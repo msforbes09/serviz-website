@@ -19,6 +19,20 @@ const envSchema = z.object({
 
 export type Env = z.infer<typeof envSchema>;
 
+/**
+ * Collapses a blank value to `undefined`.
+ *
+ * A variable defined in a hosting dashboard but left empty arrives as `""`,
+ * and a schema default only fills in for `undefined` — so an empty field is
+ * stricter than no field at all, which is the opposite of what anyone setting
+ * it expects. That difference failed a deployment.
+ */
+function blankToUndefined(value: string | undefined): string | undefined {
+  const trimmed = value?.trim();
+
+  return trimmed ? trimmed : undefined;
+}
+
 /** Assumes https for a value given as a bare hostname. */
 function withScheme(value: string): string {
   return /^https?:\/\//.test(value) ? value : `https://${value}`;
@@ -42,10 +56,10 @@ function withScheme(value: string): string {
  * the server and hydration would diverge.
  */
 function resolveSiteUrl(source: Record<string, string | undefined>): string | undefined {
-  const explicit = source.NEXT_PUBLIC_SITE_URL?.trim();
+  const explicit = blankToUndefined(source.NEXT_PUBLIC_SITE_URL);
   if (explicit) return withScheme(explicit);
 
-  const host = source.VERCEL_PROJECT_PRODUCTION_URL?.trim();
+  const host = blankToUndefined(source.VERCEL_PROJECT_PRODUCTION_URL);
   if (!host) return undefined;
 
   return withScheme(host);
@@ -54,7 +68,7 @@ function resolveSiteUrl(source: Record<string, string | undefined>): string | un
 export function parseEnv(source: Record<string, string | undefined>): Env {
   const result = envSchema.safeParse({
     NEXT_PUBLIC_SITE_URL: resolveSiteUrl(source),
-    NEXT_PUBLIC_SITE_NAME: source.NEXT_PUBLIC_SITE_NAME,
+    NEXT_PUBLIC_SITE_NAME: blankToUndefined(source.NEXT_PUBLIC_SITE_NAME),
   });
 
   if (!result.success) {

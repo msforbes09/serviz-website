@@ -12,6 +12,31 @@ describe("parseEnv", () => {
     expect(env.NEXT_PUBLIC_SITE_NAME).toBe("SERBIZ");
   });
 
+  it("treats a blank value as unset, so the default applies", () => {
+    // A dashboard field that exists but was left empty arrives as "", and a
+    // schema default only fills in for undefined. That difference failed a
+    // deployment: NEXT_PUBLIC_SITE_NAME was present and empty.
+    const env = parseEnv({ NEXT_PUBLIC_SITE_URL: "", NEXT_PUBLIC_SITE_NAME: "" });
+
+    expect(env.NEXT_PUBLIC_SITE_NAME).toBe("SERBIZ");
+    expect(env.NEXT_PUBLIC_SITE_URL).toBe("http://localhost:3000");
+  });
+
+  it("treats a whitespace-only value as unset too", () => {
+    const env = parseEnv({ NEXT_PUBLIC_SITE_NAME: "   " });
+
+    expect(env.NEXT_PUBLIC_SITE_NAME).toBe("SERBIZ");
+  });
+
+  it("falls through a blank site URL to the host's domain", () => {
+    const env = parseEnv({
+      NEXT_PUBLIC_SITE_URL: "",
+      VERCEL_PROJECT_PRODUCTION_URL: "serbiz.vercel.app",
+    });
+
+    expect(env.NEXT_PUBLIC_SITE_URL).toBe("https://serbiz.vercel.app");
+  });
+
   it("defaults the site URL to localhost for local development", () => {
     const env = parseEnv({});
 
