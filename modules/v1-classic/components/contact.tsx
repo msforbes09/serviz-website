@@ -2,6 +2,7 @@
 
 import { Mail, MapPin, Phone } from "lucide-react";
 import { useId, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import { officeAddress, siteConfig } from "@/lib/site-config";
 import {
   buildConsultationMailto,
@@ -62,7 +63,18 @@ export function Contact() {
     const result = validateConsultation(enquiry);
 
     if (!result.ok) {
-      setFeedback({ tone: "error", field: result.field, message: result.message });
+      // Flushed, not batched. A screen reader reads the field's state and
+      // description at the instant focus arrives, so `aria-invalid` and
+      // `aria-describedby` have to be on the element before the next line
+      // moves focus to it. React would otherwise commit them afterwards and
+      // the visitor would land on a field that announces nothing wrong.
+      flushSync(() => {
+        setFeedback({
+          tone: "error",
+          field: result.field,
+          message: result.message,
+        });
+      });
 
       // Focus follows the error. Announcing a problem without moving to it
       // leaves a keyboard or screen reader user to hunt for the field.
@@ -89,8 +101,8 @@ export function Contact() {
           Free consultation
         </p>
         <h2 className="text-v1-forest mt-3 max-w-[680px] text-[clamp(30px,4vw,48px)] leading-[1.1] font-bold text-balance">
-          Tell us about your business. We will map out{" "}
-          <span className="text-v1-orange">what to take off your plate.</span>
+          Tell us about your business. We will map out what to{" "}
+          <span className="text-v1-orange">take off your plate.</span>
         </h2>
         <p className="mt-4 max-w-[520px] text-base leading-6 text-[#3f4b43]">
           A 30 minute call, no obligation. You leave with a written quote within

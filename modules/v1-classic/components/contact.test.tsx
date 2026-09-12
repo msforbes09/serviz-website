@@ -52,6 +52,31 @@ describe("v1 consultation form", () => {
     );
   });
 
+  it("marks and describes the field before focus lands on it", async () => {
+    const user = userEvent.setup();
+    render(<Contact />);
+
+    const name = screen.getByLabelText(/your name/i);
+    let stateOnFocus: Record<string, string | null> | null = null;
+
+    // A screen reader reads name, role, state and description at the instant
+    // focus arrives. Attributes added by a later render are never announced,
+    // so the invalid state has to be on the element before it is focused.
+    name.addEventListener("focus", () => {
+      stateOnFocus = {
+        invalid: name.getAttribute("aria-invalid"),
+        describedBy: name.getAttribute("aria-describedby"),
+      };
+    });
+
+    await user.click(submit());
+
+    expect(stateOnFocus).toEqual({
+      invalid: "true",
+      describedBy: expect.stringMatching(/\S/),
+    });
+  });
+
   it("clears the invalid state when the visitor starts fixing the field", async () => {
     const user = userEvent.setup();
     render(<Contact />);

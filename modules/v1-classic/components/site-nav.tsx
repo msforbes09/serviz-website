@@ -152,11 +152,21 @@ export function SiteNav() {
         </div>
       </nav>
 
+      {/* A dialog, and modal while it is open. The Tab cycle above only
+          constrains the keyboard; `aria-modal` is what hides the page behind
+          it from a screen reader's virtual cursor, which would otherwise read
+          straight through the overlay. Only while open, so the closed panel
+          never hides the page. `overscroll-contain` stops a scroll gesture
+          that reaches the end of the overlay from chaining to the body, which
+          `overflow: hidden` alone does not prevent on iOS. */}
       <div
         ref={menuRef}
         id="v1-menu"
+        role="dialog"
+        aria-modal={open || undefined}
+        aria-label="Menu"
         inert={!open}
-        className={`fixed inset-0 z-40 flex flex-col justify-center gap-4 bg-[color-mix(in_srgb,var(--color-v1-paper)_90%,transparent)] p-6 backdrop-blur-[40px] transition-opacity duration-[250ms] ease-[cubic-bezier(.23,1,.32,1)] min-[821px]:hidden ${open ? "opacity-100" : "pointer-events-none opacity-0"}`}
+        className={`fixed inset-0 z-40 flex flex-col justify-center gap-4 overscroll-contain bg-[color-mix(in_srgb,var(--color-v1-paper)_90%,transparent)] p-6 backdrop-blur-[40px] transition-opacity duration-[250ms] ease-[cubic-bezier(.23,1,.32,1)] min-[821px]:hidden ${open ? "opacity-100" : "pointer-events-none opacity-0"}`}
       >
         {menuLinks.map((link) => (
           <a

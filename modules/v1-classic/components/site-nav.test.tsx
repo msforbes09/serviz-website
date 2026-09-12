@@ -99,6 +99,23 @@ describe("v1 mobile menu", () => {
     expect(links[links.length - 1]).toHaveFocus();
   });
 
+  it("hides the page behind it from assistive technology while it is open", async () => {
+    const user = userEvent.setup();
+    render(<SiteNav />);
+
+    const menu = document.getElementById("v1-menu") as HTMLElement;
+
+    // The Tab cycle only constrains the keyboard. A screen reader's virtual
+    // cursor walks the page underneath regardless, so the overlay has to
+    // declare itself modal for the content behind it to be hidden too.
+    expect(menu).not.toHaveAttribute("aria-modal");
+
+    await user.click(toggle());
+
+    expect(menu).toHaveAttribute("aria-modal", "true");
+    expect(menu).toHaveAccessibleName("Menu");
+  });
+
   it("holds the page still while the overlay covers it", async () => {
     const user = userEvent.setup();
     render(<SiteNav />);

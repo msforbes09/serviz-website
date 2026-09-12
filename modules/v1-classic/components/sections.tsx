@@ -12,16 +12,29 @@ import {
   taglineWords,
 } from "../lib/content";
 import { Icon } from "./icon";
-import { SpotlightCard } from "./spotlight-card";
 
 // Two even columns left the headline 552px to work in while its own
 // `max-w-[680px]` said it wanted 680px, so 60px type broke into six lines, two
 // of them barely half width. Giving the text column the room it was written for
 // puts the headline back to five full lines at the same size. Below 900px the
 // columns stack, so auto-fit still governs.
+//
+// 1.35fr, not 1.6fr, because 1.6 was more than the headline needed and the
+// difference came out of the photograph. Measured at 1440: the headline holds
+// five lines down to 634px of text column and breaks to six below it. 1.35fr
+// gives it 634px exactly and hands the remaining 45px back to the image.
+//
+// The photograph stays a centred card rather than stretching to the text
+// column's full 608px. 5:4 at a 468px column is 374px tall, which lands it
+// within a few pixels of the 552x323 the original even-column design gave it:
+// the width the headline freed up is spent on presence, not on height. Filling
+// the column and a square were both tried and read too heavy.
+//
+// The aspect ratio is also what gives the box a definite height. A centred grid
+// column has none, so `h-full` inside it has nothing to resolve against.
 export function Hero() {
   return (
-    <section className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-12 px-6 pt-16 pb-12 min-[900px]:grid-cols-[1.6fr_1fr]">
+    <section className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-12 px-6 pt-16 pb-12 min-[900px]:grid-cols-[1.35fr_1fr]">
       <div className="max-w-[680px]">
         <p className="text-v1-forest inline-flex items-center gap-2 rounded-full bg-[#eaf4ec] px-3 py-1 text-sm font-semibold">
           <BadgeCheck aria-hidden className="size-4" />A workers cooperative in
@@ -44,9 +57,8 @@ export function Hero() {
             with colour that is actually there. */}
         <h1 className="text-v1-forest mt-6 text-[clamp(32px,5vw,60px)] leading-[1.05] font-bold tracking-[-0.02em] text-balance">
           Payroll, books and compliance, handled by{" "}
-          <span className="text-v1-orange">
-            people who care about your small business.
-          </span>
+          <span className="text-v1-orange">people who care</span> about your
+          small business.
         </h1>
         <p className="mt-6 max-w-[560px] text-lg leading-7 text-[#3f4b43]">
           SERBIZ runs the back office for sole proprietors, one person
@@ -77,20 +89,31 @@ export function Hero() {
         </ul>
       </div>
 
-      <div className="relative min-h-[320px]">
+      {/* A `group`, so the photo and the caption card respond to a hover
+          anywhere over the composition rather than each on its own. Everything
+          that moves is behind `motion-safe:`, and Tailwind already wraps every
+          `hover:` utility in a hover media query, so a touch device gets the
+          still image with no extra gating. Nothing is hidden behind the hover,
+          so there is no keyboard equivalent to owe. */}
+      <div className="group relative">
         <div
           aria-hidden
-          className="bg-v1-orange absolute -right-3 -bottom-3 left-6 top-6 rounded-3xl"
+          className="bg-v1-orange absolute -right-3 -bottom-3 left-6 top-6 rounded-3xl motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:translate-x-1 motion-safe:group-hover:translate-y-1"
         />
-        <Image
-          src="/designs/v1/office.jpg"
-          alt="SERBIZ team members working together at the office"
-          width={900}
-          height={700}
-          priority
-          className="border-v1-line relative block h-full min-h-[320px] w-full rounded-3xl border object-cover object-[60%_40%]"
-        />
-        <p className="bg-v1-forest absolute bottom-[-4px] left-4 max-w-[260px] rounded-xl p-4 text-sm leading-5 text-white">
+        {/* The clip lives here and not on the parent: the parent also holds the
+            orange block and a caption that deliberately overhangs the bottom
+            edge, and both would be cut off. */}
+        <div className="border-v1-line relative block aspect-[5/4] w-full overflow-hidden rounded-3xl border">
+          <Image
+            src="/designs/stock/hero-workspace.jpg"
+            alt="A quiet office room with a long white desk, monitors, a tall plant and a wooden ceiling"
+            width={940}
+            height={752}
+            priority
+            className="block size-full object-cover motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-[1.04]"
+          />
+        </div>
+        <p className="bg-v1-forest absolute bottom-[-4px] left-4 max-w-[260px] rounded-xl p-4 text-sm leading-5 text-white motion-safe:transition-[transform,box-shadow] motion-safe:duration-300 motion-safe:group-hover:-translate-y-1 motion-safe:group-hover:shadow-[0_18px_40px_rgba(11,74,36,.32)]">
           <strong className="block text-xl leading-7">
             7 services, one team
           </strong>
@@ -117,7 +140,7 @@ export function Services() {
 
         <div className="mt-12 grid grid-cols-[repeat(auto-fill,minmax(270px,1fr))] gap-4">
           {services.map((service, index) => (
-            <SpotlightCard
+            <article
               key={service.title}
               style={{ "--i": index } as React.CSSProperties}
               className="reveal reveal-step border-v1-line bg-v1-paper hover:border-v1-forest flex flex-col gap-3 rounded-2xl border p-6 transition-[transform,border-color,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(11,74,36,.08)]"
@@ -134,7 +157,7 @@ export function Services() {
               </div>
               <h3 className="text-xl leading-7 font-semibold">{service.title}</h3>
               <p className="text-base leading-6 text-[#3f4b43]">{service.body}</p>
-            </SpotlightCard>
+            </article>
           ))}
 
           <a
@@ -179,15 +202,21 @@ export function WhySerbiz() {
   return (
     <section id="why" className="bg-v1-forest scroll-mt-8 text-white">
       <div className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-12 px-6 py-20">
-        <div className="reveal relative">
-          <Image
-            src="/designs/stock/office-tower.jpg"
-            alt="Office towers in Metro Manila"
-            width={900}
-            height={1000}
-            className="block max-h-[520px] min-h-[360px] w-full rounded-3xl object-cover"
-          />
-          <p className="text-v1-forest absolute right-4 bottom-4 flex items-center gap-3 rounded-xl bg-white p-4">
+        <div className="reveal group relative">
+          {/* A small shop rather than the glass towers that used to sit here.
+              The heading beside it says SERBIZ is not scaled down from a big
+              firm, and a photograph of a corporate skyline argued the
+              opposite. */}
+          <div className="overflow-hidden rounded-3xl">
+            <Image
+              src="/designs/stock/small-shop.jpg"
+              alt="The sunlit interior of a small shop, with wooden shelves, stocked goods and a street beyond the window"
+              width={1100}
+              height={1000}
+              className="block max-h-[520px] min-h-[360px] w-full object-cover motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-[1.04]"
+            />
+          </div>
+          <p className="text-v1-forest absolute right-4 bottom-4 flex items-center gap-3 rounded-xl bg-white p-4 motion-safe:transition-[transform,box-shadow] motion-safe:duration-300 motion-safe:group-hover:-translate-y-1 motion-safe:group-hover:shadow-[0_18px_40px_rgba(0,0,0,.28)]">
             <Image
               src="/designs/v1/logo-mark.png"
               alt=""
@@ -209,9 +238,8 @@ export function WhySerbiz() {
           </p>
           <h2 className="mt-3 max-w-[680px] text-[clamp(30px,4vw,48px)] leading-[1.1] font-bold text-balance">
             Built for SPs, OPCs and SMEs,{" "}
-            <span className="text-[#ffb784]">
-              not scaled down from a big firm.
-            </span>
+            <span className="text-[#ffb784]">not scaled down</span> from a big
+            firm.
           </h2>
           <div className="mt-10 grid gap-6">
             {reasons.map((reason, index) => (
@@ -345,8 +373,8 @@ export function News() {
             News and events
           </p>
           <h2 className="text-v1-forest mt-3 text-[clamp(30px,4vw,48px)] leading-[1.1] font-bold">
-            What the cooperative is{" "}
-            <span className="text-v1-orange">up to.</span>
+            What the{" "}
+            <span className="text-v1-orange">cooperative is up to.</span>
           </h2>
         </div>
         <a
@@ -361,10 +389,10 @@ export function News() {
 
       <div className="mt-10 grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-4">
         {posts.map((post, index) => (
-          <SpotlightCard
+          <article
             key={post.title}
             style={{ "--i": index } as React.CSSProperties}
-            className="reveal reveal-step border-v1-line flex flex-col rounded-2xl border bg-white transition-[transform,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(11,74,36,.08)]"
+            className="reveal reveal-step border-v1-line flex flex-col overflow-hidden rounded-2xl border bg-white transition-[transform,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(11,74,36,.08)]"
           >
             <Image
               src={post.image}
@@ -383,7 +411,7 @@ export function News() {
               <h3 className="text-lg leading-7 font-semibold">{post.title}</h3>
               <p className="text-sm leading-5 text-[#3f4b43]">{post.body}</p>
             </div>
-          </SpotlightCard>
+          </article>
         ))}
       </div>
     </section>
@@ -392,7 +420,10 @@ export function News() {
 
 export function SiteFooter() {
   return (
-    <footer className="bg-v1-forest text-[#cfe0d4]">
+    // `--v1-focus-ring` restated because `outline-offset` draws the ring on
+    // this footer's forest background, where the default forest ring is
+    // invisible. See the focus block in globals.css.
+    <footer className="bg-v1-forest text-[#cfe0d4] [--v1-focus-ring:var(--color-v1-paper)]">
       <div className="mx-auto flex max-w-[1200px] flex-wrap justify-between gap-6 px-6 py-12 text-sm leading-5">
         <div className="flex items-center gap-3">
           <Image

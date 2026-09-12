@@ -132,16 +132,11 @@ they start to matter, not by size.
   preview pages `noindex` regardless — Open Graph governs link unfurling, not
   indexing, so the two settings do not conflict.
 
-- **The hero photograph is stock, and its alt text says otherwise.**
-  `public/designs/v1/office.jpg` is a generic co-working space. The alt text in
-  `modules/v1-classic/components/sections.tsx` reads "SERBIZ team members
-  working together at the office", which asserts to a screen reader that these
-  people work at the cooperative. That is the same problem the certificate
-  placeholders were built to avoid, hiding in the accessibility layer where it
-  is easier to miss. Fix the alt text now to describe a generic workplace;
-  replace the image with a real office photo before launch. The blanket stock
-  photography entry in the sign-off checklist above covers the image, not the
-  false description.
+- ~~**The hero photograph is stock, and its alt text says otherwise.**~~ Fixed.
+  The photograph that made the claim is gone, replaced by one with no people in
+  it, so the alt text now describes objects on a desk and asserts nothing about
+  who works at the cooperative. See the photography entry below. The image is
+  still a placeholder, which the sign-off checklist covers.
 
 - **The phone number is retyped in five components.** `lib/site-config.ts` opens
   by saying never to retype a phone number or address into a component, and five
@@ -154,6 +149,99 @@ they start to matter, not by size.
 
 - **The contact form only opens a mail client.** See the Queued entry below,
   which now records why this is worse than a cosmetic gap.
+
+## Found in the v1 interface review (2026-09-12)
+
+The interface review of `feat/v1-egov-devices` raised six findings. Five were
+fixed in that branch. What is left is the part of the colour finding that a
+minimal fix deliberately did not take.
+
+- **The v1 orange still fails 4.5:1 for small text and for button labels.**
+  `--color-v1-orange` in `app/globals.css` was darkened from `#f26a1b` to
+  `#e36419` so that the accent phrase closing every heading clears the 3:1 that
+  heading text needs. Small text needs 4.5:1 and two uses still fall short:
+
+  | Use | Measured | Needs |
+  | --- | --- | --- |
+  | Eyebrow labels, 14px semibold, six of them | 3.29:1 on paper, 3.06:1 on the FAQ mint | 4.5:1 |
+  | White label on the orange button fill | 3.44:1 | 4.5:1 |
+
+  `#b34e14` clears 4.5:1 on all three v1 backgrounds and would retire both rows,
+  but it reads as burnt sienna rather than the brand orange, so it is a change
+  the client should see rather than one to make during a review. Decide it
+  alongside the brand palette entry at the top of this file, and apply the same
+  check to v2's `--color-v2-orange` and v3's `--color-v3-rust`, which were never
+  measured.
+
+- **The two v1 photographs were swapped, and the replacements are people-free.**
+  Both slots previously ran at the wrong declared size, which stretched them:
+  the hero file was 877×390 behind a declared 900×700, and the tower was 900×600
+  behind a declared 900×1000. Both now declare what they actually are.
+
+  | Slot | File | Unsplash |
+  | --- | --- | --- |
+  | Hero | `public/designs/stock/hero-workspace.jpg`, 940×940 | [Modern office space with plants and artwork](https://unsplash.com/photos/modern-office-space-with-plants-and-artwork-xTmez98cqAM) |
+  | Why SERBIZ | `public/designs/stock/small-shop.jpg`, 1100×1000 | [Sunlit cafe interior with wooden furniture](https://unsplash.com/photos/sunlit-cafe-interior-with-wooden-furniture-yDduhQk5-7k) |
+
+  The hero file is square because the hero slot is: see the layout entry below.
+  Both files are cut to the size the slot actually renders at 2x, so
+  `next/image` serves them without upscaling or wasted bytes.
+
+  The old office tower was replaced on content grounds, not taste: it showed a
+  corporate skyline directly beside a heading promising SERBIZ is *not* scaled
+  down from a big firm. Choosing photographs without people also retires the
+  sign-off objection about images of people who do not work at the cooperative,
+  for these two slots only. Both remain placeholders.
+
+  Two files are now unreferenced and were deliberately left in place:
+  `public/designs/v1/office.jpg`, which the assets table above still expects
+  from Claude Design, and `public/designs/stock/office-tower.jpg`. Delete them
+  once the layout choice is settled.
+
+  Small legible signage appears in the shop interior, and the poster in it reads
+  as an East Asian script. Nothing in either photograph is Philippine-specific.
+
+- **The v1 hero grid was rebalanced, with measurements.** The polish pass gave
+  the text column `1.6fr` to stop the headline breaking into six lines. It
+  worked, but it took the width out of the photograph, which went from 552px
+  wide in the original even-column design to 425px. The image was also pinned
+  at `min-h-[320px]` beside a 608px text column, leaving ~290px of empty space.
+
+  Measured at a 1440px viewport, the headline holds five lines down to 634px of
+  text column and breaks to six below it:
+
+  | Text column | Headline lines | Image width |
+  | --- | --- | --- |
+  | 552 | 6 | 552 |
+  | 602 | 6 | 502 |
+  | **634** | **5** | **470** |
+  | 679 | 5 | 425 |
+
+  So the ratio is now `1.35fr`, the break-even point, and the image is
+  `aspect-[5/4]` and stays centred: 468×374, within a few pixels of the height
+  the original even-column design gave it. The width the headline freed up is
+  spent on presence rather than on height. Filling the column (468×606) and a
+  square (468×468) were both built and rejected as too heavy.
+
+  Re-measure before copying the ratio to v2 or v3: both have different headline
+  lengths and type scales, so 1.35fr is a v1 number, not a house one.
+
+- **The pointer spotlight was removed.** `SpotlightCard`, its test and the
+  `.v1-spotlight` rules in `app/globals.css` are gone, and the service and news
+  cards are plain `<article>` elements again. It was one of the four devices
+  taken from e.gov.ph and it is the one that did not earn its keep here: a glow
+  that only exists on hover-capable devices, on a site whose visitors are mostly
+  on phones.
+
+  Two things travelled with it. The news card needed `overflow-hidden` back at
+  the call site, since `SpotlightCard` had been supplying it and without it the
+  photo's square corners break out of the rounded border. And an interface-review
+  finding about the glow leaving an empty flex item on touch devices is now moot
+  rather than fixed.
+
+  The other three e.gov.ph devices stay: two-tone headlines, the connected step
+  nodes and the icon ramp. Update the PR description on [#6](https://github.com/msforbes09/serviz-website/pull/6)
+  before it merges, since it still lists four.
 
 ## Housekeeping
 

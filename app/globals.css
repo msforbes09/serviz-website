@@ -144,7 +144,12 @@
   /* v1 — classic */
   --color-v1-forest: #0b4a24;
   --color-v1-forest-soft: #3c7a50;
-  --color-v1-orange: #f26a1b;
+  /* Darkened from #f26a1b, which measured 2.93:1 on paper and 2.72:1 on the
+     FAQ mint. Heading text needs 3:1, and every heading now closes with an
+     accent phrase in this colour. Clears it on all three v1 backgrounds while
+     staying the same orange to the eye. Still short of the 4.5:1 that the
+     eyebrow labels and the white-on-orange button label need; see TODO.md. */
+  --color-v1-orange: #e36419;
   --color-v1-ink: #14211a;
   --color-v1-muted: #5c6b60;
   --color-v1-placeholder: #8a958d;
@@ -267,36 +272,6 @@
   }
 }
 
-/* A soft brand-coloured light that follows the pointer across a card. The
-   position arrives as two custom properties written by SpotlightCard, so moving
-   the mouse repaints one gradient and re-renders no React at all.
-
-   Gated on real hover. On a touch screen a stray mousemove would light a card
-   up and leave it lit with nothing to switch it off. */
-@media (hover: hover) {
-  .v1-spotlight {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    opacity: 0;
-    background: radial-gradient(
-      220px circle at var(--mx, 50%) var(--my, 50%),
-      color-mix(in srgb, var(--color-v1-forest) 9%, transparent),
-      transparent 72%
-    );
-  }
-
-  :hover > .v1-spotlight {
-    opacity: 1;
-  }
-}
-
-@media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .v1-spotlight {
-    transition: opacity 0.25s ease;
-  }
-}
-
 /* Each service icon takes its own step along a blend from forest to orange, so
    a grid of seven reads as a sequence rather than a wall of identical tiles.
    Every tint is a mix of the two brand colours, which means the ramp cannot
@@ -314,10 +289,26 @@
 
 /* One focus treatment for the whole v1 layout. It was previously declared on
    three elements and left to the browser default on the rest, so the ring
-   changed as you tabbed through the page. */
-.v1-root :focus-visible {
-  outline: 2px solid var(--color-v1-forest);
-  outline-offset: 2px;
+   changed as you tabbed through the page.
+
+   In `components` rather than unlayered. Unlayered it outranked every Tailwind
+   focus utility whatever their specificity, which turned the FAQ button's
+   deliberate inset ring into an offset one that the card's `overflow: hidden`
+   then clipped away on three sides. Layered, a utility can still override it.
+
+   The colour is a variable because a ring has to be visible against whatever
+   it is drawn on, and `outline-offset` draws it on the surface *behind* the
+   element. Forest on forest is a ring nobody can see, so any dark container
+   with something focusable inside it must restate `--v1-focus-ring`. */
+@layer components {
+  .v1-root {
+    --v1-focus-ring: var(--color-v1-forest);
+  }
+
+  .v1-root :focus-visible {
+    outline: 2px solid var(--v1-focus-ring);
+    outline-offset: 2px;
+  }
 }
 
 /* v2 hero motion. Both are decorative and gated behind motion-safe: at the
