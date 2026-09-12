@@ -12,11 +12,27 @@ import {
   WhySerbiz,
 } from "@/modules/v1-classic/components/sections";
 import { SiteNav } from "@/modules/v1-classic/components/site-nav";
+import { previewSocialMetadata } from "@/modules/previews/lib/preview-metadata";
 
 export const metadata: Metadata = {
+  // Ours, for the browser tab and our own index.
   title: "v1 — Classic",
   description:
     "Layout preview: one long page, generous white space, restrained type.",
+  // The client's. A shared link unfurls from these, not from the two above, so
+  // the card never announces the layout as attempt number one. See
+  // `preview-metadata.ts` for why they are deliberately different. The image
+  // itself comes from `opengraph-image.tsx` in this segment.
+  openGraph: {
+    type: "website",
+    title: previewSocialMetadata.title,
+    description: previewSocialMetadata.description,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: previewSocialMetadata.title,
+    description: previewSocialMetadata.description,
+  },
 };
 
 export default function V1Page() {

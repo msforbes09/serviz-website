@@ -120,17 +120,25 @@ each one approved before any of this is public.
 
 ## Found in the v1 review (2026-09-12)
 
-Four things surfaced while summarising the v1 enhancement work. Ordered by when
-they start to matter, not by size.
+Four things surfaced while summarising the v1 enhancement work. Two are now
+done and are kept here with what shipped; two remain.
 
-- **No social preview.** Nothing in `app/` sets `openGraph` beyond
-  `metadataBase`, and there is no `opengraph-image`. The three preview links are
-  about to be sent to the client, and in Messenger, Viber or Slack they will
-  render as bare URLs with no title card. This is the most time-sensitive of the
-  four purely because of what happens this week. A single `opengraph-image.tsx`
-  under each preview route, or one shared image at the root, covers it. Keep the
-  preview pages `noindex` regardless — Open Graph governs link unfurling, not
-  indexing, so the two settings do not conflict.
+- **No social preview.** ~~Nothing in `app/` sets `openGraph`.~~ Done for v1
+  only. `app/8sfz8dn5ts/opengraph-image.tsx` generates a 1200×630 card at build
+  time and the page carries `openGraph` and `twitter` blocks.
+
+  The copy on that card is deliberately not the page's own title and
+  description. Those read "v1 — Classic" and "Layout preview: one long page…",
+  which are ours for finding our way around; a link unfurling with them would
+  announce the layout as attempt number one and undo the reason the slugs are
+  random. `modules/previews/lib/preview-metadata.ts` holds the client-facing
+  copy, built entirely from `site-config`, and its test fails if an internal
+  variant name ever leaks back in.
+
+  **v2 and v3 still have none.** Copy the same three files across when their
+  turn comes; `preview-metadata.ts` is already shared and variant-neutral, so
+  only the `opengraph-image.tsx` palette changes. The preview pages stay
+  `noindex` either way — Open Graph governs unfurling, not indexing.
 
 - ~~**The hero photograph is stock, and its alt text says otherwise.**~~ Fixed.
   The photograph that made the claim is gone, replaced by one with no people in
