@@ -3,7 +3,7 @@ import { reasons } from "../lib/content";
 
 export function WhySerbiz() {
   return (
-    <section id="why" className="bg-v2-forest relative overflow-hidden text-white">
+    <section id="why" className="bg-v2-forest relative overflow-clip text-white">
       <div aria-hidden className="pointer-events-none absolute top-7 right-5 flex gap-2.5">
         <span className="block h-3 w-9 -skew-x-[35deg] bg-[#9aa5ad]" />
         <span className="block h-3 w-9 -skew-x-[35deg] bg-[#9aa5ad]" />

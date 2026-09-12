@@ -364,7 +364,7 @@ export function HowItWorks() {
  */
 export function Mission() {
   return (
-    <section className="relative isolate overflow-hidden">
+    <section className="relative isolate overflow-clip">
       <Image
         src="/designs/stock/metro-manila.jpg"
         alt=""
