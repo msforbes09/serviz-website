@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { poppins } from "@/modules/v1-classic/lib/fonts";
+import { RevealController } from "@/components/motion/reveal-controller";
+import { outfit, poppins } from "@/modules/v1-classic/lib/fonts";
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
@@ -8,7 +9,7 @@ export const metadata: Metadata = {
 export default function V1Layout({ children }: LayoutProps<"/8sfz8dn5ts">) {
   return (
     <div
-      className={`v1-root ${poppins.variable} font-poppins bg-v1-paper text-v1-ink`}
+      className={`v1-root ${outfit.variable} ${poppins.variable} font-poppins bg-v1-paper text-v1-ink`}
     >
       {/* First stop for a keyboard visitor, and invisible until it is focused.
           Without it every anchor jump means tabbing the whole nav again. */}
@@ -19,6 +20,10 @@ export default function V1Layout({ children }: LayoutProps<"/8sfz8dn5ts">) {
         Skip to content
       </a>
       {children}
+      {/* Renders nothing and wraps nothing, so every section stays a Server
+          Component. Mounted on v1 only for now; v2 and v3 still use the
+          CSS-only scroll timeline. */}
+      <RevealController />
     </div>
   );
 }

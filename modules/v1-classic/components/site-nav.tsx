@@ -2,12 +2,31 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { siteConfig } from "@/lib/site-config";
 import { navLinks } from "../lib/content";
 
 const menuLinks = [
   ...navLinks,
   { href: "#contact", label: "Book a free consultation" },
 ] as const;
+
+// "Resources Income Workers Cooperative", read off the legal name rather than
+// typed a second time, so the bar cannot drift from `site-config.ts`.
+const descriptor = siteConfig.legalName.replace(siteConfig.name, "").trim();
+
+/**
+ * Two things a fragment jump does that a scripted one has to do by hand: land
+ * the section under `scroll-margin-top`, which `scrollIntoView` honours, and
+ * move focus there, so the next Tab continues from the section rather than
+ * from the link just used. Sections are not focusable on their own, hence the
+ * tabindex.
+ */
+function jumpTo(target: HTMLElement) {
+  if (!target.hasAttribute("tabindex")) target.tabIndex = -1;
+  target.focus({ preventScroll: true });
+  // No `behavior`, for the same reason as the logo: CSS decides.
+  target.scrollIntoView({ block: "start" });
+}
 
 /**
  * v1's navigation. A client component because the mobile panel is a
@@ -23,6 +42,7 @@ export function SiteNav() {
   const [open, setOpen] = useState(false);
   const toggleRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+  const pendingJump = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (!open) return;
@@ -85,13 +105,51 @@ export function SiteNav() {
     window.scrollTo({ top: 0 });
   }
 
+  // A jump chosen from the overlay runs here, after the lock effect above has
+  // handed the page back. Cleanups run before the next effects, so by the time
+  // this sees `open` go false the body's overflow is already restored. A
+  // smooth scroll begun while the body was still locked is dropped when the
+  // lock lifts a frame later, which left the menu's links doing nothing.
+  useEffect(() => {
+    if (open || !pendingJump.current) return;
+    jumpTo(pendingJump.current);
+    pendingJump.current = null;
+  }, [open]);
+
+  /**
+   * Section links scroll from script instead of letting the fragment navigate.
+   * A fragment navigation writes `#faq` into the address bar, and a refresh
+   * then reopens the page part way down, past the hero and its entrance. The
+   * href stays, so a visitor without scripting still gets the jump.
+   *
+   * Returns the section when the link points at one on this page, having
+   * taken over the click. Anything else is left to the browser.
+   */
+  function sectionFor(event: React.MouseEvent<HTMLAnchorElement>) {
+    const target = document.getElementById(
+      event.currentTarget.hash.slice(1),
+    );
+    if (target) event.preventDefault();
+    return target;
+  }
+
+  function handleSectionClick(event: React.MouseEvent<HTMLAnchorElement>) {
+    const target = sectionFor(event);
+    if (target) jumpTo(target);
+  }
+
+  function handleMenuClick(event: React.MouseEvent<HTMLAnchorElement>) {
+    pendingJump.current = sectionFor(event);
+    setOpen(false);
+  }
+
   return (
     <>
       <nav
         aria-label="Main"
-        className="v1-nav-lift border-v1-line sticky top-0 z-50 border-b bg-[color-mix(in_srgb,var(--color-v1-paper)_92%,transparent)] backdrop-blur-md"
+        className="v1-nav-lift border-v1-line sticky top-0 z-50 h-(--v1-nav-height) border-b bg-[color-mix(in_srgb,var(--color-v1-paper)_92%,transparent)] backdrop-blur-md"
       >
-        <div className="mx-auto flex max-w-[1200px] items-center justify-between gap-6 px-6 py-3">
+        <div className="mx-auto flex h-full max-w-[1200px] items-center justify-between gap-6 px-6">
           {/* `#top`, not `#main`. The main landmark starts below the nav, so
               jumping to it left the page short of the top by exactly the height
               of the bar, which is the bug this fixes. A fragment of "top" with
@@ -99,20 +157,32 @@ export function SiteNav() {
               href alone is correct and still works without scripting; the
               click handler makes it certain. The skip link keeps `#main`, since
               getting past the nav is the whole point of that one. */}
+          {/* The mark plus real text, not the full wordmark PNG: that file
+              carried its own white ground, which sat as a box on the paper
+              bar. The mark alone is transparent, and type takes whatever is
+              behind it. */}
           <a
             href="#top"
             onClick={handleLogoClick}
             aria-label="SERBIZ home"
-            className="flex items-center"
+            className="flex min-w-0 items-center gap-2.5"
           >
             <Image
-              src="/designs/v1/logo-full.png"
-              alt="SERBIZ Resources Income Workers Cooperative"
-              width={220}
-              height={44}
+              src="/designs/v1/logo-mark.png"
+              alt=""
+              width={40}
+              height={40}
               priority
-              className="block h-11 w-auto"
+              className="size-10 shrink-0 object-contain"
             />
+            <span className="flex min-w-0 flex-col leading-[1.05]">
+              <span className="font-outfit text-v1-ink text-[22px] font-extrabold tracking-[0.12em]">
+                {siteConfig.name}
+              </span>
+              <span className="text-v1-muted truncate text-[10px] tracking-[0.02em]">
+                {descriptor}
+              </span>
+            </span>
           </a>
 
           <div className="hidden items-center gap-6 text-sm font-medium min-[821px]:flex">
@@ -120,6 +190,7 @@ export function SiteNav() {
               <a
                 key={link.href}
                 href={link.href}
+                onClick={handleSectionClick}
                 className="text-v1-ink hover:text-v1-orange transition-colors"
               >
                 {link.label}
@@ -127,6 +198,7 @@ export function SiteNav() {
             ))}
             <a
               href="#contact"
+              onClick={handleSectionClick}
               className="bg-v1-forest hover:bg-v1-orange rounded-lg px-3 py-2 font-semibold text-white transition-colors"
             >
               Book a free consultation
@@ -172,7 +244,7 @@ export function SiteNav() {
           <a
             key={link.href}
             href={link.href}
-            onClick={() => setOpen(false)}
+            onClick={handleMenuClick}
             className="text-v1-ink block text-3xl leading-9 font-semibold"
           >
             {link.label}

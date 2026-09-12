@@ -32,9 +32,15 @@ import { Icon } from "./icon";
 //
 // The aspect ratio is also what gives the box a definite height. A centred grid
 // column has none, so `h-full` inside it has nothing to resolve against.
+//
+// The floor is the viewport less the nav, so the hero owns the first screen and
+// the services band waits below the fold instead of poking in, at any window
+// height. `svh` is the small viewport: on a phone it is the height with the
+// browser chrome showing, so the hero never overshoots when the chrome is in.
+// A floor, not a height, so a short window still gets the whole hero.
 export function Hero() {
   return (
-    <section className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-12 px-6 pt-16 pb-24 min-[900px]:grid-cols-[1.35fr_1fr]">
+    <section className="mx-auto grid min-h-[calc(100svh-var(--v1-nav-height))] max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-12 px-6 pt-16 pb-24 min-[900px]:grid-cols-[1.35fr_1fr]">
       <div className="max-w-[680px]">
         <p
           style={{ "--i": 0 } as React.CSSProperties}
@@ -74,29 +80,29 @@ export function Hero() {
           corporations and SMEs. Payslips out on time, BIR filings on schedule,
           reports you can read. You get your evenings back.
         </p>
-        <div
-          style={{ "--i": 3 } as React.CSSProperties}
-          className="enter-rise enter-step mt-8 flex flex-wrap items-center gap-3"
-        >
+        <div className="mt-8 flex flex-wrap items-center gap-3">
           <a
             href="#contact"
-            className="bg-v1-orange hover:bg-v1-forest rounded-lg px-6 py-3 text-base font-semibold text-white transition-[background-color,transform] duration-200 hover:-translate-y-0.5"
+            style={{ "--i": 3 } as React.CSSProperties}
+            className="enter-rise enter-step v1-shine bg-v1-orange hover:bg-v1-forest rounded-lg px-6 py-3 text-base font-semibold text-white transition-[background-color,transform] duration-200 hover:-translate-y-0.5"
           >
             Book a free consultation
           </a>
           <a
             href={`tel:${siteConfig.contact.mobileTel}`}
-            className="text-v1-forest inline-flex items-center gap-2 px-4 py-3 text-base font-semibold"
+            style={{ "--i": 4 } as React.CSSProperties}
+            className="enter-rise enter-step text-v1-forest inline-flex items-center gap-2 px-4 py-3 text-base font-semibold"
           >
             <Phone aria-hidden className="size-5" /> {siteConfig.contact.phones.mobile}
           </a>
         </div>
-        <ul
-          style={{ "--i": 4 } as React.CSSProperties}
-          className="enter-rise enter-step mt-8 flex list-none flex-wrap gap-x-6 gap-y-4 text-sm text-[#3f4b43]"
-        >
-          {heroBadges.map((badge) => (
-            <li key={badge} className="inline-flex items-center gap-2">
+        <ul className="mt-8 flex list-none flex-wrap gap-x-6 gap-y-4 text-sm text-[#3f4b43]">
+          {heroBadges.map((badge, index) => (
+            <li
+              key={badge}
+              style={{ "--i": 5 + index } as React.CSSProperties}
+              className="enter-rise enter-step inline-flex items-center gap-2"
+            >
               <CircleCheck aria-hidden className="text-v1-forest size-[18px]" />
               {badge}
             </li>
@@ -110,7 +116,10 @@ export function Hero() {
           `hover:` utility in a hover media query, so a touch device gets the
           still image with no extra gating. Nothing is hidden behind the hover,
           so there is no keyboard equivalent to owe. */}
-      <div className="group relative">
+      <div
+        style={{ "--from-x": "56px" } as React.CSSProperties}
+        className="enter-x group relative motion-safe:transition-transform motion-safe:duration-700 motion-safe:ease-[cubic-bezier(.23,1,.32,1)]"
+      >
         <div
           aria-hidden
           className="bg-v1-orange absolute -right-3 -bottom-3 left-6 top-6 rounded-3xl motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:translate-x-1 motion-safe:group-hover:translate-y-1"
@@ -234,7 +243,10 @@ export function WhySerbiz() {
   return (
     <section id="why" className="bg-v1-forest scroll-mt-4 text-white">
       <div className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-12 px-6 py-24">
-        <div className="reveal group relative">
+        <div
+          style={{ "--from-x": "-48px" } as React.CSSProperties}
+          className="reveal reveal-x group relative"
+        >
           {/* A small shop rather than the glass towers that used to sit here.
               The heading beside it says SERBIZ is not scaled down from a big
               firm, and a photograph of a corporate skyline argued the
@@ -364,13 +376,13 @@ export function HowItWorks() {
  */
 export function Mission() {
   return (
-    <section className="relative isolate overflow-hidden">
+    <section className="relative isolate overflow-clip">
       <Image
         src="/designs/stock/metro-manila.jpg"
         alt=""
         width={1800}
         height={640}
-        className="absolute inset-0 -z-10 size-full object-cover"
+        className="reveal reveal-zoom absolute inset-0 -z-10 size-full object-cover"
       />
       {/* A flat forest tint, not a gradient. The photograph's brightness varies
           across the frame, so a gradient would give the text a different
@@ -390,12 +402,28 @@ export function Mission() {
         aria-hidden
         className="absolute inset-0 -z-10 bg-[color-mix(in_srgb,var(--color-v1-forest)_78%,transparent)]"
       />
-      <div className="reveal mx-auto max-w-[1200px] px-6 py-16 sm:py-28">
-        <span aria-hidden className="bg-v1-orange block h-1 w-14 rounded-full" />
-        <p className="mt-5 text-sm font-semibold tracking-[0.08em] text-white uppercase">
+      {/* The band assembles: the photograph settles while the rule, the
+          eyebrow and the mission rise in one after another. A single fade on
+          the whole block was too quiet to register against the dark ground. */}
+      <div
+        style={{ "--reveal-gap": "120ms" } as React.CSSProperties}
+        className="mx-auto max-w-[1200px] px-6 py-16 sm:py-28"
+      >
+        <span
+          aria-hidden
+          style={{ "--i": 0 } as React.CSSProperties}
+          className="reveal reveal-step bg-v1-orange block h-1 w-14 rounded-full"
+        />
+        <p
+          style={{ "--i": 1 } as React.CSSProperties}
+          className="reveal reveal-step mt-5 text-sm font-semibold tracking-[0.08em] text-white uppercase"
+        >
           Our mission
         </p>
-        <p className="mt-4 max-w-[900px] text-[clamp(22px,3vw,32px)] leading-[1.35] font-semibold text-balance text-white">
+        <p
+          style={{ "--i": 2 } as React.CSSProperties}
+          className="reveal reveal-step mt-4 max-w-[900px] text-[clamp(22px,3vw,32px)] leading-[1.35] font-semibold text-balance text-white"
+        >
           {siteConfig.mission}
         </p>
       </div>
@@ -427,18 +455,23 @@ export function Permits() {
             squeezed each card to about 110px and the labels spilled out of
             their own borders. */}
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {certificates.map((certificate) =>
+          {certificates.map((certificate, index) =>
             certificate.src ? (
               <Image
                 key={certificate.alt}
+                style={{ "--i": index, "--reveal-offset": "250ms", "--reveal-gap": "100ms" } as React.CSSProperties}
                 src={certificate.src}
                 alt={certificate.alt}
                 width={600}
                 height={800}
-                className="reveal border-v1-line block aspect-3/4 w-full rounded-lg border object-cover"
+                className="reveal reveal-step border-v1-line block aspect-3/4 w-full rounded-lg border object-cover"
               />
             ) : (
-              <div key={certificate.alt} className="reveal text-v1-forest">
+              <div
+                key={certificate.alt}
+                style={{ "--i": index, "--reveal-offset": "250ms", "--reveal-gap": "100ms" } as React.CSSProperties}
+                className="reveal reveal-step text-v1-forest"
+              >
                 <DocumentPlaceholder label={certificate.alt} />
               </div>
             ),

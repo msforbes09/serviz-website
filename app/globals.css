@@ -236,6 +236,72 @@
   }
 }
 
+/* The JavaScript-driven path, used by any layout that mounts
+   `RevealController`. It exists because `animation-timeline: view()` is
+   unsupported in older Safari and Firefox, where the scroll-driven rules above
+   do nothing at all — correct, but it means most visitors saw no entrance.
+
+   Everything here is gated behind `[data-reveal-ready]`, which only the
+   controller sets, and only once it is running and has already marked what is
+   on screen. No JavaScript, a thrown error, or a browser without
+   `IntersectionObserver` all leave the page visible. That is the inverse of
+   e.gov.ph, which ships `opacity: 0` in the markup and hopes an observer fires.
+
+   `animation: none` stands the scroll-timeline path down so the two cannot
+   fight over the same properties. The stagger moves from `animation-range` to
+   `transition-delay`, reading the same `--i` the call sites already set. */
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal-ready] .reveal {
+    animation: none;
+    opacity: 0;
+    transform: translateY(32px);
+    transition:
+      opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1),
+      transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    /* `--reveal-offset` holds a whole group back, so a list beside an intro
+       column can start after the intro has begun rather than alongside it. */
+    transition-delay: calc(
+      var(--reveal-offset, 0ms) + var(--i, 0) * var(--reveal-gap, 60ms)
+    );
+  }
+
+  [data-reveal-ready] .reveal[data-revealed] {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Sideways, for a column that sits beside something else. Direction comes
+     from `--from-x` at the call site, so one class serves either side. */
+  [data-reveal-ready] .reveal-x {
+    transform: translateX(var(--from-x, 48px));
+  }
+
+  /* A photograph settling, transform only: it starts a touch too large and
+     eases to rest over a longer beat, and never fades — a full-bleed image
+     fading in from paper reads as a broken load, and a settle reads as
+     arrival. Pairs with the text in front of it rising on its own steps. */
+  [data-reveal-ready] .reveal-zoom {
+    opacity: 1;
+    transform: scale(1.08);
+    transition-duration: 1.2s;
+  }
+
+  /* The tagline fills word by word. Under the observer it runs on a clock, so
+     stopping mid-scroll no longer parks a word half-coloured — which is the
+     scroll-linked behaviour this replaces. `steps(1, end)` keeps each word
+     snapping rather than fading, as the original did. */
+  [data-reveal-ready] .tagline > span {
+    animation: none;
+    color: color-mix(in srgb, var(--color-v1-forest) 28%, transparent);
+    transition: color 1ms steps(1, end);
+    transition-delay: calc(var(--i, 0) * 55ms);
+  }
+
+  [data-reveal-ready] .tagline[data-revealed] > span {
+    color: var(--color-v1-forest);
+  }
+}
+
 /* Cards sitting in the same row share a scroll position, so a plain .reveal
    brings the whole row in as one block. Offsetting each card's range by its
    index turns that into a left-to-right sweep. Same trick as the tagline, and
@@ -310,6 +376,54 @@
   background-color: color-mix(in srgb, var(--v1-tint) 18%, transparent);
 }
 
+/* A glint across the primary call to action: a narrow white band that sweeps
+   the button once, about a second after the hero has landed, and again on
+   hover as feedback. Measured off e.gov.ph, where the same 70px band crosses
+   a 139px button — but theirs loops every 3.5s. This one does not. Looping
+   decoration competes with the content for attention, which is exactly why
+   the v3 logo drift was removed; a single pass at the end of the load
+   cascade sits inside the delight budget, and hover is feedback.
+
+   No `from` keyframe and no fill, on purpose: the band's resting place is
+   off the left edge, so a browser that never runs the animation shows a
+   plain button, and after the pass it snaps back out of sight unseen. The
+   hover sweep is a transition so it can retarget mid-flight. */
+.v1-shine {
+  position: relative;
+  overflow: clip;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .v1-shine::after {
+    content: "";
+    position: absolute;
+    inset: -20% auto -20% 0;
+    width: 45%;
+    pointer-events: none;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgb(255 255 255 / 0.32),
+      transparent
+    );
+    transform: translateX(-160%) skewX(-18deg);
+    animation: v1-shine 1.1s cubic-bezier(0.23, 1, 0.32, 1) 1.5s 1;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .v1-shine:hover::after {
+      transform: translateX(320%) skewX(-18deg);
+      transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+  }
+}
+
+@keyframes v1-shine {
+  to {
+    transform: translateX(320%) skewX(-18deg);
+  }
+}
+
 /* One focus treatment for the whole v1 layout. It was previously declared on
    three elements and left to the browser default on the rest, so the ring
    changed as you tabbed through the page.
@@ -326,6 +440,9 @@
 @layer components {
   .v1-root {
     --v1-focus-ring: var(--color-v1-forest);
+    /* The bar is set to exactly this, border included, and the hero's floor is
+       the viewport minus it. The 43px anchor landing in TODO.md assumes 69. */
+    --v1-nav-height: 69px;
   }
 
   .v1-root :focus-visible {
@@ -370,8 +487,8 @@
   .enter-rise,
   .enter-slide {
     transition:
-      opacity 0.55s cubic-bezier(0.23, 1, 0.32, 1),
-      transform 0.55s cubic-bezier(0.23, 1, 0.32, 1);
+      opacity 0.75s cubic-bezier(0.23, 1, 0.32, 1),
+      transform 0.75s cubic-bezier(0.23, 1, 0.32, 1);
   }
 
   .enter-delay {
@@ -387,8 +504,12 @@
      transition utilities. Putting one on an element that already has a tuned
      `transition-[...]` silently replaces it — that is why v1's hero caption
      card, which transitions box-shadow on hover, does not carry one. */
+  /* 100ms per step, measured off e.gov.ph's load cascade: eight above-fold
+     elements arriving 100ms apart. Their first one lands at ~300ms, but that is
+     hydration latency before Framer Motion can run, not a designed pause, so
+     it is not copied — ours starts on first paint. */
   .enter-step {
-    transition-delay: calc(var(--i, 0) * 60ms);
+    transition-delay: calc(var(--i, 0) * 100ms);
   }
 
   .enter-slide {
@@ -396,6 +517,21 @@
   }
 
   @starting-style {
+    /* A hero photograph sliding in. Transform only, deliberately no opacity:
+       that image is its page's LCP element, and fading it from zero pushes the
+       LCP timestamp out by the length of the transition. A slide costs nothing,
+       because transform never blocks paint.
+
+       This class supplies *only* the starting position — no `transition` of its
+       own, unlike its siblings above. The element already carries a Tailwind
+       `transition-transform duration-*` for its hover, and these `.enter-*`
+       rules are unlayered: a `transition` here would outrank that utility and
+       silently retime the hover. Letting the call site own the transition keeps
+       both on one timing. */
+    .enter-x {
+      transform: translateX(var(--from-x, 48px));
+    }
+
     .enter-rise {
       opacity: 0;
       transform: translateY(28px);
