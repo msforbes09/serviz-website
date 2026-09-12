@@ -13,20 +13,31 @@ import {
 } from "../lib/content";
 import { Icon } from "./icon";
 
+// Two even columns left the headline 552px to work in while its own
+// `max-w-[680px]` said it wanted 680px, so 60px type broke into six lines, two
+// of them barely half width. Giving the text column the room it was written for
+// puts the headline back to five full lines at the same size. Below 900px the
+// columns stack, so auto-fit still governs.
 export function Hero() {
   return (
-    <section className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-12 px-6 pt-16 pb-12">
+    <section className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-12 px-6 pt-16 pb-12 min-[900px]:grid-cols-[1.6fr_1fr]">
       <div className="max-w-[680px]">
         <p className="text-v1-forest inline-flex items-center gap-2 rounded-full bg-[#eaf4ec] px-3 py-1 text-sm font-semibold">
           <BadgeCheck aria-hidden className="size-4" />A workers cooperative in
           Pasig City, since 2021
         </p>
-        <h1 className="mt-6 bg-[linear-gradient(90deg,var(--color-v1-forest),var(--color-v1-forest-soft))] bg-clip-text text-[clamp(36px,5vw,60px)] leading-[1.05] font-bold tracking-[-0.02em] text-transparent">
-          Payroll, books and compliance,
-          <br />
-          handled by people who care
-          <br />
-          about your small business.
+        {/* No hard line breaks: the designed three-line shape only holds at
+            desktop width, and forcing it left "handled by" stranded on its own
+            line on a phone. `text-balance` lets the browser even the lines out
+            at whatever width it actually gets.
+
+            The floor is 32px rather than 36px for the same reason. At 36px on
+            a 375px screen the line count goes to six, two of them barely half
+            width; 32px fits it into five even lines. Nothing above 720px
+            changes, so the desktop composition is untouched. */}
+        <h1 className="v1-gradient-heading mt-6 bg-[linear-gradient(90deg,var(--color-v1-forest),var(--color-v1-forest-soft))] bg-clip-text text-[clamp(32px,5vw,60px)] leading-[1.05] font-bold tracking-[-0.02em] text-balance text-transparent">
+          Payroll, books and compliance, handled by people who care about your
+          small business.
         </h1>
         <p className="mt-6 max-w-[560px] text-lg leading-7 text-[#3f4b43]">
           SERBIZ runs the back office for sole proprietors, one person
@@ -83,7 +94,7 @@ export function Hero() {
 
 export function Services() {
   return (
-    <section id="services" className="border-v1-line border-y bg-white">
+    <section id="services" className="border-v1-line scroll-mt-20 border-y bg-white">
       <div className="mx-auto max-w-[1200px] px-6 py-20">
         <div className="reveal max-w-[680px]">
           <p className="text-v1-orange text-sm font-semibold tracking-[0.08em] uppercase">
@@ -95,10 +106,11 @@ export function Services() {
         </div>
 
         <div className="mt-12 grid grid-cols-[repeat(auto-fill,minmax(270px,1fr))] gap-4">
-          {services.map((service) => (
+          {services.map((service, index) => (
             <article
               key={service.title}
-              className="reveal border-v1-line bg-v1-paper hover:border-v1-forest flex flex-col gap-3 rounded-2xl border p-6 transition-[transform,border-color,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(11,74,36,.08)]"
+              style={{ "--i": index } as React.CSSProperties}
+              className="reveal reveal-step border-v1-line bg-v1-paper hover:border-v1-forest flex flex-col gap-3 rounded-2xl border p-6 transition-[transform,border-color,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(11,74,36,.08)]"
             >
               <div className="flex items-center justify-between">
                 <span className="text-v1-forest grid size-12 place-items-center rounded-xl bg-[#eaf4ec]">
@@ -117,7 +129,8 @@ export function Services() {
 
           <a
             href="#contact"
-            className="reveal bg-v1-forest hover:bg-v1-orange flex min-h-[200px] flex-col justify-between gap-3 rounded-2xl p-6 text-white transition-[background-color,transform] duration-200 hover:-translate-y-1"
+            style={{ "--i": services.length } as React.CSSProperties}
+            className="reveal reveal-step bg-v1-forest hover:bg-v1-orange flex min-h-[200px] flex-col justify-between gap-3 rounded-2xl p-6 text-white transition-[background-color,transform] duration-200 hover:-translate-y-1"
           >
             <MessagesSquare aria-hidden className="size-6" />
             <span className="text-xl leading-7 font-semibold">
@@ -154,7 +167,7 @@ export function Tagline() {
 
 export function WhySerbiz() {
   return (
-    <section id="why" className="bg-v1-forest text-white">
+    <section id="why" className="bg-v1-forest scroll-mt-20 text-white">
       <div className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-12 px-6 py-20">
         <div className="reveal relative">
           <Image
@@ -188,10 +201,11 @@ export function WhySerbiz() {
             Built for SPs, OPCs and SMEs, not scaled down from a big firm.
           </h2>
           <div className="mt-10 grid gap-6">
-            {reasons.map((reason) => (
+            {reasons.map((reason, index) => (
               <div
                 key={reason.title}
-                className="reveal grid grid-cols-[48px_1fr] items-start gap-4"
+                style={{ "--i": index } as React.CSSProperties}
+                className="reveal reveal-step grid grid-cols-[48px_1fr] items-start gap-4"
               >
                 <span className="grid size-12 place-items-center rounded-xl bg-white/10 text-[#ffb784]">
                   <Icon name={reason.icon} className="size-6" />
@@ -215,7 +229,7 @@ export function WhySerbiz() {
 
 export function HowItWorks() {
   return (
-    <section id="how" className="mx-auto max-w-[1200px] px-6 py-20">
+    <section id="how" className="mx-auto max-w-[1200px] scroll-mt-20 px-6 py-20">
       <div className="reveal max-w-[680px]">
         <p className="text-v1-orange text-sm font-semibold tracking-[0.08em] uppercase">
           How it works
@@ -225,10 +239,11 @@ export function HowItWorks() {
         </h2>
       </div>
       <ol className="mt-12 grid list-none grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-4">
-        {steps.map((step) => (
+        {steps.map((step, index) => (
           <li
             key={step.n}
-            className="reveal border-v1-line rounded-2xl border bg-white p-6"
+            style={{ "--i": index } as React.CSSProperties}
+            className="reveal reveal-step border-v1-line rounded-2xl border bg-white p-6"
           >
             <span className="text-v1-orange text-5xl leading-none font-bold">
               {step.n}
@@ -244,7 +259,7 @@ export function HowItWorks() {
 
 export function Permits() {
   return (
-    <section id="proof" className="border-v1-line border-y bg-white">
+    <section id="proof" className="border-v1-line scroll-mt-20 border-y bg-white">
       <div className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(280px,1fr))] items-center gap-12 px-6 py-20">
         <div className="reveal max-w-[480px]">
           <p className="text-v1-orange text-sm font-semibold tracking-[0.08em] uppercase">
@@ -261,7 +276,10 @@ export function Permits() {
             Revenue and the City of Pasig.
           </p>
         </div>
-        <div className="grid grid-cols-3 gap-3">
+        {/* Two columns on a phone, three from `sm` up. Three at every width
+            squeezed each card to about 110px and the labels spilled out of
+            their own borders. */}
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
           {certificates.map((certificate) =>
             certificate.src ? (
               <Image
@@ -286,7 +304,7 @@ export function Permits() {
 
 export function News() {
   return (
-    <section id="news" className="mx-auto max-w-[1200px] px-6 py-20">
+    <section id="news" className="mx-auto max-w-[1200px] scroll-mt-20 px-6 py-20">
       <div className="reveal flex flex-wrap items-end justify-between gap-4">
         <div className="max-w-[680px]">
           <p className="text-v1-orange text-sm font-semibold tracking-[0.08em] uppercase">
@@ -307,10 +325,11 @@ export function News() {
       </div>
 
       <div className="mt-10 grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-4">
-        {posts.map((post) => (
+        {posts.map((post, index) => (
           <article
             key={post.title}
-            className="reveal border-v1-line flex flex-col overflow-hidden rounded-2xl border bg-white transition-[transform,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(11,74,36,.08)]"
+            style={{ "--i": index } as React.CSSProperties}
+            className="reveal reveal-step border-v1-line flex flex-col overflow-hidden rounded-2xl border bg-white transition-[transform,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(11,74,36,.08)]"
           >
             <Image
               src={post.image}

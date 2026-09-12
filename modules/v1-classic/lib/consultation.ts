@@ -6,7 +6,11 @@ export type Consultation = {
   message: string;
 };
 
-export type ValidationResult = { ok: true } | { ok: false; message: string };
+export type ConsultationField = keyof Consultation;
+
+export type ValidationResult =
+  | { ok: true }
+  | { ok: false; field: ConsultationField; message: string };
 
 // Deliberately loose. An address is only truly validated by sending to it, and
 // a stricter pattern rejects legitimate addresses far more often than it
@@ -16,6 +20,10 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 /**
  * Checks the v1 consultation form, reporting one problem at a time in field
  * order so the message always points at the field the visitor should fix next.
+ *
+ * The failure names its field as well as its message. A message alone leaves
+ * the form guessing where to send focus, and a keyboard or screen reader user
+ * is then told something is wrong without being taken to it.
  */
 export function validateConsultation({
   name,
@@ -23,15 +31,23 @@ export function validateConsultation({
   message,
 }: Consultation): ValidationResult {
   if (name.trim().length === 0) {
-    return { ok: false, message: "Please enter your name." };
+    return { ok: false, field: "name", message: "Please enter your name." };
   }
 
   if (!EMAIL.test(email.trim())) {
-    return { ok: false, message: "Please enter a valid email address." };
+    return {
+      ok: false,
+      field: "email",
+      message: "Please enter a valid email address.",
+    };
   }
 
   if (message.trim().length === 0) {
-    return { ok: false, message: "Tell us a little about what you need." };
+    return {
+      ok: false,
+      field: "message",
+      message: "Tell us a little about what you need.",
+    };
   }
 
   return { ok: true };

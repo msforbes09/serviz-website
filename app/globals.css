@@ -150,6 +150,9 @@
   --color-v1-placeholder: #8a958d;
   --color-v1-paper: #fafaf7;
   --color-v1-line: #e3e8e4;
+  /* Error text and borders. Contrast-checked against both #fff and the
+     #fef3f2 error tint it sits on. */
+  --color-v1-danger: #b42318;
 
   /* v2 — warm editorial */
   --color-v2-forest: #0b3d1f;
@@ -213,6 +216,63 @@
     opacity: 1;
     transform: none;
   }
+}
+
+/* Cards sitting in the same row share a scroll position, so a plain .reveal
+   brings the whole row in as one block. Offsetting each card's range by its
+   index turns that into a left-to-right sweep. Same trick as the tagline, and
+   it stays inside the .reveal guards: without scroll timelines or with reduced
+   motion the cards are simply there. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal-step {
+      animation-range: entry 0% cover calc(22% + var(--i, 0) * 5%);
+    }
+  }
+}
+
+/* v1's nav sits flat on the page whether you are at the top or halfway down.
+   This lifts it off the content once you start scrolling.
+
+   No `from` keyframe on purpose: the animation's start is the element's own
+   resting style, so a browser that never runs it shows the flat bar rather
+   than a bar stuck in some half state. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: scroll()) {
+    .v1-nav-lift {
+      animation: v1-nav-lift linear both;
+      animation-timeline: scroll();
+      animation-range: 0 96px;
+    }
+  }
+}
+
+@keyframes v1-nav-lift {
+  to {
+    background-color: color-mix(in srgb, var(--color-v1-paper) 98%, transparent);
+    box-shadow: 0 10px 30px -12px rgb(11 74 36 / 0.22);
+  }
+}
+
+/* The v1 headline is painted as a gradient clipped to the glyphs, which means
+   the text itself is transparent. Forced-colours modes drop background images,
+   so the headline would render as nothing at all. Same failure shape as an
+   entrance animation that never runs: the fallback has to be the visible
+   state, not the hidden one. */
+@media (forced-colors: active) {
+  .v1-gradient-heading {
+    background: none;
+    color: CanvasText;
+    -webkit-text-fill-color: currentColor;
+  }
+}
+
+/* One focus treatment for the whole v1 layout. It was previously declared on
+   three elements and left to the browser default on the rest, so the ring
+   changed as you tabbed through the page. */
+.v1-root :focus-visible {
+  outline: 2px solid var(--color-v1-forest);
+  outline-offset: 2px;
 }
 
 /* v2 hero motion. Both are decorative and gated behind motion-safe: at the
