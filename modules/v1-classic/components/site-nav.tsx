@@ -72,6 +72,19 @@ export function SiteNav() {
     };
   }, [open]);
 
+  function handleLogoClick(event: React.MouseEvent<HTMLAnchorElement>) {
+    event.preventDefault();
+
+    // No `behavior` given, so this defers to the CSS `scroll-behavior`: smooth
+    // normally, instant for a visitor who asked for reduced motion. Passing
+    // "smooth" here would animate for them regardless of that preference.
+    //
+    // Belt and braces over the `#top` href, which is correct per the HTML spec
+    // but could not be observed working in this environment. Also keeps the
+    // fragment out of the address bar.
+    window.scrollTo({ top: 0 });
+  }
+
   return (
     <>
       <nav
@@ -79,7 +92,19 @@ export function SiteNav() {
         className="v1-nav-lift border-v1-line sticky top-0 z-50 border-b bg-[color-mix(in_srgb,var(--color-v1-paper)_92%,transparent)] backdrop-blur-md"
       >
         <div className="mx-auto flex max-w-[1200px] items-center justify-between gap-6 px-6 py-3">
-          <a href="#main" aria-label="SERBIZ home" className="flex items-center">
+          {/* `#top`, not `#main`. The main landmark starts below the nav, so
+              jumping to it left the page short of the top by exactly the height
+              of the bar, which is the bug this fixes. A fragment of "top" with
+              no element to match is defined as the top of the document, so the
+              href alone is correct and still works without scripting; the
+              click handler makes it certain. The skip link keeps `#main`, since
+              getting past the nav is the whole point of that one. */}
+          <a
+            href="#top"
+            onClick={handleLogoClick}
+            aria-label="SERBIZ home"
+            className="flex items-center"
+          >
             <Image
               src="/designs/v1/logo-full.png"
               alt="SERBIZ Resources Income Workers Cooperative"
