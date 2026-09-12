@@ -395,9 +395,20 @@ minimal fix deliberately did not take.
 
 - **Tests run inside the Vercel build.** `prebuild` chains lint and the test
   suite ahead of `next build`, so a test-environment quirk fails a deployment
-  rather than a CI job. That is what broke the first deploy. Moving both into a
-  GitHub Actions workflow, and leaving `build` as just `next build`, would
-  decouple them.
+  rather than a CI job. That is what broke the first deploy, and then the
+  second: Vercel sets `NODE_ENV=production` for the whole build, Vitest only
+  defaults it to "test" when unset, and the inherited value made Vite resolve
+  React's production bundle where `act` throws. 19 render tests failed on
+  Vercel while all 63 passed locally.
+
+  `vitest.config.mts` now pins `NODE_ENV` before Vite resolves anything, and
+  `test/environment.test.ts` fails loudly if the pin is removed. Reproduce
+  either state with `NODE_ENV=production npm run build`.
+
+  The structural fix still stands: moving lint and tests into a GitHub Actions
+  workflow, leaving `build` as just `next build`, would stop a test quirk from
+  reading as a failed deployment at all. Twice now the symptom has looked like
+  an infrastructure problem when it was a test-environment one.
 
 - **Repository name spelling.** The remote is `msforbes09/serviz-website` while
   the brand, the package name and every string in `lib/site-config.ts` are
