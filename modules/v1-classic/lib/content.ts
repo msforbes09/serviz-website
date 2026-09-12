@@ -1,0 +1,196 @@
+/**
+ * Copy for the v1 layout, transcribed from `serbiz-v1-classic.html`.
+ *
+ * Services, mission and permit facts come from the flyers. The news items and
+ * the FAQ answers came from the design and are NOT confirmed — see the
+ * sign-off checklist in `TODO.md`.
+ *
+ * Icons are named, not imported, so this stays a plain data module: the
+ * component maps each name onto a Lucide icon. The design used Phosphor from a
+ * CDN; Lucide is already in the project and ships nothing extra.
+ */
+export type IconName =
+  | "banknote"
+  | "book"
+  | "receipt"
+  | "users"
+  | "building"
+  | "package"
+  | "laptop"
+  | "layers"
+  | "calendar"
+  | "coins"
+  | "heart";
+
+export const navLinks = [
+  { href: "#services", label: "Services" },
+  { href: "#why", label: "Why SERBIZ" },
+  { href: "#news", label: "News and events" },
+  { href: "#faq", label: "FAQ" },
+] as const;
+
+export const heroBadges = [
+  "CDA registered cooperative",
+  "BIR registered",
+  "Pasig business permit",
+] as const;
+
+export type Service = {
+  icon: IconName;
+  title: string;
+  body: string;
+  isNew?: boolean;
+};
+
+export const services: Service[] = [
+  {
+    icon: "banknote",
+    title: "Payroll and benefits outsourcing",
+    body: "Timekeeping, payslips, 13th month, SSS, PhilHealth and Pag-IBIG remittances and claims. On time every cutoff.",
+  },
+  {
+    icon: "book",
+    title: "Accounting outsourcing",
+    body: "Bookkeeping, accounts receivable and payable, and monthly financial reports you can actually read.",
+  },
+  {
+    icon: "receipt",
+    title: "Tax compliance",
+    body: "BIR periodic returns prepared, filed and paid on schedule, online or onsite, whichever your RDO needs.",
+  },
+  {
+    icon: "users",
+    title: "HR support",
+    body: "Recruitment documentation, 201 files, employee records and benefits administration for teams under 100.",
+  },
+  {
+    icon: "building",
+    title: "Business registration assistance",
+    body: "DTI or SEC, BIR, Mayor's permit and agency registrations handled end to end, with a checklist you can follow.",
+  },
+  {
+    icon: "package",
+    title: "Customized service packages",
+    body: "Mix payroll, accounting, HR and more into one monthly package sized to your headcount and volume.",
+  },
+  {
+    icon: "laptop",
+    title: "IT consulting",
+    body: "Practical systems advice for small teams: payroll and accounting software setup, web portals, backups and basic security.",
+    isNew: true,
+  },
+];
+
+export const taglineWords =
+  "Why worry about the small stuff when you can leave it to us?".split(" ");
+
+export const reasons: { icon: IconName; title: string; body: string }[] = [
+  {
+    icon: "layers",
+    title: "One team for payroll and books",
+    body: "Your payroll figures and your ledgers come from the same people, so nothing falls between two vendors.",
+  },
+  {
+    icon: "calendar",
+    title: "Compliance on the calendar",
+    body: "Every BIR, SSS, PhilHealth and Pag-IBIG deadline is scheduled at onboarding. You are told before it is due, not after.",
+  },
+  {
+    icon: "coins",
+    title: "Cooperative pricing",
+    body: "Members own the cooperative. Lower overheads than a firm, passed on as lower monthly fees.",
+  },
+  {
+    icon: "heart",
+    title: "People who have done this for decades",
+    body: "Our members spent their careers in compensation, benefits and accounting departments. Now they do it for you.",
+  },
+];
+
+export const steps = [
+  {
+    n: "01",
+    title: "Tell us about your business",
+    body: "A free 30 minute call. Headcount, entity type, what is piling up.",
+  },
+  {
+    n: "02",
+    title: "Get a package and quote",
+    body: "Within three working days you receive a written scope and monthly fee. No obligation.",
+  },
+  {
+    n: "03",
+    title: "We take over month to month",
+    body: "Records handed over, calendar set, first payroll or filing done under your review.",
+  },
+] as const;
+
+export const certificates = [
+  { src: "/designs/v1/cert-bir.jpg", alt: "BIR Certificate of Registration" },
+  { src: "/designs/v1/cert-cda.jpg", alt: "CDA Certificate of Compliance" },
+  { src: "/designs/v1/cert-pasig.jpg", alt: "Pasig City Mayor's Permit" },
+] as const;
+
+/** UNVERIFIED — written by the design tool, not supplied by the cooperative. */
+export const posts = [
+  {
+    kind: "Event",
+    date: "Oct 18, 2026",
+    title: "Free clinic: BIR filing basics for sole proprietors",
+    body: "A Saturday morning session at our Kapitolyo office. Bring your books and questions.",
+    image: "/designs/v1/ill-tax.jpg",
+  },
+  {
+    kind: "News",
+    date: "Sep 2026",
+    title: "IT consulting joins the service list",
+    body: "Members with systems experience now help clients pick and set up payroll and accounting tools.",
+    image: "/designs/v1/ill-portal.jpg",
+  },
+  {
+    kind: "News",
+    date: "May 2026",
+    title: "CDA Certificate of Compliance renewed",
+    body: "The cooperative passed its annual reporting review with the Cooperative Development Authority.",
+    image: "/designs/v1/ill-books.jpg",
+  },
+  {
+    kind: "Event",
+    date: "Nov 2026",
+    title: "Annual general assembly of members",
+    body: "Members meet to review the year and elect officers. Clients are welcome as observers.",
+    image: "/designs/v1/ill-time.jpg",
+  },
+] as const;
+
+/** UNVERIFIED — the answers make commitments the cooperative has not confirmed. */
+export const faqs = [
+  {
+    q: "Who do you work with?",
+    a: "Sole proprietors, one person corporations, small and medium enterprises and other cooperatives. Most clients have between 1 and 80 employees.",
+  },
+  {
+    q: "Do we have to be in Pasig?",
+    a: "No. We work remotely with clients across Metro Manila and the rest of the Philippines, and go onsite within NCR when a filing or audit needs it.",
+  },
+  {
+    q: "How is pricing set?",
+    a: "By headcount and transaction volume. You receive a written quote after the free consultation with no obligation to proceed.",
+  },
+  {
+    q: "Can you take over in the middle of the year?",
+    a: "Yes. We reconcile the records from your previous provider or in house team first, then continue from the next cutoff.",
+  },
+  {
+    q: "What is a workers cooperative?",
+    a: "A business owned and run by the people who work in it, registered with the Cooperative Development Authority. It keeps overheads low and the team accountable.",
+  },
+  {
+    q: "Is our data safe with you?",
+    a: "Records live on access controlled systems, we sign a non disclosure agreement at engagement, and only your assigned members see your files.",
+  },
+  {
+    q: "What does IT consulting cover?",
+    a: "Choosing and setting up payroll and accounting software, simple web portals, backups and basic security for small teams. No jargon, priced per project.",
+  },
+] as const;
