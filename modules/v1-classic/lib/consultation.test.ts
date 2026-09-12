@@ -11,7 +11,20 @@ describe("validateConsultation", () => {
   it("asks for a name first", () => {
     const result = validateConsultation({ ...valid, name: "   " });
 
-    expect(result).toEqual({ ok: false, message: "Please enter your name." });
+    expect(result).toEqual({
+      ok: false,
+      field: "name",
+      message: "Please enter your name.",
+    });
+  });
+
+  it("names the field at fault so the form can focus it", () => {
+    expect(validateConsultation({ ...valid, email: "nope" })).toMatchObject({
+      field: "email",
+    });
+    expect(validateConsultation({ ...valid, message: " " })).toMatchObject({
+      field: "message",
+    });
   });
 
   it("rejects an address that is not an email", () => {
@@ -25,6 +38,7 @@ describe("validateConsultation", () => {
 
     expect(result).toEqual({
       ok: false,
+      field: "message",
       message: "Tell us a little about what you need.",
     });
   });
@@ -32,7 +46,11 @@ describe("validateConsultation", () => {
   it("reports the first problem only, in field order", () => {
     const result = validateConsultation({ name: "", email: "nope", message: "" });
 
-    expect(result).toEqual({ ok: false, message: "Please enter your name." });
+    expect(result).toEqual({
+      ok: false,
+      field: "name",
+      message: "Please enter your name.",
+    });
   });
 });
 
