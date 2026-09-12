@@ -17,7 +17,9 @@ Two things that bite immediately in this repo:
 
 Marketing site for SERBIZ Resources Income Workers Cooperative (SRI), a Philippine payroll and accounting outsourcing cooperative serving sole proprietors, one person corporations and SMEs. Organisation facts (legal name, mission, vision, contact details) live in `lib/site-config.ts` and are transcribed from the print material in `references/Images/` — read from that module, never retype a phone number or address into a component.
 
-**Current state: scaffold.** The shell, route boundaries, SEO routes, env validation and test harness exist. Page content and the visual theme do not. The user will supply designs and a brand palette later; until then the theme is shadcn's neutral `base-nova` default and pages are placeholders that say so. Do not invent a palette or marketing copy without being asked.
+**Current state: three layout previews, awaiting the client's choice.** Each lives on its own unguessable route with its own shell, sections and palette, under `modules/v1-classic/`, `modules/v2-forest/` and `modules/v3-navy/`. `modules/previews/lib/variants.ts` maps slug to layout and names the internal index. All preview routes are `noindex` and stay out of the sitemap. `app/(site)/page.tsx` is still the placeholder home and gets replaced by whichever layout wins.
+
+Do not invent marketing copy or facts. Much of the preview copy came from the design tool rather than the cooperative, and `TODO.md` holds the sign-off checklist of everything still unconfirmed.
 
 Scope decisions already made: public marketing pages only. No auth, no admin area, no backend API client, no database. Content is typed data in the repo.
 
@@ -44,6 +46,8 @@ The public shell is the `(site)` route group: `app/(site)/layout.tsx` renders `S
 **Client components only at the leaves.** `"use client"` never goes on a layout, page or section. Extract the interactive piece into a small client component and leave the rest server-rendered so it can prerender.
 
 `lib/env.ts` is the only place `process.env` is read. It parses with Zod, strips the trailing slash off the site URL and throws on malformed input. App code imports `env`. Anything read in the browser must be `NEXT_PUBLIC_`-prefixed and must not be a secret — Next inlines those into the client bundle.
+
+The site URL falls back to Vercel's injected production domain when it is not set explicitly. That fallback reads a server-side variable, which is only safe because `env` is imported by the root layout, sitemap and robots and never by a client component. Importing it into a client component would make the browser and the server disagree.
 
 New public routes must be added to `app/sitemap.ts` in the same change.
 

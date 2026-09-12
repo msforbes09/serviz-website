@@ -19,8 +19,32 @@ const envSchema = z.object({
 
 export type Env = z.infer<typeof envSchema>;
 
+/**
+ * Vercel injects `VERCEL_PROJECT_PRODUCTION_URL` into every build as a bare
+ * hostname. Using it as the fallback means a fresh deploy has correct canonical
+ * URLs on its first build, instead of needing one deploy to learn the URL and a
+ * second to apply it.
+ *
+ * This is a server-side variable, which is safe here only because `env` is
+ * imported by the root layout, the sitemap and robots — never by a client
+ * component. Were that to change, the browser would see a different value from
+ * the server and hydration would diverge.
+ */
+function resolveSiteUrl(source: Record<string, string | undefined>): string | undefined {
+  const explicit = source.NEXT_PUBLIC_SITE_URL?.trim();
+  if (explicit) return explicit;
+
+  const host = source.VERCEL_PROJECT_PRODUCTION_URL?.trim();
+  if (!host) return undefined;
+
+  return /^https?:\/\//.test(host) ? host : `https://${host}`;
+}
+
 export function parseEnv(source: Record<string, string | undefined>): Env {
-  const result = envSchema.safeParse(source);
+  const result = envSchema.safeParse({
+    NEXT_PUBLIC_SITE_URL: resolveSiteUrl(source),
+    NEXT_PUBLIC_SITE_NAME: source.NEXT_PUBLIC_SITE_NAME,
+  });
 
   if (!result.success) {
     const detail = result.error.issues
@@ -39,4 +63,5 @@ export function parseEnv(source: Record<string, string | undefined>): Env {
 export const env = parseEnv({
   NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
   NEXT_PUBLIC_SITE_NAME: process.env.NEXT_PUBLIC_SITE_NAME,
+  VERCEL_PROJECT_PRODUCTION_URL: process.env.VERCEL_PROJECT_PRODUCTION_URL,
 });
