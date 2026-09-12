@@ -236,6 +236,37 @@
   }
 }
 
+/* The JavaScript-driven path, used by any layout that mounts
+   `RevealController`. It exists because `animation-timeline: view()` is
+   unsupported in older Safari and Firefox, where the scroll-driven rules above
+   do nothing at all — correct, but it means most visitors saw no entrance.
+
+   Everything here is gated behind `[data-reveal-ready]`, which only the
+   controller sets, and only once it is running and has already marked what is
+   on screen. No JavaScript, a thrown error, or a browser without
+   `IntersectionObserver` all leave the page visible. That is the inverse of
+   e.gov.ph, which ships `opacity: 0` in the markup and hopes an observer fires.
+
+   `animation: none` stands the scroll-timeline path down so the two cannot
+   fight over the same properties. The stagger moves from `animation-range` to
+   `transition-delay`, reading the same `--i` the call sites already set. */
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal-ready] .reveal {
+    animation: none;
+    opacity: 0;
+    transform: translateY(32px);
+    transition:
+      opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1),
+      transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    transition-delay: calc(var(--i, 0) * 60ms);
+  }
+
+  [data-reveal-ready] .reveal[data-revealed] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* Cards sitting in the same row share a scroll position, so a plain .reveal
    brings the whole row in as one block. Offsetting each card's range by its
    index turns that into a left-to-right sweep. Same trick as the tagline, and

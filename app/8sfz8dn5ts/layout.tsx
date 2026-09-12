@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { RevealController } from "@/components/motion/reveal-controller";
 import { poppins } from "@/modules/v1-classic/lib/fonts";
 
 export const metadata: Metadata = {
@@ -19,6 +20,10 @@ export default function V1Layout({ children }: LayoutProps<"/8sfz8dn5ts">) {
         Skip to content
       </a>
       {children}
+      {/* Renders nothing and wraps nothing, so every section stays a Server
+          Component. Mounted on v1 only for now; v2 and v3 still use the
+          CSS-only scroll timeline. */}
+      <RevealController />
     </div>
   );
 }

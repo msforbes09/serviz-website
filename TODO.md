@@ -391,6 +391,31 @@ minimal fix deliberately did not take.
   titles alone are generic. A second accordion would also have swapped a
   repetitive grid for a repetitive stack.
 
+- **v1's scroll reveals are now JavaScript-driven.** `animation-timeline:
+  view()` is unsupported in older Safari and Firefox, where the CSS-only reveal
+  does nothing at all — correct, but it means many visitors saw no entrance,
+  which is what prompted this. `components/motion/reveal-controller.tsx` is a
+  render-nothing client component mounted once in v1's layout, so every section
+  it animates stays a Server Component.
+
+  **The design rule is that nothing is hidden until the script is running and
+  able to show it again.** The stylesheet holds no resting `opacity: 0`; the
+  hidden state is gated behind `data-reveal-ready`, which only the controller
+  sets. No JavaScript, a thrown error, a browser without `IntersectionObserver`,
+  or reduced motion all leave the page plainly visible.
+
+  That is the inverse of e.gov.ph, which ships `opacity: 0` in the markup and
+  waits on an observer. The gap worth knowing about is an observer that *exists
+  but never fires* — a hidden or backgrounded tab does exactly that, and it is
+  the state e.gov.ph was measured in with seven elements inside the viewport
+  still invisible. A `sweep()` covers it: it reveals anything currently in the
+  viewport regardless of the observer, and runs before arming, on
+  `visibilitychange`, and once on a 1.2s timeout.
+
+  **v2 and v3 still use the CSS-only path.** Move them over the same way when
+  their turn comes; the controller is variant-neutral and only needs mounting.
+
+
 ## Housekeeping
 
 - **Tests run inside the Vercel build.** `prebuild` chains lint and the test
