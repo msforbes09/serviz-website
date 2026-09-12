@@ -52,9 +52,10 @@ describe("v1 logo", () => {
 
     // The full wordmark was a PNG with a white ground baked in, which showed
     // as a box against the paper bar. Real text takes the bar's own colour.
-    expect(logo()).toHaveTextContent(siteConfig.name);
+    // Same two lines as the v3 bar: the name, then the descriptor on its own,
+    // without the short name tacked on.
     expect(logo()).toHaveTextContent(
-      `Resources Income Workers Cooperative (${siteConfig.shortName})`,
+      new RegExp(`^${siteConfig.name}Resources Income Workers Cooperative$`),
     );
     expect(within(logo()).queryByRole("img")).toBeNull();
   });
@@ -109,6 +110,31 @@ describe("v1 section links", () => {
     render(<SiteNav />);
 
     expect(servicesLink()).toHaveAttribute("href", "#services");
+  });
+
+  it("waits for the menu to release the page before scrolling from it", async () => {
+    const user = userEvent.setup();
+    const overflowWhenScrolled: string[] = [];
+    Element.prototype.scrollIntoView = vi.fn(function () {
+      overflowWhenScrolled.push(document.body.style.overflow);
+    });
+    const target = withTarget();
+    render(<SiteNav />);
+
+    await user.click(screen.getByRole("button", { name: /menu/i }));
+    await user.click(
+      within(document.getElementById("v1-menu") as HTMLElement).getByRole("link", {
+        name: "Services",
+      }),
+    );
+
+    // The open menu holds the body at overflow: hidden. A smooth scroll begun
+    // under that lock is thrown away when the lock lifts a frame later, so the
+    // jump has to start after the menu has let go of the page.
+    expect(overflowWhenScrolled).toEqual([""]);
+    expect(window.location.hash).toBe("");
+
+    target.remove();
   });
 });
 

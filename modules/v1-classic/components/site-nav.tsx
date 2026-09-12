@@ -15,6 +15,20 @@ const menuLinks = [
 const descriptor = siteConfig.legalName.replace(siteConfig.name, "").trim();
 
 /**
+ * Two things a fragment jump does that a scripted one has to do by hand: land
+ * the section under `scroll-margin-top`, which `scrollIntoView` honours, and
+ * move focus there, so the next Tab continues from the section rather than
+ * from the link just used. Sections are not focusable on their own, hence the
+ * tabindex.
+ */
+function jumpTo(target: HTMLElement) {
+  if (!target.hasAttribute("tabindex")) target.tabIndex = -1;
+  target.focus({ preventScroll: true });
+  // No `behavior`, for the same reason as the logo: CSS decides.
+  target.scrollIntoView({ block: "start" });
+}
+
+/**
  * v1's navigation. A client component because the mobile panel is a
  * full-screen overlay whose open state lives here; the rest of the v1 page is
  * server-rendered.
@@ -28,6 +42,7 @@ export function SiteNav() {
   const [open, setOpen] = useState(false);
   const toggleRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+  const pendingJump = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (!open) return;
@@ -90,29 +105,42 @@ export function SiteNav() {
     window.scrollTo({ top: 0 });
   }
 
+  // A jump chosen from the overlay runs here, after the lock effect above has
+  // handed the page back. Cleanups run before the next effects, so by the time
+  // this sees `open` go false the body's overflow is already restored. A
+  // smooth scroll begun while the body was still locked is dropped when the
+  // lock lifts a frame later, which left the menu's links doing nothing.
+  useEffect(() => {
+    if (open || !pendingJump.current) return;
+    jumpTo(pendingJump.current);
+    pendingJump.current = null;
+  }, [open]);
+
   /**
    * Section links scroll from script instead of letting the fragment navigate.
    * A fragment navigation writes `#faq` into the address bar, and a refresh
    * then reopens the page part way down, past the hero and its entrance. The
    * href stays, so a visitor without scripting still gets the jump.
    *
-   * Two things a fragment jump does that this has to do by hand: land the
-   * section under `scroll-margin-top`, which `scrollIntoView` honours, and
-   * move focus there, so the next Tab continues from the section rather than
-   * from the link just used. Sections are not focusable on their own, hence
-   * the tabindex.
+   * Returns the section when the link points at one on this page, having
+   * taken over the click. Anything else is left to the browser.
    */
-  function handleSectionClick(event: React.MouseEvent<HTMLAnchorElement>) {
+  function sectionFor(event: React.MouseEvent<HTMLAnchorElement>) {
     const target = document.getElementById(
       event.currentTarget.hash.slice(1),
     );
-    if (!target) return;
+    if (target) event.preventDefault();
+    return target;
+  }
 
-    event.preventDefault();
-    if (!target.hasAttribute("tabindex")) target.tabIndex = -1;
-    target.focus({ preventScroll: true });
-    // No `behavior`, for the same reason as the logo: CSS decides.
-    target.scrollIntoView({ block: "start" });
+  function handleSectionClick(event: React.MouseEvent<HTMLAnchorElement>) {
+    const target = sectionFor(event);
+    if (target) jumpTo(target);
+  }
+
+  function handleMenuClick(event: React.MouseEvent<HTMLAnchorElement>) {
+    pendingJump.current = sectionFor(event);
+    setOpen(false);
   }
 
   return (
@@ -148,11 +176,11 @@ export function SiteNav() {
               className="size-10 shrink-0 object-contain"
             />
             <span className="flex min-w-0 flex-col leading-[1.05]">
-              <span className="text-v1-forest text-[22px] font-bold tracking-[0.12em]">
+              <span className="font-outfit text-v1-ink text-[22px] font-extrabold tracking-[0.12em]">
                 {siteConfig.name}
               </span>
-              <span className="text-v1-muted truncate text-[11px]">
-                {descriptor} ({siteConfig.shortName})
+              <span className="text-v1-muted truncate text-[10px] tracking-[0.02em]">
+                {descriptor}
               </span>
             </span>
           </a>
@@ -216,10 +244,7 @@ export function SiteNav() {
           <a
             key={link.href}
             href={link.href}
-            onClick={(event) => {
-              setOpen(false);
-              handleSectionClick(event);
-            }}
+            onClick={handleMenuClick}
             className="text-v1-ink block text-3xl leading-9 font-semibold"
           >
             {link.label}
