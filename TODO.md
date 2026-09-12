@@ -13,6 +13,29 @@ rules in `CLAUDE.md`.
 - **Page designs.** Home, about, services, why us, FAQs and contact are
   placeholders. Sections get built under `modules/landing/` and
   `modules/site/`, not inline in a page.
+- **Claude Design authorization.** Importing a layout needs `DesignSync`, which
+  needs design-system access this session cannot grant. Run `/design-login`
+  once from an interactive `claude` terminal on this machine; headless sessions
+  then reuse it. Blocking the v1 import from
+  `claude.ai/design/p/bbfa7f03-12da-4e2d-b9bd-9889096c1191`.
+- **v2 and v3 designs.** Only `serbiz-v1-classic.html` exists so far. Their
+  routes and modules get created when their designs land, not before.
+
+## Three-layout preview (decided 2026-09-12)
+
+The client picks one of three presentations of the same content.
+
+- **Three URL prefixes.** `/v1`, `/v2`, `/v3`, each with its own shell,
+  sections and theme tokens, all live at once so one link compares them.
+  Variant sections live in `modules/v1-classic/` and siblings.
+- **One content layer.** All three read the same organisation facts from
+  `lib/site-config.ts`. A variant changes presentation, never the facts.
+- **Preview routes are `noindex`** and stay out of `app/sitemap.ts` until the
+  client chooses. Three near-duplicate copies of one company must not be
+  indexed.
+- **On selection:** the winning variant is promoted to `/`, the losing routes
+  and modules are deleted, and the sitemap plus indexing rules are restored.
+
 ## Housekeeping
 
 - **Repository name spelling.** The remote is `msforbes09/serviz-website` while
