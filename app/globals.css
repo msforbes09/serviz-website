@@ -176,7 +176,11 @@
   --color-v3-navy: #0f2a44;
   --color-v3-navy-deep: #0b2137;
   --color-v3-navy-darkest: #081a2c;
-  --color-v3-rust: #c9502c;
+  /* Darkened from #c9502c, which measured 4.26:1 on the v3 paper. Ten eyebrow
+     labels use it at 12-15px, where small text needs 4.5:1. This clears it at
+     4.56 and is all but indistinguishable from the original; it also lifts the
+     white-on-rust button label from exactly 4.5 to 4.81. */
+  --color-v3-rust: #c14d2a;
   --color-v3-rust-bright: #de5e3a;
   --color-v3-sky: #8cc8e8;
   --color-v3-mint: #cfe6f5;
@@ -324,6 +328,20 @@
    element. Forest on forest is a ring nobody can see, so any dark container
    with something focusable inside it must restate `--v1-focus-ring`. */
 @layer components {
+  /* v3 had no focus styling at all: every ring was the browser default, on a
+     variant built around large navy panels. Same shape as v1's rule and the
+     same reason for the variable — `outline-offset` draws the ring on whatever
+     sits behind the element, so a navy ring on a navy panel is invisible. Any
+     dark container holding something focusable restates it. */
+  .v3-root {
+    --v3-focus-ring: var(--color-v3-navy);
+  }
+
+  .v3-root :focus-visible {
+    outline: 2px solid var(--v3-focus-ring);
+    outline-offset: 2px;
+  }
+
   .v1-root {
     --v1-focus-ring: var(--color-v1-forest);
   }

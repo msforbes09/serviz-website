@@ -5,7 +5,7 @@ import { basePath } from "../lib/content";
 
 export function HomeHero() {
   return (
-    <section className="bg-v3-navy relative overflow-hidden text-white">
+    <section className="bg-v3-navy relative overflow-hidden text-white [--v3-focus-ring:var(--color-v3-paper)]">
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <div className="bg-v3-navy-deep absolute top-[-10%] right-[-8%] h-[120%] w-[60%] opacity-90 [clip-path:polygon(28%_0,100%_0,100%_100%,0_100%)]" />
         <div className="bg-v3-rust absolute top-0 right-0 h-full w-[34%] opacity-95 [clip-path:polygon(70%_0,100%_0,100%_100%,40%_100%)]" />
@@ -18,18 +18,30 @@ export function HomeHero() {
       </div>
 
       <div className="relative mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-10 px-5 pt-18 pb-20">
-        <div className="enter-rise">
-          <p className="text-v3-sky mb-[18px] text-[13px] font-semibold tracking-[0.18em] uppercase">
+        <div>
+          <p
+            style={{ "--i": 0 } as React.CSSProperties}
+            className="text-v3-sky enter-rise enter-step mb-[18px] text-[13px] font-semibold tracking-[0.18em] uppercase"
+          >
             Payroll · Accounting · Tax · HR · IT — Pasig City
           </p>
-          <h1 className="font-outfit mb-[22px] text-[clamp(38px,6vw,68px)] leading-[1.02] font-extrabold tracking-[-0.02em] text-pretty">
+          <h1
+            style={{ "--i": 1 } as React.CSSProperties}
+            className="font-outfit enter-rise enter-step mb-[22px] text-[clamp(38px,6vw,68px)] leading-[1.02] font-extrabold tracking-[-0.02em] text-pretty"
+          >
             Why worry about the small stuff when you can leave it to us?
           </h1>
-          <p className="text-v3-on-dark mb-[34px] max-w-[540px] text-[clamp(16px,1.6vw,19px)] leading-relaxed text-pretty">
+          <p
+            style={{ "--i": 2 } as React.CSSProperties}
+            className="text-v3-on-dark enter-rise enter-step mb-[34px] max-w-[540px] text-[clamp(16px,1.6vw,19px)] leading-relaxed text-pretty"
+          >
             Payroll, accounting, tax, HR and IT — handled for small businesses
             in the Philippines.
           </p>
-          <div className="flex flex-wrap gap-3">
+          <div
+            style={{ "--i": 3 } as React.CSSProperties}
+            className="enter-rise enter-step flex flex-wrap gap-3"
+          >
             <a
               href={`mailto:${siteConfig.contact.email}?subject=Consultation%20request`}
               className="bg-v3-rust hover:bg-v3-rust-bright rounded-full px-[26px] py-4 text-base font-semibold text-white transition-[transform,background-color] duration-200 ease-[cubic-bezier(.23,1,.32,1)] hover:-translate-y-0.5 active:scale-[.97]"

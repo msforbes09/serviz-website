@@ -55,11 +55,12 @@ export function ServicesGrid() {
         </div>
 
         <ul className="grid list-none grid-cols-[repeat(auto-fit,minmax(270px,1fr))] gap-4">
-          {serviceCards.map((service) => (
+          {serviceCards.map((service, index) => (
             <li key={service.num}>
               <Link
                 href={`${basePath}/services`}
-                className={`reveal border-v3-navy/10 relative flex h-full flex-col gap-3.5 overflow-hidden rounded-[20px] border px-6 pt-[26px] pb-7 transition-[transform,box-shadow] duration-[220ms] ease-[cubic-bezier(.23,1,.32,1)] hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(15,42,68,.12)] ${toneClass[service.tone]}`}
+                style={{ "--i": index } as React.CSSProperties}
+                className={`reveal reveal-step border-v3-navy/10 relative flex h-full flex-col gap-3.5 overflow-hidden rounded-[20px] border px-6 pt-[26px] pb-7 transition-[transform,box-shadow] duration-[220ms] ease-[cubic-bezier(.23,1,.32,1)] hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(15,42,68,.12)] ${toneClass[service.tone]}`}
               >
                 <span className="flex items-center justify-between">
                   <span className="font-outfit text-v3-rust text-[34px] leading-none font-extrabold">
@@ -88,7 +89,7 @@ export function ServicesGrid() {
 
 export function WhyUs() {
   return (
-    <section className="bg-v3-navy relative overflow-hidden text-white">
+    <section className="bg-v3-navy relative overflow-hidden text-white [--v3-focus-ring:var(--color-v3-paper)]">
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <div className="bg-v3-rust absolute bottom-[-20%] left-[-6%] h-[70%] w-[45%] opacity-90 [clip-path:polygon(0_30%,60%_0,100%_100%,0_100%)]" />
         <div className="bg-v3-navy-deep absolute bottom-[-10%] left-[-6%] h-[50%] w-[40%] [clip-path:polygon(0_40%,55%_0,100%_100%,0_100%)]" />
@@ -109,10 +110,11 @@ export function WhyUs() {
         </div>
 
         <ul className="grid list-none gap-3.5">
-          {reasons.map((reason) => (
+          {reasons.map((reason, index) => (
             <li
               key={reason.n}
-              className="reveal flex items-center gap-[18px] rounded-[18px] border border-white/10 bg-white/5 px-5 py-4 backdrop-blur-[6px]"
+              style={{ "--i": index } as React.CSSProperties}
+              className="reveal reveal-step flex items-center gap-[18px] rounded-[18px] border border-white/10 bg-white/5 px-5 py-4 backdrop-blur-[6px]"
             >
               <span className="bg-v3-rust font-outfit grid size-11 shrink-0 place-items-center rounded-xl text-lg font-extrabold">
                 {reason.n}
@@ -145,10 +147,11 @@ export function Permits() {
         </div>
 
         <div className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-5">
-          {permits.map((permit) => (
+          {permits.map((permit, index) => (
             <figure
               key={permit.title}
-              className="reveal border-v3-navy/10 bg-v3-paper m-0 flex flex-col gap-3.5 rounded-[20px] border p-4 transition-[transform,box-shadow] duration-[220ms] ease-[cubic-bezier(.23,1,.32,1)] hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(15,42,68,.12)]"
+              style={{ "--i": index } as React.CSSProperties}
+              className="reveal reveal-step border-v3-navy/10 bg-v3-paper m-0 flex flex-col gap-3.5 rounded-[20px] border p-4 transition-[transform,box-shadow] duration-[220ms] ease-[cubic-bezier(.23,1,.32,1)] hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(15,42,68,.12)]"
             >
               {permit.image ? (
                 <Image

@@ -13,7 +13,7 @@ async function CopyrightYear() {
 
 export function SiteFooter() {
   return (
-    <footer className="bg-v3-navy-darkest relative overflow-hidden text-white">
+    <footer className="bg-v3-navy-darkest relative overflow-hidden text-white [--v3-focus-ring:var(--color-v3-paper)]">
       <div
         aria-hidden
         className="absolute inset-x-0 top-0 h-1.5 bg-[linear-gradient(90deg,var(--color-v3-rust)_0_40%,var(--color-v3-sky)_40%_55%,var(--color-v3-navy)_55%_100%)]"

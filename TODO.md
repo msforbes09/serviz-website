@@ -391,6 +391,61 @@ minimal fix deliberately did not take.
   titles alone are generic. A second accordion would also have swapped a
   repetitive grid for a repetitive stack.
 
+## The v3 pass (2026-09-12)
+
+Checked v3 against the seven defects the v1 playbook says to look for, rather
+than assuming. **Three did not exist here**: no fixed-column grids, no hard
+`<br>` in a heading, no gradient-clipped text. The scroll-margin arithmetic is
+moot because v3 is multi-page with no in-page anchors, and mission, vision and
+motto are already on the about page, so v3 needs no equivalent of v1's mission
+band. Its body copy is 117 words across the whole variant against 109 in v1's
+services section alone, so there was nothing to trim.
+
+**Fixed:**
+
+- **Navigation pill.** The glass treatment is gone — the gradient, the inset
+  highlights and the outer glow — leaving a solid navy pill. The animation is
+  now a Motion shared-layout element: one `motion.span` with a `layoutId` that
+  is the same on every item, so Motion animates between the boxes. That deleted
+  the manual measurement entirely: pixel offsets in state, a resize listener, a
+  re-measure once web fonts settled, and a transition on `width`, which triggers
+  layout every frame. The spring is `{ duration: 0.45, bounce: 0.22 }` and
+  carries velocity through an interruption. First use of `motion` in the repo,
+  which was already a declared dependency.
+- **Mobile menu** now closes on Escape and returns focus to the toggle. It is a
+  dropdown panel, not a full-screen overlay, so it owes no focus trap, scroll
+  lock or `aria-modal` — that is v1's contract, not this one. Two tests, red
+  first.
+- **Skip link and `<main id>`**, which v3 had neither of.
+- **Focus ring.** v3 had *zero* `focus-visible` declarations; every ring was the
+  browser default on a variant built around navy panels. `.v3-root` now scopes
+  one, with `--v3-focus-ring` restated on the hero, the navy section, the footer
+  and the contact form. Measures 13.87 on navy and 16.66 on the darkest panel.
+- **Open Graph.** One card on the layout, inherited by all five routes. Every v3
+  page title starts with "v3 — ", so without this a shared link would announce
+  the layout as a numbered attempt. Navy ground with the wordmark on a white
+  chip, matching the lockup the footer already uses.
+- **`--color-v3-rust` darkened** from `#c9502c` to `#c14d2a`. Ten eyebrow labels
+  use it at 12–15px where 4.5:1 is required and it measured 4.26. Now 4.56, and
+  the white-on-rust button label goes from exactly 4.5 to 4.81.
+- **Staggers.** Seven card grids gained `reveal-step` with an index, and the
+  hero text column was split so the eyebrow, headline, lede and buttons arrive
+  in reading order instead of as one block.
+
+**Checked and deliberately not changed:**
+
+- **The contact form.** An earlier read of this called it unvalidated. That was
+  wrong: it uses native `required` on name and message with no `noValidate`, so
+  the browser blocks submit, focuses the first invalid field and announces the
+  message. Replacing that with custom handling would be a regression.
+- **Spacing.** v1's worst finding was a card gutter narrower than the cards' own
+  padding. v3's is the reverse — 20px gutters against 16px padding — and its
+  section rhythm varies only 80 to 88. Nothing worth changing.
+- **Two-tone headlines and the icon ramp.** v1 design devices. Copying them
+  makes the three previews converge, which defeats showing the client three
+  distinct presentations.
+
+
 ## Housekeeping
 
 - **Tests run inside the Vercel build.** `prebuild` chains lint and the test

@@ -94,10 +94,11 @@ export function WhyClientsStay() {
         </div>
 
         <ul className="grid list-none gap-3">
-          {reasons.map((reason) => (
+          {reasons.map((reason, index) => (
             <li
               key={reason.n}
-              className="reveal border-v3-navy/10 bg-v3-paper flex items-center gap-4 rounded-2xl border px-5 py-4"
+              style={{ "--i": index } as React.CSSProperties}
+              className="reveal reveal-step border-v3-navy/10 bg-v3-paper flex items-center gap-4 rounded-2xl border px-5 py-4"
             >
               <span className="bg-v3-navy text-v3-rust font-outfit grid size-9 shrink-0 place-items-center rounded-[10px] text-[15px] font-extrabold">
                 {reason.n}

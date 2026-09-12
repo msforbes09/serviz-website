@@ -7,10 +7,11 @@ export function NewsList() {
       <h2 className="font-outfit text-v3-navy m-0 text-[28px] font-extrabold">
         Latest news
       </h2>
-      {news.map((post) => (
+      {news.map((post, index) => (
         <article
           key={post.title}
-          className="reveal border-v3-navy/10 overflow-hidden rounded-[20px] border bg-white transition-[transform,box-shadow] duration-[220ms] ease-[cubic-bezier(.23,1,.32,1)] hover:-translate-y-[3px] hover:shadow-[0_18px_40px_rgba(15,42,68,.1)]"
+          style={{ "--i": index } as React.CSSProperties}
+          className="reveal reveal-step border-v3-navy/10 overflow-hidden rounded-[20px] border bg-white transition-[transform,box-shadow] duration-[220ms] ease-[cubic-bezier(.23,1,.32,1)] hover:-translate-y-[3px] hover:shadow-[0_18px_40px_rgba(15,42,68,.1)]"
         >
           <div className="bg-v3-navy relative aspect-[16/8]">
             <Image
@@ -46,10 +47,11 @@ export function UpcomingEvents() {
       <h2 className="font-outfit text-v3-navy m-0 text-[28px] font-extrabold">
         Upcoming
       </h2>
-      {events.map((event) => (
+      {events.map((event, index) => (
         <div
           key={event.title}
-          className="reveal border-v3-navy/10 flex items-start gap-[18px] rounded-[18px] border bg-white px-5 py-[18px]"
+          style={{ "--i": index } as React.CSSProperties}
+          className="reveal reveal-step border-v3-navy/10 flex items-start gap-[18px] rounded-[18px] border bg-white px-5 py-[18px]"
         >
           <div className="bg-v3-navy w-16 shrink-0 rounded-xl px-0 pt-2.5 pb-2 text-center text-white">
             <div className="font-outfit text-v3-rust text-2xl leading-none font-extrabold">

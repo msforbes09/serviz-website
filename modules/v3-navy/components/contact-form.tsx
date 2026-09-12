@@ -21,7 +21,7 @@ export function ContactForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-v3-navy grid gap-3 rounded-3xl p-6 text-white"
+      className="bg-v3-navy grid gap-3 rounded-3xl p-6 text-white [--v3-focus-ring:var(--color-v3-paper)]"
     >
       <h2 className="font-outfit text-xl font-bold">Send a quick message</h2>
 

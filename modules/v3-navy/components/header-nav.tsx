@@ -1,73 +1,87 @@
 "use client";
 
+import { motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { siteConfig } from "@/lib/site-config";
 import { navItems } from "../lib/content";
 
-type Pill = { x: number; w: number };
-
 /**
- * Desktop navigation with a pill that slides to whichever route is active,
- * plus the mobile menu. The one client leaf in the v3 shell.
+ * Desktop navigation with a pill that moves to whichever route is active, plus
+ * the mobile menu. The one client leaf in the v3 shell.
  *
- * The pill is measured rather than styled per-item because it animates
- * *between* items: its transform and width transition, which needs real pixel
- * values. Measurement runs in a layout effect so the pill is already in place
- * on the first paint, and again on resize and once web fonts settle, since
- * both change the items' widths.
+ * The pill is a shared-layout element: one `motion.span` rendered inside the
+ * active link, with a `layoutId` that is the same string on every item. When
+ * the active route changes the old one unmounts and the new one mounts, and
+ * Motion animates between the two boxes.
+ *
+ * That replaces measuring the active item by hand. The previous version kept
+ * pixel offsets in state, re-measured on resize and again once web fonts
+ * settled, and transitioned `width` — a property that triggers layout on every
+ * frame. Motion animates position and size on the compositor and corrects the
+ * border-radius distortion that scaling a pill would otherwise produce.
  */
 export function HeaderNav() {
   const pathname = usePathname();
-  const trackRef = useRef<HTMLDivElement>(null);
-  const [pill, setPill] = useState<Pill | null>(null);
+  const reduceMotion = useReducedMotion();
   const [menuOpen, setMenuOpen] = useState(false);
+  const toggleRef = useRef<HTMLButtonElement>(null);
 
-  useLayoutEffect(() => {
-    const track = trackRef.current;
-    if (!track) return;
+  /**
+   * The panel is a dropdown under the header, not a full-screen overlay, so it
+   * owes Escape and focus return — but not a focus trap, a scroll lock or
+   * `aria-modal`. Those are the contract for a modal dialog, which this is not;
+   * v1's overlay is one and carries all of them.
+   */
+  useEffect(() => {
+    if (!menuOpen) return;
 
-    function measure() {
-      const active = track?.querySelector<HTMLElement>('[data-active="true"]');
-      if (!active) return;
-      setPill({ x: active.offsetLeft, w: active.offsetWidth });
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key !== "Escape") return;
+      setMenuOpen(false);
+      toggleRef.current?.focus();
     }
 
-    measure();
-    window.addEventListener("resize", measure);
-    document.fonts?.ready.then(measure).catch(() => {});
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [menuOpen]);
 
-    return () => window.removeEventListener("resize", measure);
-  }, [pathname]);
+  // Apple-style spring rather than a duration curve. The bounce is what reads
+  // as the pill settling into place instead of stopping dead, and a spring
+  // carries velocity through an interruption — clicking a third item mid-flight
+  // retargets from wherever the pill actually is.
+  const pillTransition = reduceMotion
+    ? { duration: 0 }
+    : { type: "spring" as const, duration: 0.45, bounce: 0.22 };
 
   return (
     <>
       <nav
-        ref={trackRef}
         aria-label="Main"
-        className="relative isolate hidden items-center gap-1 min-[1001px]:flex"
+        className="relative hidden items-center gap-1 min-[1001px]:flex"
       >
-        <span
-          aria-hidden
-          style={{
-            transform: `translateX(${pill?.x ?? 0}px) scale(${pill ? 1 : 0.9})`,
-            width: pill ? `${pill.w}px` : 0,
-            opacity: pill ? 1 : 0,
-          }}
-          className="bg-v3-navy absolute top-0 left-0 z-0 h-full rounded-full border border-white/20 bg-[linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,.04)_50%,rgba(0,0,0,.08))] shadow-[inset_0_1px_0_rgba(255,255,255,.35),inset_0_-1px_0_rgba(0,0,0,.25),0_8px_20px_rgba(15,42,68,.28)] transition-[transform,width,opacity] duration-[550ms] ease-[cubic-bezier(.32,.94,.36,1)]"
-        />
         {navItems.map((item) => {
           const active = pathname === item.href;
           return (
             <Link
               key={item.href}
               href={item.href}
-              data-active={active}
               aria-current={active ? "page" : undefined}
-              className={`relative z-1 rounded-full px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-colors duration-[250ms] ${active ? "text-white" : "text-v3-ink hover:bg-v3-navy/5"}`}
+              className={`relative rounded-full px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-colors duration-[250ms] ${active ? "text-white" : "text-v3-ink hover:bg-v3-navy/5"}`}
             >
-              {item.label}
+              {active && (
+                <motion.span
+                  aria-hidden
+                  layoutId="v3-nav-pill"
+                  // `initial={false}` so the pill is simply in place on first
+                  // paint rather than animating in from nothing.
+                  initial={false}
+                  transition={pillTransition}
+                  className="bg-v3-navy absolute inset-0 rounded-full"
+                />
+              )}
+              <span className="relative">{item.label}</span>
             </Link>
           );
         })}
@@ -80,6 +94,7 @@ export function HeaderNav() {
       </nav>
 
       <button
+        ref={toggleRef}
         type="button"
         onClick={() => setMenuOpen((open) => !open)}
         aria-label={menuOpen ? "Close menu" : "Open menu"}

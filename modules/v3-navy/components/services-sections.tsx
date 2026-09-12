@@ -73,10 +73,11 @@ export function OtherServices() {
         </div>
 
         <ul className="grid list-none grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-4">
-          {otherServices.map((service) => (
+          {otherServices.map((service, index) => (
             <li
               key={service.title}
-              className={`reveal border-v3-navy/10 relative flex flex-col gap-3 overflow-hidden rounded-[20px] border px-6 py-7 ${toneClass[service.tone]}`}
+              style={{ "--i": index } as React.CSSProperties}
+              className={`reveal reveal-step border-v3-navy/10 relative flex flex-col gap-3 overflow-hidden rounded-[20px] border px-6 py-7 ${toneClass[service.tone]}`}
             >
               {service.isNew && (
                 <span className="bg-v3-rust absolute top-[18px] right-[18px] rounded-full px-2.5 py-1 text-[11px] font-bold tracking-[0.12em] text-white uppercase">
