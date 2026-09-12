@@ -2,14 +2,24 @@
  * The three layout presentations the client picks between.
  *
  * Each goes to the client as its own link, and nothing on any of them leads to
- * the others — no chooser page, no switcher. The slugs are random so that
- * seeing one preview never reveals that the others exist, which also keeps the
- * client's first impression of a layout free of any implied ranking.
+ * the others — no switcher, no link back to the index. The slugs are random so
+ * that seeing one preview never reveals that the others exist, which also keeps
+ * the client's first impression of a layout free of any implied ranking.
  *
  * `variants.test.ts` asserts every entry still has a route behind it, so
  * deleting a losing variant's folder without removing it here fails the suite
  * rather than shipping a dead link.
  */
+
+/**
+ * Our own index of the three, for moving between them while we work. It is not
+ * for the client, so it carries a random slug like the previews do: a
+ * memorable path such as /previews would be trivial to stumble onto, and one
+ * visit there would show all three layouts at once — exactly what the separate
+ * links exist to prevent.
+ */
+export const previewIndexPath = "/m796ajxcp5";
+
 export type Variant = {
   /** Route segment. Unguessable by design; see the note above. */
   slug: string;

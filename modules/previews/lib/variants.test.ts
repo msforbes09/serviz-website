@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { getVariant, variants } from "./variants";
+import { getVariant, previewIndexPath, variants } from "./variants";
 
 describe("preview variants", () => {
   it("lists all three layouts", () => {
@@ -32,6 +32,18 @@ describe("preview variants", () => {
 
       expect(existsSync(page), `${variant.name} has no app/${variant.slug}/page.tsx`).toBe(true);
     }
+  });
+
+  it("keeps the index behind a random slug too", () => {
+    // A memorable path here would hand a curious visitor all three layouts at
+    // once, which is the one thing the separate links exist to prevent.
+    expect(previewIndexPath).toMatch(/^\/[a-z0-9]{10}$/);
+  });
+
+  it("has a route behind the index", () => {
+    const page = join(process.cwd(), "app", previewIndexPath.slice(1), "page.tsx");
+
+    expect(existsSync(page), `no ${previewIndexPath} route`).toBe(true);
   });
 
   it("finds a variant by slug", () => {

@@ -35,7 +35,11 @@ The client picks one of three presentations of the same content.
 
   Random rather than `/v1`–`/v3` so that seeing one preview never reveals the
   others, and so no layout arrives pre-labelled as a first or second attempt.
-  There is no chooser page and no switcher: nothing links one to another.
+  Nothing on a preview links to another one.
+
+- **Our own index:** `/m796ajxcp5` lists all three. Not for the client, which
+  is why it carries a random slug too — a memorable path would be trivial to
+  stumble onto and would show every layout at once. Worth bookmarking.
 - **One content layer.** All three read the same organisation facts from
   `lib/site-config.ts`. A variant changes presentation, never the facts.
 - **Preview routes are `noindex`** and stay out of `app/sitemap.ts` until the
