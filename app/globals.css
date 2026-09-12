@@ -258,7 +258,11 @@
     transition:
       opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1),
       transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-    transition-delay: calc(var(--i, 0) * var(--reveal-gap, 60ms));
+    /* `--reveal-offset` holds a whole group back, so a list beside an intro
+       column can start after the intro has begun rather than alongside it. */
+    transition-delay: calc(
+      var(--reveal-offset, 0ms) + var(--i, 0) * var(--reveal-gap, 60ms)
+    );
   }
 
   [data-reveal-ready] .reveal[data-revealed] {
@@ -272,11 +276,14 @@
     transform: translateX(var(--from-x, 48px));
   }
 
-  /* Scale-up, for a full-bleed band that should arrive rather than slide.
-     0.92 is measured off e.gov.ph's Solution section, and is the shape an
-     entrance wants: never from nothing, always from nearly-there. */
-  [data-reveal-ready] .reveal-scale {
-    transform: scale(0.92);
+  /* A photograph settling, transform only: it starts a touch too large and
+     eases to rest over a longer beat, and never fades — a full-bleed image
+     fading in from paper reads as a broken load, and a settle reads as
+     arrival. Pairs with the text in front of it rising on its own steps. */
+  [data-reveal-ready] .reveal-zoom {
+    opacity: 1;
+    transform: scale(1.08);
+    transition-duration: 1.2s;
   }
 
   /* The tagline fills word by word. Under the observer it runs on a clock, so

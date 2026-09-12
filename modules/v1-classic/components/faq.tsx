@@ -49,6 +49,9 @@ export function Faq() {
                     "--i": index,
                     "--from-x": "48px",
                     "--reveal-gap": "100ms",
+                    // The intro column on the left starts first; the list
+                    // holds a beat so it reads as following the heading.
+                    "--reveal-offset": "250ms",
                   } as React.CSSProperties
                 }
                 className="reveal reveal-x reveal-step border-v1-line overflow-hidden rounded-xl border bg-white"

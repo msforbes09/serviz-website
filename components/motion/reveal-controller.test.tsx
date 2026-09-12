@@ -117,6 +117,27 @@ describe("RevealController", () => {
     expect(el.dataset.revealed).toBe("");
   });
 
+  it("sweeps on scroll stop, for an item the observer has not reported yet", () => {
+    // An item can be on screen without the observer having fired for it —
+    // sitting inside the root margin, or arriving between callbacks. If the
+    // visitor stops scrolling there, it must not stay hidden.
+    vi.useFakeTimers();
+    stubObserver();
+    stubMatchMedia(false);
+    const host = mountTargets(1);
+    const el = host.firstElementChild as HTMLElement;
+    vi.spyOn(el, "getBoundingClientRect").mockReturnValue({ top: 5000, bottom: 5400 } as DOMRect);
+    render(<RevealController />);
+    expect(el.dataset.revealed).toBeUndefined();
+
+    vi.mocked(el.getBoundingClientRect).mockReturnValue({ top: 100, bottom: 400 } as DOMRect);
+    window.dispatchEvent(new Event("scroll"));
+    vi.advanceTimersByTime(200);
+
+    expect(el.dataset.revealed).toBe("");
+    vi.useRealTimers();
+  });
+
   it("disarms on unmount, so nothing is left hidden with no observer", () => {
     stubObserver();
     stubMatchMedia(false);

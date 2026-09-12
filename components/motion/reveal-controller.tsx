@@ -71,9 +71,11 @@ export function RevealController() {
           observer.unobserve(el);
         }
       },
-      // A little before the edge, so an element is already moving by the time
-      // it is properly in view rather than starting at the last moment.
-      { rootMargin: "0px 0px -12% 0px" },
+      // A touch before the edge, so an element is already moving by the time
+      // it is properly in view. Kept small: anything sitting inside this band
+      // is on screen but not yet "intersecting", and at 12% a visitor who
+      // stopped scrolling there saw a card that simply never appeared.
+      { rootMargin: "0px 0px -4% 0px" },
     );
 
     for (const el of pending) observer.observe(el);
@@ -84,7 +86,20 @@ export function RevealController() {
     document.addEventListener("visibilitychange", sweep);
     const safetyNet = window.setTimeout(sweep, 1200);
 
+    // And on scroll stop. Whatever the observer has or has not reported by
+    // the time the visitor stops, anything on screen gets revealed, so an
+    // entrance that has started always runs to the end and nothing in view
+    // waits on the next scroll. Debounced, so it costs one sweep per stop.
+    let scrollTimer = 0;
+    function onScroll() {
+      window.clearTimeout(scrollTimer);
+      scrollTimer = window.setTimeout(sweep, 150);
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+
     return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.clearTimeout(scrollTimer);
       document.removeEventListener("visibilitychange", sweep);
       window.clearTimeout(safetyNet);
       observer.disconnect();

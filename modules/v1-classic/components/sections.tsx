@@ -376,7 +376,7 @@ export function Mission() {
         alt=""
         width={1800}
         height={640}
-        className="absolute inset-0 -z-10 size-full object-cover"
+        className="reveal reveal-zoom absolute inset-0 -z-10 size-full object-cover"
       />
       {/* A flat forest tint, not a gradient. The photograph's brightness varies
           across the frame, so a gradient would give the text a different
@@ -396,12 +396,28 @@ export function Mission() {
         aria-hidden
         className="absolute inset-0 -z-10 bg-[color-mix(in_srgb,var(--color-v1-forest)_78%,transparent)]"
       />
-      <div className="reveal reveal-scale mx-auto max-w-[1200px] px-6 py-16 sm:py-28">
-        <span aria-hidden className="bg-v1-orange block h-1 w-14 rounded-full" />
-        <p className="mt-5 text-sm font-semibold tracking-[0.08em] text-white uppercase">
+      {/* The band assembles: the photograph settles while the rule, the
+          eyebrow and the mission rise in one after another. A single fade on
+          the whole block was too quiet to register against the dark ground. */}
+      <div
+        style={{ "--reveal-gap": "120ms" } as React.CSSProperties}
+        className="mx-auto max-w-[1200px] px-6 py-16 sm:py-28"
+      >
+        <span
+          aria-hidden
+          style={{ "--i": 0 } as React.CSSProperties}
+          className="reveal reveal-step bg-v1-orange block h-1 w-14 rounded-full"
+        />
+        <p
+          style={{ "--i": 1 } as React.CSSProperties}
+          className="reveal reveal-step mt-5 text-sm font-semibold tracking-[0.08em] text-white uppercase"
+        >
           Our mission
         </p>
-        <p className="mt-4 max-w-[900px] text-[clamp(22px,3vw,32px)] leading-[1.35] font-semibold text-balance text-white">
+        <p
+          style={{ "--i": 2 } as React.CSSProperties}
+          className="reveal reveal-step mt-4 max-w-[900px] text-[clamp(22px,3vw,32px)] leading-[1.35] font-semibold text-balance text-white"
+        >
           {siteConfig.mission}
         </p>
       </div>
@@ -433,18 +449,23 @@ export function Permits() {
             squeezed each card to about 110px and the labels spilled out of
             their own borders. */}
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {certificates.map((certificate) =>
+          {certificates.map((certificate, index) =>
             certificate.src ? (
               <Image
                 key={certificate.alt}
+                style={{ "--i": index, "--reveal-offset": "250ms", "--reveal-gap": "100ms" } as React.CSSProperties}
                 src={certificate.src}
                 alt={certificate.alt}
                 width={600}
                 height={800}
-                className="reveal border-v1-line block aspect-3/4 w-full rounded-lg border object-cover"
+                className="reveal reveal-step border-v1-line block aspect-3/4 w-full rounded-lg border object-cover"
               />
             ) : (
-              <div key={certificate.alt} className="reveal text-v1-forest">
+              <div
+                key={certificate.alt}
+                style={{ "--i": index, "--reveal-offset": "250ms", "--reveal-gap": "100ms" } as React.CSSProperties}
+                className="reveal reveal-step text-v1-forest"
+              >
                 <DocumentPlaceholder label={certificate.alt} />
               </div>
             ),

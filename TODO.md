@@ -487,6 +487,29 @@ minimal fix deliberately did not take.
   from the nav pill or v2/v3's CTAs.
 
 
+- **Entrances run to completion on scroll stop, and three v1 sections were
+  re-paced.** The client reported the FAQ freezing when scrolling stopped. On
+  the JS path entrances already run on a clock, so the cause was the observer's
+  12% bottom margin: an item sitting in that band is on screen but not yet
+  "intersecting", and stopping there left it hidden. Two fixes: the margin is
+  now 4%, and the controller sweeps on scroll stop (debounced 150ms), so
+  anything on screen is revealed whatever the observer has reported. That is
+  the fourth safety net after mount, `visibilitychange` and the 1.2s timeout,
+  and the one that turns "continues once started" into a guarantee. Tested.
+
+  `--reveal-offset` is new: it holds a whole group back so a list beside an
+  intro column starts after the intro has begun. The FAQ and the permits both
+  set 250ms, so the left column leads.
+
+  The mission band's single fade was too quiet against the dark ground. It now
+  assembles: the photograph settles from `scale(1.08)` over 1.2s with no fade
+  (`.reveal-zoom`, transform only — a full-bleed image fading in from paper
+  reads as a broken load), while the rule, eyebrow and mission rise in at
+  120ms steps. `.reveal-scale` was retired with it; nothing else used it.
+
+  The three permit cards used to land as one block; they now cascade at 100ms.
+
+
 ## Housekeeping
 
 - **Tests run inside the Vercel build.** `prebuild` chains lint and the test
