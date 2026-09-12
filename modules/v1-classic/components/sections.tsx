@@ -74,29 +74,29 @@ export function Hero() {
           corporations and SMEs. Payslips out on time, BIR filings on schedule,
           reports you can read. You get your evenings back.
         </p>
-        <div
-          style={{ "--i": 3 } as React.CSSProperties}
-          className="enter-rise enter-step mt-8 flex flex-wrap items-center gap-3"
-        >
+        <div className="mt-8 flex flex-wrap items-center gap-3">
           <a
             href="#contact"
-            className="bg-v1-orange hover:bg-v1-forest rounded-lg px-6 py-3 text-base font-semibold text-white transition-[background-color,transform] duration-200 hover:-translate-y-0.5"
+            style={{ "--i": 3 } as React.CSSProperties}
+            className="enter-rise enter-step v1-shine bg-v1-orange hover:bg-v1-forest rounded-lg px-6 py-3 text-base font-semibold text-white transition-[background-color,transform] duration-200 hover:-translate-y-0.5"
           >
             Book a free consultation
           </a>
           <a
             href={`tel:${siteConfig.contact.mobileTel}`}
-            className="text-v1-forest inline-flex items-center gap-2 px-4 py-3 text-base font-semibold"
+            style={{ "--i": 4 } as React.CSSProperties}
+            className="enter-rise enter-step text-v1-forest inline-flex items-center gap-2 px-4 py-3 text-base font-semibold"
           >
             <Phone aria-hidden className="size-5" /> {siteConfig.contact.phones.mobile}
           </a>
         </div>
-        <ul
-          style={{ "--i": 4 } as React.CSSProperties}
-          className="enter-rise enter-step mt-8 flex list-none flex-wrap gap-x-6 gap-y-4 text-sm text-[#3f4b43]"
-        >
-          {heroBadges.map((badge) => (
-            <li key={badge} className="inline-flex items-center gap-2">
+        <ul className="mt-8 flex list-none flex-wrap gap-x-6 gap-y-4 text-sm text-[#3f4b43]">
+          {heroBadges.map((badge, index) => (
+            <li
+              key={badge}
+              style={{ "--i": 5 + index } as React.CSSProperties}
+              className="enter-rise enter-step inline-flex items-center gap-2"
+            >
               <CircleCheck aria-hidden className="text-v1-forest size-[18px]" />
               {badge}
             </li>

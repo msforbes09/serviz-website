@@ -455,6 +455,38 @@ minimal fix deliberately did not take.
   transform-only, so the LCP image inside never fades.
 
 
+- **v1 hero builds item by item, the FAQ enters one at a time, and the primary
+  CTA glints.** Three more things measured off e.gov.ph.
+
+  The hero's CTA row and trust row used to enter as two blocks. Each item now
+  has its own step: badge, headline, lede, button, phone, then the three
+  badges — eight steps at 100ms, the last landing at 1.45s. The reference for
+  this was their stats row (40M+ downloads, 700M+ transactions) entering one at
+  a time. **The stats themselves were not built:** those are real figures for
+  them, and the rule against inventing numbers already covers it. The slot is
+  ready if the client supplies a client count.
+
+  The seven FAQ items enter from the right, one at a time. A new
+  `--reveal-gap` custom property lets one list widen the JS-path stagger
+  without touching the global 60ms; the FAQ sets 100ms, because at 60ms seven
+  items read as one wave. From the right and not the left, since the list sits
+  to the right of the intro column and arriving from that edge never crosses
+  the text.
+
+  `.v1-shine` sweeps a white band across the hero CTA once, 1.5s after load —
+  right as the cascade finishes — and again on hover. Measured: e.gov.ph's
+  band is 70px across a 139px button and **loops every 3.5s**. Ours does not.
+  Looping decoration competes with content for attention, which is why the v3
+  logo drift was removed; a single pass at the end of the cascade sits inside
+  the delight budget and hover is feedback. If the loop is wanted, it is
+  `animation-iteration-count: infinite` plus a longer duration to carry the
+  rest between passes. No `from` keyframe and no fill, so a browser that never
+  runs it shows a plain button and the band snaps back off-screen unseen.
+
+  The `.v1-shine` class is variant-neutral in substance and one addition away
+  from the nav pill or v2/v3's CTAs.
+
+
 ## Housekeeping
 
 - **Tests run inside the Vercel build.** `prebuild` chains lint and the test

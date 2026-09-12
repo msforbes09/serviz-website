@@ -37,10 +37,21 @@ export function Faq() {
             const isOpen = openIndex === index;
             const panelId = `v1-faq-${index}`;
 
+            // One at a time, from the right: the list sits to the right of the
+            // intro column, so arriving from that edge never crosses the text.
+            // `--reveal-gap` widens the stagger to the 100ms measured off
+            // e.gov.ph; at the default 60ms seven items read as one wave.
             return (
               <div
                 key={faq.q}
-                className="border-v1-line overflow-hidden rounded-xl border bg-white"
+                style={
+                  {
+                    "--i": index,
+                    "--from-x": "48px",
+                    "--reveal-gap": "100ms",
+                  } as React.CSSProperties
+                }
+                className="reveal reveal-x reveal-step border-v1-line overflow-hidden rounded-xl border bg-white"
               >
                 <h3>
                   <button
