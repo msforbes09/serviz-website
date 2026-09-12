@@ -3,6 +3,7 @@ import Link from "next/link";
 import { siteConfig } from "@/lib/site-config";
 import {
   audiences,
+  basePath,
   permits,
   reasons,
   serviceCards,
@@ -45,7 +46,7 @@ export function ServicesGrid() {
             </h2>
           </div>
           <Link
-            href="/v3/services"
+            href={`${basePath}/services`}
             className="border-v3-navy text-v3-navy hover:bg-v3-navy rounded-full border-[1.5px] px-[22px] py-3 text-sm font-semibold transition-colors hover:text-white"
           >
             Full service details →
@@ -56,7 +57,7 @@ export function ServicesGrid() {
           {serviceCards.map((service) => (
             <li key={service.num}>
               <Link
-                href="/v3/services"
+                href={`${basePath}/services`}
                 className={`reveal border-v3-navy/10 relative flex h-full flex-col gap-3.5 overflow-hidden rounded-[20px] border px-6 pt-[26px] pb-7 transition-[transform,box-shadow] duration-[220ms] ease-[cubic-bezier(.23,1,.32,1)] hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(15,42,68,.12)] ${toneClass[service.tone]}`}
               >
                 <span className="flex items-center justify-between">

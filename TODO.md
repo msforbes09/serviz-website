@@ -23,9 +23,19 @@ rules in `CLAUDE.md`.
 
 The client picks one of three presentations of the same content.
 
-- **Three URL prefixes.** `/v1`, `/v2`, `/v3`, each with its own shell,
-  sections and theme tokens, all live at once so one link compares them.
-  Variant sections live in `modules/v1-classic/` and siblings.
+- **Three unguessable URLs**, one per layout, each with its own shell, sections
+  and theme tokens. Variant sections live in `modules/v1-classic/` and siblings;
+  the registry in `modules/previews/lib/variants.ts` maps slug to layout.
+
+  | Layout | Send the client |
+  | --- | --- |
+  | v1 Classic | `/8sfz8dn5ts` |
+  | v2 Warm editorial | `/u2feptyuzu` |
+  | v3 Structured navy | `/4sjhdc5awq` |
+
+  Random rather than `/v1`–`/v3` so that seeing one preview never reveals the
+  others, and so no layout arrives pre-labelled as a first or second attempt.
+  There is no chooser page and no switcher: nothing links one to another.
 - **One content layer.** All three read the same organisation facts from
   `lib/site-config.ts`. A variant changes presentation, never the facts.
 - **Preview routes are `noindex`** and stay out of `app/sitemap.ts` until the
@@ -33,6 +43,8 @@ The client picks one of three presentations of the same content.
   indexed.
 - **On selection:** the winning variant is promoted to `/`, the losing routes
   and modules are deleted, and the sitemap plus indexing rules are restored.
+  For v3 that means setting `basePath` in its content module to an empty
+  string; the slug appears nowhere else in the code.
 
 ### Design sources
 

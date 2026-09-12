@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { siteConfig } from "@/lib/site-config";
+import { basePath } from "../lib/content";
 
 export function HomeHero() {
   return (
@@ -36,7 +37,7 @@ export function HomeHero() {
               Book a free consultation
             </a>
             <Link
-              href="/v3/services"
+              href={`${basePath}/services`}
               className="rounded-full border-[1.5px] border-white/50 px-[26px] py-[15px] text-base font-semibold text-white transition-[background-color,border-color,transform] duration-200 ease-[cubic-bezier(.23,1,.32,1)] hover:border-white hover:bg-white/10 active:scale-[.97]"
             >
               See our services

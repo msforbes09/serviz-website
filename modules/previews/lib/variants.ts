@@ -1,44 +1,48 @@
 /**
  * The three layout presentations the client picks between.
  *
- * One entry per preview route. The chooser at `/previews` renders this list,
- * and `variants.test.ts` asserts every entry has a route behind it — so
- * deleting a losing variant's route without removing it here fails the build
+ * Each goes to the client as its own link, and nothing on any of them leads to
+ * the others — no chooser page, no switcher. The slugs are random so that
+ * seeing one preview never reveals that the others exist, which also keeps the
+ * client's first impression of a layout free of any implied ranking.
+ *
+ * `variants.test.ts` asserts every entry still has a route behind it, so
+ * deleting a losing variant's folder without removing it here fails the suite
  * rather than shipping a dead link.
  */
 export type Variant = {
-  /** Route segment and the name everyone uses in conversation. */
+  /** Route segment. Unguessable by design; see the note above. */
   slug: string;
-  /** Short label for the chooser card. */
+  /** The name we use for it in conversation. Never shown to the client. */
   name: string;
-  /** What distinguishes this presentation, in the client's terms. */
+  /** What distinguishes this presentation. */
   description: string;
-  /** Palette summary, shown as swatches on the chooser. */
+  /** Palette summary. */
   swatches: string[];
-  /** Typeface pairing, so the client can see why the three read differently. */
+  /** Typeface pairing. */
   type: string;
 };
 
 export const variants: Variant[] = [
   {
-    slug: "v1",
-    name: "Classic",
+    slug: "8sfz8dn5ts",
+    name: "v1 — Classic",
     description:
       "One long page, generous white space, restrained type. Reads as an established professional firm.",
     swatches: ["#0B4A24", "#F26A1B", "#FAFAF7"],
     type: "Poppins throughout",
   },
   {
-    slug: "v2",
-    name: "Warm editorial",
+    slug: "u2feptyuzu",
+    name: "v2 — Warm editorial",
     description:
       "Cream ground with a deep forest hero, expandable service cards and a news feed. Approachable and current.",
     swatches: ["#0B3D1F", "#F26B1D", "#F6F5F1"],
     type: "Sora headings, Poppins body",
   },
   {
-    slug: "v3",
-    name: "Structured navy",
+    slug: "4sjhdc5awq",
+    name: "v3 — Structured navy",
     description:
       "Five separate pages with angular shapes and a navy-and-rust palette. The most corporate of the three.",
     swatches: ["#0F2A44", "#C9502C", "#F7F9FB"],

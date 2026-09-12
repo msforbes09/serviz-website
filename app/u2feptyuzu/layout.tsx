@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { PreviewBar } from "@/modules/previews/components/preview-bar";
 import { poppins, sora } from "@/modules/v2-forest/lib/fonts";
 
 // Preview routes stay out of search results until the client picks one. Three
@@ -9,10 +8,9 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function V2Layout({ children }: LayoutProps<"/v2">) {
+export default function V2Layout({ children }: LayoutProps<"/u2feptyuzu">) {
   return (
     <div className={`${sora.variable} ${poppins.variable} font-poppins bg-v2-cream text-v2-ink`}>
-      <PreviewBar current="v2" />
       {children}
     </div>
   );

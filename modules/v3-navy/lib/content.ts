@@ -6,13 +6,21 @@
  * NOT confirmed — see the sign-off checklist in `TODO.md`.
  */
 
+/**
+ * Route prefix for this preview. Deliberately unguessable: the three layouts
+ * go to the client as three separate links and nothing should lead from one
+ * to another. The slug appears once, here — when the winning variant is
+ * promoted to the site root this becomes an empty string.
+ */
+export const basePath = "/4sjhdc5awq";
+
 export const navItems = [
-  { href: "/v3", label: "Home" },
-  { href: "/v3/services", label: "Services" },
-  { href: "/v3/about", label: "About" },
-  { href: "/v3/news", label: "News & Events" },
-  { href: "/v3/contact", label: "Contact" },
-] as const;
+  { href: basePath, label: "Home" },
+  { href: `${basePath}/services`, label: "Services" },
+  { href: `${basePath}/about`, label: "About" },
+  { href: `${basePath}/news`, label: "News & Events" },
+  { href: `${basePath}/contact`, label: "Contact" },
+];
 
 /** Card tones, mirroring the design's dark / light / mint rotation. */
 export type Tone = "dark" | "light" | "mint";
