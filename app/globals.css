@@ -277,14 +277,37 @@
    Every tint is a mix of the two brand colours, which means the ramp cannot
    drift off-brand however many cards are added to it. */
 .v1-icon-tint {
+  /* 16% per card, not 10%. At 10% the seventh tile reached only 60% orange and
+     the ramp died in ochre, so the device never arrived at the brand colour
+     that makes the progression legible. At 16% the seventh lands on 96%.
+
+     Clamped, because the percentage has to stay valid. A `color-mix` given more
+     than 100% is invalid and drops the whole declaration, which would leave a
+     tile with no background at all — so an eighth service added to the list
+     would have silently broken the grid rather than just extending the ramp. */
   --v1-tint: color-mix(
     in oklab,
     var(--color-v1-forest),
-    var(--color-v1-orange) calc(var(--i, 0) * 10%)
+    var(--color-v1-orange) min(100%, calc(var(--i, 0) * 16%))
   );
 
-  color: var(--v1-tint);
-  background-color: color-mix(in srgb, var(--v1-tint) 12%, transparent);
+  /* A saturated glyph on a wash of its own hue, not a solid block. Seven solid
+     tiles were tried and read as heavy: at full strength the midpoints of a
+     forest-to-orange blend are olive and khaki, which look muddy rather than
+     like either brand colour, and a row of seven saturated squares fights the
+     section above it.
+
+     The wash keeps the ramp legible without the weight, because the glyph
+     carries the colour at full strength and the tile only tints behind it.
+     18% rather than the original 12%: the tile is now the 64px element the
+     card is built around, and at 12% the seven steps were indistinguishable.
+
+     The glyph takes a little ink because the ramp walks toward a light colour.
+     At full tint the last card's orange glyph on its own peach tint measured
+     2.79:1 and looked washed out; 28% ink holds every step above 3:1 while
+     leaving the tile untouched, so the section stays light. */
+  color: color-mix(in oklab, var(--v1-tint), var(--color-v1-ink) 28%);
+  background-color: color-mix(in srgb, var(--v1-tint) 18%, transparent);
 }
 
 /* One focus treatment for the whole v1 layout. It was previously declared on

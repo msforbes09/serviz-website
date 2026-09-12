@@ -10,8 +10,8 @@ export function Faq() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section id="faq" className="scroll-mt-8 bg-[#eaf4ec]">
-      <div className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-12 px-6 py-20">
+    <section id="faq" className="scroll-mt-4 bg-[#eaf4ec]">
+      <div className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-12 px-6 py-24">
         <div className="reveal max-w-[420px]">
           <p className="text-v1-orange text-sm font-semibold tracking-[0.08em] uppercase">
             Questions

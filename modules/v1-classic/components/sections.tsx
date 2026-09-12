@@ -34,7 +34,7 @@ import { Icon } from "./icon";
 // column has none, so `h-full` inside it has nothing to resolve against.
 export function Hero() {
   return (
-    <section className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-12 px-6 pt-16 pb-12 min-[900px]:grid-cols-[1.35fr_1fr]">
+    <section className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-12 px-6 pt-16 pb-24 min-[900px]:grid-cols-[1.35fr_1fr]">
       <div className="max-w-[680px]">
         <p className="text-v1-forest inline-flex items-center gap-2 rounded-full bg-[#eaf4ec] px-3 py-1 text-sm font-semibold">
           <BadgeCheck aria-hidden className="size-4" />A workers cooperative in
@@ -126,8 +126,8 @@ export function Hero() {
 
 export function Services() {
   return (
-    <section id="services" className="border-v1-line scroll-mt-8 border-y bg-white">
-      <div className="mx-auto max-w-[1200px] px-6 py-20">
+    <section id="services" className="border-v1-line scroll-mt-4 border-y bg-white">
+      <div className="mx-auto max-w-[1200px] px-6 py-24">
         <div className="reveal max-w-[680px]">
           <p className="text-v1-orange text-sm font-semibold tracking-[0.08em] uppercase">
             What we do
@@ -138,25 +138,42 @@ export function Services() {
           </h2>
         </div>
 
-        <div className="mt-12 grid grid-cols-[repeat(auto-fill,minmax(270px,1fr))] gap-4">
+        <div className="mt-12 grid grid-cols-[repeat(auto-fill,minmax(270px,1fr))] gap-6">
           {services.map((service, index) => (
             <article
               key={service.title}
               style={{ "--i": index } as React.CSSProperties}
-              className="reveal reveal-step border-v1-line bg-v1-paper hover:border-v1-forest flex flex-col gap-3 rounded-2xl border p-6 transition-[transform,border-color,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(11,74,36,.08)]"
+              className="reveal reveal-step border-v1-line bg-v1-paper hover:border-v1-forest flex flex-col gap-5 rounded-2xl border p-6 transition-[transform,border-color,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(11,74,36,.08)]"
             >
-              <div className="flex items-center justify-between">
-                <span className="v1-icon-tint grid size-12 place-items-center rounded-xl">
-                  <Icon name={service.icon} className="size-6" />
+              {/* Icon-led: the tile is what carries the card and the words sit
+                  under it as a caption. Seven cards of icon / title / paragraph
+                  read as seven identical text blocks however the three bands
+                  are arranged, so the fix is to change what leads the card, not
+                  to reshuffle the same parts.
+
+                  This only works because the bodies were trimmed to 9-17 words.
+                  At paragraph length a caption treatment is just small
+                  paragraphs. The `--i` ramp on the parent gives each of the
+                  seven tiles its own step from forest to orange, which is what
+                  makes the grid read as a set rather than a repetition. */}
+              <div className="flex items-start justify-between gap-3">
+                <span className="v1-icon-tint grid size-16 place-items-center rounded-2xl">
+                  <Icon name={service.icon} className="size-8" />
                 </span>
                 {service.isNew && (
-                  <span className="bg-v1-orange rounded-full px-2 py-0.5 text-xs font-semibold text-white">
+                  <span className="bg-v1-orange shrink-0 rounded-full px-2 py-0.5 text-xs font-semibold text-white">
                     New
                   </span>
                 )}
               </div>
-              <h3 className="text-xl leading-7 font-semibold">{service.title}</h3>
-              <p className="text-base leading-6 text-[#3f4b43]">{service.body}</p>
+              <div>
+                <h3 className="text-lg leading-6 font-semibold">{service.title}</h3>
+                {/* 14px, and measured: #3f4b43 on the paper card is 8.74:1,
+                    well clear of the 4.5:1 that small text owes. */}
+                <p className="mt-1.5 text-sm leading-5 text-[#3f4b43]">
+                  {service.body}
+                </p>
+              </div>
             </article>
           ))}
 
@@ -182,7 +199,7 @@ export function Services() {
 
 export function Tagline() {
   return (
-    <section className="mx-auto max-w-[1200px] px-6 py-24">
+    <section className="mx-auto max-w-[1200px] px-6 py-32">
       <p className="tagline text-v1-forest max-w-[900px] text-[clamp(36px,5vw,60px)] leading-[1.1] font-bold tracking-[-0.02em]">
         {taglineWords.map((word, index) => (
           <span
@@ -200,8 +217,8 @@ export function Tagline() {
 
 export function WhySerbiz() {
   return (
-    <section id="why" className="bg-v1-forest scroll-mt-8 text-white">
-      <div className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-12 px-6 py-20">
+    <section id="why" className="bg-v1-forest scroll-mt-4 text-white">
+      <div className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-12 px-6 py-24">
         <div className="reveal group relative">
           {/* A small shop rather than the glass towers that used to sit here.
               The heading beside it says SERBIZ is not scaled down from a big
@@ -241,7 +258,7 @@ export function WhySerbiz() {
             <span className="text-[#ffb784]">not scaled down</span> from a big
             firm.
           </h2>
-          <div className="mt-10 grid gap-6">
+          <div className="mt-12 grid gap-6">
             {reasons.map((reason, index) => (
               <div
                 key={reason.title}
@@ -270,7 +287,7 @@ export function WhySerbiz() {
 
 export function HowItWorks() {
   return (
-    <section id="how" className="mx-auto max-w-[1200px] scroll-mt-8 px-6 py-20">
+    <section id="how" className="mx-auto max-w-[1200px] scroll-mt-4 px-6 py-24">
       <div className="reveal max-w-[680px]">
         <p className="text-v1-orange text-sm font-semibold tracking-[0.08em] uppercase">
           How it works
@@ -280,7 +297,7 @@ export function HowItWorks() {
           <span className="text-v1-orange">in under two weeks.</span>
         </h2>
       </div>
-      <div className="relative mt-14">
+      <div className="relative mt-12">
         {/* The rule that turns three cards into one sequence. It runs between
             the first and last node centres, which in a three-column grid is a
             sixth in from each edge, and fades out at both ends so it reads as
@@ -419,7 +436,7 @@ export function Permits() {
 
 export function News() {
   return (
-    <section id="news" className="mx-auto max-w-[1200px] scroll-mt-8 px-6 py-20">
+    <section id="news" className="mx-auto max-w-[1200px] scroll-mt-4 px-6 py-24">
       <div className="reveal flex flex-wrap items-end justify-between gap-4">
         <div className="max-w-[680px]">
           <p className="text-v1-orange text-sm font-semibold tracking-[0.08em] uppercase">
@@ -440,7 +457,7 @@ export function News() {
         </a>
       </div>
 
-      <div className="mt-10 grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-4">
+      <div className="mt-12 grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-6">
         {posts.map((post, index) => (
           <article
             key={post.title}

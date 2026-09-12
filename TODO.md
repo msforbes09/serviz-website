@@ -290,6 +290,34 @@ minimal fix deliberately did not take.
   decision rather than a refactor. Same class of problem as the phone number,
   found while adding the mission band.
 
+- **v1 spacing was audited and re-tuned.** The 8pt grid was already sound; what
+  varied was how consistently one relationship got spaced. Three problems, all
+  measured before changing anything:
+
+  | Relationship | Was | Now |
+  | --- | --- | --- |
+  | Section vertical padding | 80 | 96 |
+  | Section intro to body | 40 / 48 / 56 | 48 |
+  | Card gutter | 16, against 24px card padding | 24 |
+  | Tagline, the one typographic pause | 96 | 128 |
+  | Hero bottom padding | 48 | 96 |
+
+  The card gutter was the worst of them: 16px between cards that each carry 24px
+  of internal padding makes a grid read as one dense block, because the space
+  between cards is tighter than the space inside them.
+
+  **The scroll margin had to move with the padding.** `scroll-mt-8` was 32px
+  precisely because sections carried 80px of padding under a 69px nav. At 96px
+  padding it is `scroll-mt-4`, which holds the landing at the same 43px below
+  the nav. Verified on all seven anchors at both 375px and 1440px: every section
+  lands at 16px with the first line 43–44px clear. The arithmetic table in
+  `.claude/sessions/2026-09-12.md` now records all three states.
+
+  Column counts were checked before widening the gutters: Services and News both
+  stay at four columns at 1440, so nothing reflowed. Two-column gutters stayed at
+  48 and the contact form's internal field gap stayed at 16 — different
+  relationships, correctly spaced differently.
+
 - **v1 service copy was trimmed by subtraction.** Service bodies went from 109
   words to 87, about 20%, without a single sentence being rewritten. The content
   file records two tiers of copy — services, mission and permits from the
@@ -315,6 +343,53 @@ minimal fix deliberately did not take.
   page's weight is structural — fourteen title-plus-paragraph pairs across
   Services, Why and How — not volumetric. Trimming was worth doing because it is
   free and lowers risk, not because it fixes the feeling.
+
+- **v1 service cards are now icon-led.** The tile went from a 44px accent beside
+  the heading to the 64px element the card is built around, with the title and
+  the trimmed body sitting under it as a caption at 18px and 14px.
+
+  This only works because the copy was trimmed first. At paragraph length a
+  caption treatment is just small paragraphs; at 9–17 words it reads as a label
+  under a graphic. Card heights settled at 268 on desktop and 248 on a phone.
+
+  The tile alpha went 12% → 18%. At 12% the seven steps of the ramp were
+  indistinguishable and the tiles read as grey, which was fine when the tile was
+  a whisper beside a heading and wrong when it is the thing carrying the card.
+
+  The ramp was also re-pitched from 10% to 16% per card. At 10% the seventh tile
+  reached only 60% orange and the progression died in ochre without arriving at
+  the brand colour that makes it legible. It now resolves to `rgb(219, 100, 27)`
+  against a brand orange of `rgb(227, 100, 25)`.
+
+  **Solid tiles were built and rejected.** At full strength the midpoints of a
+  forest-to-orange blend are olive and khaki, which read as muddy rather than as
+  either brand colour, and a row of seven saturated squares fought the section
+  above it. The wash keeps the ramp legible without the weight: the glyph
+  carries the colour at full strength and the tile only tints behind it.
+
+  | Card | Tile | Glyph on tile |
+  | --- | --- | --- |
+  | 1 Payroll | `rgb(207, 218, 208)` | 8.41 |
+  | 4 HR | `rgb(228, 222, 209)` | 6.22 |
+  | 7 IT | `rgb(245, 223, 207)` | 4.35 |
+
+  The glyph takes 28% ink because the ramp walks toward a light colour. At full
+  tint the last card's orange glyph on its own peach tint measured 2.79:1 and
+  looked washed out. The ink holds every step above 4.3 while leaving the tile
+  alone, so the section stays light.
+
+  **The percentage is clamped** with `min(100%, …)`. A `color-mix` given more
+  than 100% is invalid and drops the whole declaration, so at 16% per card an
+  eighth service would have silently left a tile with no background rather than
+  just extending the ramp.
+
+  Click-to-expand cards were considered and declined. Unlike hover it is
+  perfectly accessible, and the FAQ on this page already does it. It was
+  declined on content grounds: after the trim the bodies are lists of specifics
+  — SSS, PhilHealth and Pag-IBIG remittances, BIR returns, DTI or SEC, 201 files
+  — and those are the only concrete, differentiating content on the page. The
+  titles alone are generic. A second accordion would also have swapped a
+  repetitive grid for a repetitive stack.
 
 ## Housekeeping
 
