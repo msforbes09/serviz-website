@@ -502,6 +502,14 @@ services section alone, so there was nothing to trim.
 
 ## Housekeeping
 
+- **The `.enter-*` rules in `globals.css` are unlayered**, so their `transition`
+  shorthand beats any Tailwind utility whatever its specificity — layered rules
+  lose to unlayered ones. A `duration-[260ms]` class on the element compiles
+  fine and then loses silently. Overrides for those rules belong beside them in
+  `globals.css`, not as utilities at the call site. This has now bitten twice in
+  opposite directions: once clobbering a tuned hover transition on v1's hero
+  caption, once failing to override one on v3's hero photograph.
+
 - **`lint`, `typecheck` and `test` do not parse CSS.** A stray brace in
   `app/globals.css` passed all three and only surfaced as a blank page, because
   ESLint reads JS/TS, `tsc` reads types, and Vitest never imports the
