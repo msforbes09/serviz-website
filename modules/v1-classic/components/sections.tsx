@@ -18,9 +18,23 @@ import { Icon } from "./icon";
 // of them barely half width. Giving the text column the room it was written for
 // puts the headline back to five full lines at the same size. Below 900px the
 // columns stack, so auto-fit still governs.
+//
+// 1.35fr, not 1.6fr, because 1.6 was more than the headline needed and the
+// difference came out of the photograph. Measured at 1440: the headline holds
+// five lines down to 634px of text column and breaks to six below it. 1.35fr
+// gives it 634px exactly and hands the remaining 45px back to the image.
+//
+// The photograph stays a centred card rather than stretching to the text
+// column's full 608px. 5:4 at a 468px column is 374px tall, which lands it
+// within a few pixels of the 552x323 the original even-column design gave it:
+// the width the headline freed up is spent on presence, not on height. Filling
+// the column and a square were both tried and read too heavy.
+//
+// The aspect ratio is also what gives the box a definite height. A centred grid
+// column has none, so `h-full` inside it has nothing to resolve against.
 export function Hero() {
   return (
-    <section className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-12 px-6 pt-16 pb-12 min-[900px]:grid-cols-[1.6fr_1fr]">
+    <section className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-12 px-6 pt-16 pb-24 min-[900px]:grid-cols-[1.35fr_1fr]">
       <div className="max-w-[680px]">
         <p className="text-v1-forest inline-flex items-center gap-2 rounded-full bg-[#eaf4ec] px-3 py-1 text-sm font-semibold">
           <BadgeCheck aria-hidden className="size-4" />A workers cooperative in
@@ -34,9 +48,16 @@ export function Hero() {
             The floor is 32px rather than 36px for the same reason. At 36px on
             a 375px screen the line count goes to six, two of them barely half
             width; 32px fits it into five even lines. Nothing above 720px
-            changes, so the desktop composition is untouched. */}
-        <h1 className="v1-gradient-heading mt-6 bg-[linear-gradient(90deg,var(--color-v1-forest),var(--color-v1-forest-soft))] bg-clip-text text-[clamp(32px,5vw,60px)] leading-[1.05] font-bold tracking-[-0.02em] text-balance text-transparent">
-          Payroll, books and compliance, handled by people who care about your
+            changes, so the desktop composition is untouched.
+
+            Solid ink with the payoff phrase in orange, rather than a gradient
+            clipped to the glyphs. The gradient read as texture instead of
+            emphasis, and because it made the text itself transparent it also
+            needed rescuing in forced-colours modes. This says the same thing
+            with colour that is actually there. */}
+        <h1 className="text-v1-forest mt-6 text-[clamp(32px,5vw,60px)] leading-[1.05] font-bold tracking-[-0.02em] text-balance">
+          Payroll, books and compliance, handled by{" "}
+          <span className="text-v1-orange">people who care</span> about your
           small business.
         </h1>
         <p className="mt-6 max-w-[560px] text-lg leading-7 text-[#3f4b43]">
@@ -55,7 +76,7 @@ export function Hero() {
             href={`tel:${siteConfig.contact.mobileTel}`}
             className="text-v1-forest inline-flex items-center gap-2 px-4 py-3 text-base font-semibold"
           >
-            <Phone aria-hidden className="size-5" /> 0915 816 2433
+            <Phone aria-hidden className="size-5" /> {siteConfig.contact.phones.mobile}
           </a>
         </div>
         <ul className="mt-8 flex list-none flex-wrap gap-x-6 gap-y-4 text-sm text-[#3f4b43]">
@@ -68,20 +89,31 @@ export function Hero() {
         </ul>
       </div>
 
-      <div className="relative min-h-[320px]">
+      {/* A `group`, so the photo and the caption card respond to a hover
+          anywhere over the composition rather than each on its own. Everything
+          that moves is behind `motion-safe:`, and Tailwind already wraps every
+          `hover:` utility in a hover media query, so a touch device gets the
+          still image with no extra gating. Nothing is hidden behind the hover,
+          so there is no keyboard equivalent to owe. */}
+      <div className="group relative">
         <div
           aria-hidden
-          className="bg-v1-orange absolute -right-3 -bottom-3 left-6 top-6 rounded-3xl"
+          className="bg-v1-orange absolute -right-3 -bottom-3 left-6 top-6 rounded-3xl motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:translate-x-1 motion-safe:group-hover:translate-y-1"
         />
-        <Image
-          src="/designs/v1/office.jpg"
-          alt="SERBIZ team members working together at the office"
-          width={900}
-          height={700}
-          priority
-          className="border-v1-line relative block h-full min-h-[320px] w-full rounded-3xl border object-cover object-[60%_40%]"
-        />
-        <p className="bg-v1-forest absolute bottom-[-4px] left-4 max-w-[260px] rounded-xl p-4 text-sm leading-5 text-white">
+        {/* The clip lives here and not on the parent: the parent also holds the
+            orange block and a caption that deliberately overhangs the bottom
+            edge, and both would be cut off. */}
+        <div className="border-v1-line relative block aspect-[5/4] w-full overflow-hidden rounded-3xl border">
+          <Image
+            src="/designs/stock/hero-workspace.jpg"
+            alt="A quiet office room with a long white desk, monitors, a tall plant and a wooden ceiling"
+            width={940}
+            height={752}
+            priority
+            className="block size-full object-cover motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-[1.04]"
+          />
+        </div>
+        <p className="bg-v1-forest absolute bottom-[-4px] left-4 max-w-[260px] rounded-xl p-4 text-sm leading-5 text-white motion-safe:transition-[transform,box-shadow] motion-safe:duration-300 motion-safe:group-hover:-translate-y-1 motion-safe:group-hover:shadow-[0_18px_40px_rgba(11,74,36,.32)]">
           <strong className="block text-xl leading-7">
             7 services, one team
           </strong>
@@ -94,36 +126,54 @@ export function Hero() {
 
 export function Services() {
   return (
-    <section id="services" className="border-v1-line scroll-mt-20 border-y bg-white">
-      <div className="mx-auto max-w-[1200px] px-6 py-20">
+    <section id="services" className="border-v1-line scroll-mt-4 border-y bg-white">
+      <div className="mx-auto max-w-[1200px] px-6 py-24">
         <div className="reveal max-w-[680px]">
           <p className="text-v1-orange text-sm font-semibold tracking-[0.08em] uppercase">
             What we do
           </p>
           <h2 className="text-v1-forest mt-3 text-[clamp(30px,4vw,48px)] leading-[1.1] font-bold text-balance">
-            Everything tedious about running a business, taken off your desk.
+            Everything tedious about running a business,{" "}
+            <span className="text-v1-orange">taken off your desk.</span>
           </h2>
         </div>
 
-        <div className="mt-12 grid grid-cols-[repeat(auto-fill,minmax(270px,1fr))] gap-4">
+        <div className="mt-12 grid grid-cols-[repeat(auto-fill,minmax(270px,1fr))] gap-6">
           {services.map((service, index) => (
             <article
               key={service.title}
               style={{ "--i": index } as React.CSSProperties}
-              className="reveal reveal-step border-v1-line bg-v1-paper hover:border-v1-forest flex flex-col gap-3 rounded-2xl border p-6 transition-[transform,border-color,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(11,74,36,.08)]"
+              className="reveal reveal-step border-v1-line bg-v1-paper hover:border-v1-forest flex flex-col gap-5 rounded-2xl border p-6 transition-[transform,border-color,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(11,74,36,.08)]"
             >
-              <div className="flex items-center justify-between">
-                <span className="text-v1-forest grid size-12 place-items-center rounded-xl bg-[#eaf4ec]">
-                  <Icon name={service.icon} className="size-6" />
+              {/* Icon-led: the tile is what carries the card and the words sit
+                  under it as a caption. Seven cards of icon / title / paragraph
+                  read as seven identical text blocks however the three bands
+                  are arranged, so the fix is to change what leads the card, not
+                  to reshuffle the same parts.
+
+                  This only works because the bodies were trimmed to 9-17 words.
+                  At paragraph length a caption treatment is just small
+                  paragraphs. The `--i` ramp on the parent gives each of the
+                  seven tiles its own step from forest to orange, which is what
+                  makes the grid read as a set rather than a repetition. */}
+              <div className="flex items-start justify-between gap-3">
+                <span className="v1-icon-tint grid size-16 place-items-center rounded-2xl">
+                  <Icon name={service.icon} className="size-8" />
                 </span>
                 {service.isNew && (
-                  <span className="bg-v1-orange rounded-full px-2 py-0.5 text-xs font-semibold text-white">
+                  <span className="bg-v1-orange shrink-0 rounded-full px-2 py-0.5 text-xs font-semibold text-white">
                     New
                   </span>
                 )}
               </div>
-              <h3 className="text-xl leading-7 font-semibold">{service.title}</h3>
-              <p className="text-base leading-6 text-[#3f4b43]">{service.body}</p>
+              <div>
+                <h3 className="text-lg leading-6 font-semibold">{service.title}</h3>
+                {/* 14px, and measured: #3f4b43 on the paper card is 8.74:1,
+                    well clear of the 4.5:1 that small text owes. */}
+                <p className="mt-1.5 text-sm leading-5 text-[#3f4b43]">
+                  {service.body}
+                </p>
+              </div>
             </article>
           ))}
 
@@ -149,7 +199,7 @@ export function Services() {
 
 export function Tagline() {
   return (
-    <section className="mx-auto max-w-[1200px] px-6 py-24">
+    <section className="mx-auto max-w-[1200px] px-6 py-32">
       <p className="tagline text-v1-forest max-w-[900px] text-[clamp(36px,5vw,60px)] leading-[1.1] font-bold tracking-[-0.02em]">
         {taglineWords.map((word, index) => (
           <span
@@ -167,17 +217,23 @@ export function Tagline() {
 
 export function WhySerbiz() {
   return (
-    <section id="why" className="bg-v1-forest scroll-mt-20 text-white">
-      <div className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-12 px-6 py-20">
-        <div className="reveal relative">
-          <Image
-            src="/designs/stock/office-tower.jpg"
-            alt="Office towers in Metro Manila"
-            width={900}
-            height={1000}
-            className="block max-h-[520px] min-h-[360px] w-full rounded-3xl object-cover"
-          />
-          <p className="text-v1-forest absolute right-4 bottom-4 flex items-center gap-3 rounded-xl bg-white p-4">
+    <section id="why" className="bg-v1-forest scroll-mt-4 text-white">
+      <div className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-12 px-6 py-24">
+        <div className="reveal group relative">
+          {/* A small shop rather than the glass towers that used to sit here.
+              The heading beside it says SERBIZ is not scaled down from a big
+              firm, and a photograph of a corporate skyline argued the
+              opposite. */}
+          <div className="overflow-hidden rounded-3xl">
+            <Image
+              src="/designs/stock/small-shop.jpg"
+              alt="The sunlit interior of a small shop, with wooden shelves, stocked goods and a street beyond the window"
+              width={1100}
+              height={1000}
+              className="block max-h-[520px] min-h-[360px] w-full object-cover motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-[1.04]"
+            />
+          </div>
+          <p className="text-v1-forest absolute right-4 bottom-4 flex items-center gap-3 rounded-xl bg-white p-4 motion-safe:transition-[transform,box-shadow] motion-safe:duration-300 motion-safe:group-hover:-translate-y-1 motion-safe:group-hover:shadow-[0_18px_40px_rgba(0,0,0,.28)]">
             <Image
               src="/designs/v1/logo-mark.png"
               alt=""
@@ -198,9 +254,11 @@ export function WhySerbiz() {
             Why SERBIZ
           </p>
           <h2 className="mt-3 max-w-[680px] text-[clamp(30px,4vw,48px)] leading-[1.1] font-bold text-balance">
-            Built for SPs, OPCs and SMEs, not scaled down from a big firm.
+            Built for SPs, OPCs and SMEs,{" "}
+            <span className="text-[#ffb784]">not scaled down</span> from a big
+            firm.
           </h2>
-          <div className="mt-10 grid gap-6">
+          <div className="mt-12 grid gap-6">
             {reasons.map((reason, index) => (
               <div
                 key={reason.title}
@@ -229,44 +287,118 @@ export function WhySerbiz() {
 
 export function HowItWorks() {
   return (
-    <section id="how" className="mx-auto max-w-[1200px] scroll-mt-20 px-6 py-20">
+    <section id="how" className="mx-auto max-w-[1200px] scroll-mt-4 px-6 py-24">
       <div className="reveal max-w-[680px]">
         <p className="text-v1-orange text-sm font-semibold tracking-[0.08em] uppercase">
           How it works
         </p>
         <h2 className="text-v1-forest mt-3 text-[clamp(30px,4vw,48px)] leading-[1.1] font-bold text-balance">
-          From first call to first payslip in under two weeks.
+          From first call to first payslip{" "}
+          <span className="text-v1-orange">in under two weeks.</span>
         </h2>
       </div>
-      <ol className="mt-12 grid list-none grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-4">
-        {steps.map((step, index) => (
-          <li
-            key={step.n}
-            style={{ "--i": index } as React.CSSProperties}
-            className="reveal reveal-step border-v1-line rounded-2xl border bg-white p-6"
-          >
-            <span className="text-v1-orange text-5xl leading-none font-bold">
-              {step.n}
-            </span>
-            <h3 className="mt-4 text-xl leading-7 font-semibold">{step.title}</h3>
-            <p className="mt-2 text-base leading-6 text-[#3f4b43]">{step.body}</p>
-          </li>
-        ))}
-      </ol>
+      <div className="relative mt-12">
+        {/* The rule that turns three cards into one sequence. It runs between
+            the first and last node centres, which in a three-column grid is a
+            sixth in from each edge, and fades out at both ends so it reads as
+            a connection rather than a border. Decorative, and gone entirely
+            once the columns stack. */}
+        <div
+          aria-hidden
+          className="via-v1-line absolute top-7 right-[16.67%] left-[16.67%] hidden h-px bg-gradient-to-r from-transparent to-transparent md:block"
+        />
+
+        <ol className="grid list-none gap-10 md:grid-cols-3 md:gap-6">
+          {steps.map((step, index) => (
+            <li
+              key={step.n}
+              style={{ "--i": index } as React.CSSProperties}
+              className="reveal reveal-step md:text-center"
+            >
+              {/* Positioned, so it sits over the rule rather than under it,
+                  and filled with the page colour so the rule stops at its
+                  edge instead of striking through the number. */}
+              <span className="border-v1-line bg-v1-paper text-v1-orange relative grid size-14 place-items-center rounded-full border text-lg font-bold md:mx-auto">
+                {step.n}
+              </span>
+              <h3 className="mt-5 text-xl leading-7 font-semibold">
+                {step.title}
+              </h3>
+              <p className="mt-2 text-base leading-6 text-[#3f4b43]">
+                {step.body}
+              </p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  );
+}
+
+/**
+ * A full-bleed pause between the step grid and the permits grid.
+ *
+ * Services, How it works and Permits run back to back as three card grids with
+ * no photograph between them, which is most of why the middle of this page
+ * reads heavier than its word count deserves. This breaks that run.
+ *
+ * It carries the mission rather than decoration. The mission comes from the
+ * flyers in `references/Images/`, it is one of the few confirmed facts about
+ * the cooperative, and until now it appeared nowhere on v1 — so the band earns
+ * its height instead of just filling it.
+ */
+export function Mission() {
+  return (
+    <section className="relative isolate overflow-hidden">
+      <Image
+        src="/designs/stock/metro-manila.jpg"
+        alt=""
+        width={1800}
+        height={640}
+        className="absolute inset-0 -z-10 size-full object-cover"
+      />
+      {/* A flat forest tint, not a gradient. The photograph's brightness varies
+          across the frame, so a gradient would give the text a different
+          contrast ratio depending on where a line happened to fall; a flat tint
+          makes it a constant.
+
+          78% is the lightest that still clears 4.5:1 for white against the
+          brightest pixel in this particular photograph, a near-white cloud at
+          rgb(244, 247, 241). Measured, not guessed. Re-measure if the picture
+          is ever swapped — the number belongs to the image, not to the design.
+
+          The eyebrow is white rather than the peach used on the other dark
+          section. At 14px peach needs 4.5:1 and never reaches it over this
+          photograph at any tint worth using, so the brand accent here is the
+          rule above it, which carries no text and owes no ratio. */}
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-10 bg-[color-mix(in_srgb,var(--color-v1-forest)_78%,transparent)]"
+      />
+      <div className="reveal mx-auto max-w-[1200px] px-6 py-16 sm:py-28">
+        <span aria-hidden className="bg-v1-orange block h-1 w-14 rounded-full" />
+        <p className="mt-5 text-sm font-semibold tracking-[0.08em] text-white uppercase">
+          Our mission
+        </p>
+        <p className="mt-4 max-w-[900px] text-[clamp(22px,3vw,32px)] leading-[1.35] font-semibold text-balance text-white">
+          {siteConfig.mission}
+        </p>
+      </div>
     </section>
   );
 }
 
 export function Permits() {
   return (
-    <section id="proof" className="border-v1-line scroll-mt-20 border-y bg-white">
-      <div className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(280px,1fr))] items-center gap-12 px-6 py-20">
+    <section id="proof" className="border-v1-line scroll-mt-4 border-y bg-white">
+      <div className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(280px,1fr))] items-center gap-12 px-6 py-24">
         <div className="reveal max-w-[480px]">
           <p className="text-v1-orange text-sm font-semibold tracking-[0.08em] uppercase">
             Permits and licenses
           </p>
           <h2 className="text-v1-forest mt-3 text-[clamp(30px,4vw,48px)] leading-[1.1] font-bold text-balance">
-            Registered, compliant and inspectable.
+            Registered, compliant and{" "}
+            <span className="text-v1-orange">inspectable.</span>
           </h2>
           <p className="mt-4 text-base leading-6 text-[#3f4b43]">
             We hold our own paperwork to the standard we hold yours. SERBIZ is
@@ -304,14 +436,15 @@ export function Permits() {
 
 export function News() {
   return (
-    <section id="news" className="mx-auto max-w-[1200px] scroll-mt-20 px-6 py-20">
+    <section id="news" className="mx-auto max-w-[1200px] scroll-mt-4 px-6 py-24">
       <div className="reveal flex flex-wrap items-end justify-between gap-4">
         <div className="max-w-[680px]">
           <p className="text-v1-orange text-sm font-semibold tracking-[0.08em] uppercase">
             News and events
           </p>
           <h2 className="text-v1-forest mt-3 text-[clamp(30px,4vw,48px)] leading-[1.1] font-bold">
-            What the cooperative is up to.
+            What the{" "}
+            <span className="text-v1-orange">cooperative is up to.</span>
           </h2>
         </div>
         <a
@@ -324,7 +457,7 @@ export function News() {
         </a>
       </div>
 
-      <div className="mt-10 grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-4">
+      <div className="mt-12 grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-6">
         {posts.map((post, index) => (
           <article
             key={post.title}
@@ -357,7 +490,10 @@ export function News() {
 
 export function SiteFooter() {
   return (
-    <footer className="bg-v1-forest text-[#cfe0d4]">
+    // `--v1-focus-ring` restated because `outline-offset` draws the ring on
+    // this footer's forest background, where the default forest ring is
+    // invisible. See the focus block in globals.css.
+    <footer className="bg-v1-forest text-[#cfe0d4] [--v1-focus-ring:var(--color-v1-paper)]">
       <div className="mx-auto flex max-w-[1200px] flex-wrap justify-between gap-6 px-6 py-12 text-sm leading-5">
         <div className="flex items-center gap-3">
           <Image

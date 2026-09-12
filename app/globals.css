@@ -144,7 +144,12 @@
   /* v1 — classic */
   --color-v1-forest: #0b4a24;
   --color-v1-forest-soft: #3c7a50;
-  --color-v1-orange: #f26a1b;
+  /* Darkened from #f26a1b, which measured 2.93:1 on paper and 2.72:1 on the
+     FAQ mint. Heading text needs 3:1, and every heading now closes with an
+     accent phrase in this colour. Clears it on all three v1 backgrounds while
+     staying the same orange to the eye. Still short of the 4.5:1 that the
+     eyebrow labels and the white-on-orange button label need; see TODO.md. */
+  --color-v1-orange: #e36419;
   --color-v1-ink: #14211a;
   --color-v1-muted: #5c6b60;
   --color-v1-placeholder: #8a958d;
@@ -192,6 +197,19 @@
   --font-poppins: var(--font-poppins-src), Poppins, system-ui, sans-serif;
   --font-sora: var(--font-sora-src), Sora, system-ui, sans-serif;
   --font-outfit: var(--font-outfit-src), Outfit, system-ui, sans-serif;
+}
+
+/* Anchor jumps glide instead of teleporting, so it stays obvious which way the
+   page moved and how far. Global rather than scoped to one variant: v2 and v3
+   should behave the same way as they are built out.
+
+   Inside the motion guard, because smooth scrolling is exactly the kind of
+   movement someone who asked for less of it is asking to be spared. They get
+   an instant jump, which is the browser default. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 /* Scroll-linked reveal used by every variant. Sections start hidden only when
@@ -254,25 +272,66 @@
   }
 }
 
-/* The v1 headline is painted as a gradient clipped to the glyphs, which means
-   the text itself is transparent. Forced-colours modes drop background images,
-   so the headline would render as nothing at all. Same failure shape as an
-   entrance animation that never runs: the fallback has to be the visible
-   state, not the hidden one. */
-@media (forced-colors: active) {
-  .v1-gradient-heading {
-    background: none;
-    color: CanvasText;
-    -webkit-text-fill-color: currentColor;
-  }
+/* Each service icon takes its own step along a blend from forest to orange, so
+   a grid of seven reads as a sequence rather than a wall of identical tiles.
+   Every tint is a mix of the two brand colours, which means the ramp cannot
+   drift off-brand however many cards are added to it. */
+.v1-icon-tint {
+  /* 16% per card, not 10%. At 10% the seventh tile reached only 60% orange and
+     the ramp died in ochre, so the device never arrived at the brand colour
+     that makes the progression legible. At 16% the seventh lands on 96%.
+
+     Clamped, because the percentage has to stay valid. A `color-mix` given more
+     than 100% is invalid and drops the whole declaration, which would leave a
+     tile with no background at all — so an eighth service added to the list
+     would have silently broken the grid rather than just extending the ramp. */
+  --v1-tint: color-mix(
+    in oklab,
+    var(--color-v1-forest),
+    var(--color-v1-orange) min(100%, calc(var(--i, 0) * 16%))
+  );
+
+  /* A saturated glyph on a wash of its own hue, not a solid block. Seven solid
+     tiles were tried and read as heavy: at full strength the midpoints of a
+     forest-to-orange blend are olive and khaki, which look muddy rather than
+     like either brand colour, and a row of seven saturated squares fights the
+     section above it.
+
+     The wash keeps the ramp legible without the weight, because the glyph
+     carries the colour at full strength and the tile only tints behind it.
+     18% rather than the original 12%: the tile is now the 64px element the
+     card is built around, and at 12% the seven steps were indistinguishable.
+
+     The glyph takes a little ink because the ramp walks toward a light colour.
+     At full tint the last card's orange glyph on its own peach tint measured
+     2.79:1 and looked washed out; 28% ink holds every step above 3:1 while
+     leaving the tile untouched, so the section stays light. */
+  color: color-mix(in oklab, var(--v1-tint), var(--color-v1-ink) 28%);
+  background-color: color-mix(in srgb, var(--v1-tint) 18%, transparent);
 }
 
 /* One focus treatment for the whole v1 layout. It was previously declared on
    three elements and left to the browser default on the rest, so the ring
-   changed as you tabbed through the page. */
-.v1-root :focus-visible {
-  outline: 2px solid var(--color-v1-forest);
-  outline-offset: 2px;
+   changed as you tabbed through the page.
+
+   In `components` rather than unlayered. Unlayered it outranked every Tailwind
+   focus utility whatever their specificity, which turned the FAQ button's
+   deliberate inset ring into an offset one that the card's `overflow: hidden`
+   then clipped away on three sides. Layered, a utility can still override it.
+
+   The colour is a variable because a ring has to be visible against whatever
+   it is drawn on, and `outline-offset` draws it on the surface *behind* the
+   element. Forest on forest is a ring nobody can see, so any dark container
+   with something focusable inside it must restate `--v1-focus-ring`. */
+@layer components {
+  .v1-root {
+    --v1-focus-ring: var(--color-v1-forest);
+  }
+
+  .v1-root :focus-visible {
+    outline: 2px solid var(--v1-focus-ring);
+    outline-offset: 2px;
+  }
 }
 
 /* v2 hero motion. Both are decorative and gated behind motion-safe: at the

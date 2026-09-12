@@ -10,14 +10,15 @@ export function Faq() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section id="faq" className="scroll-mt-20 bg-[#eaf4ec]">
-      <div className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-12 px-6 py-20">
+    <section id="faq" className="scroll-mt-4 bg-[#eaf4ec]">
+      <div className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-12 px-6 py-24">
         <div className="reveal max-w-[420px]">
           <p className="text-v1-orange text-sm font-semibold tracking-[0.08em] uppercase">
             Questions
           </p>
           <h2 className="text-v1-forest mt-3 text-[clamp(30px,4vw,48px)] leading-[1.1] font-bold text-balance">
-            Things owners ask us before signing.
+            Things owners ask us{" "}
+            <span className="text-v1-orange">before signing.</span>
           </h2>
           <p className="mt-4 text-base leading-6 text-[#3f4b43]">
             Something else on your mind?{" "}

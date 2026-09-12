@@ -23,7 +23,7 @@ export function SiteFooter() {
             {siteConfig.contact.email}
           </a>
         </p>
-        <p>{siteConfig.contact.phones.join(" · ")}</p>
+        <p>{Object.values(siteConfig.contact.phones).join(" · ")}</p>
         <p>
           © <CopyrightYear /> {siteConfig.legalName}. All rights reserved.
         </p>

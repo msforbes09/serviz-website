@@ -22,8 +22,15 @@ export const siteConfig = {
   contact: {
     /** source: flyer */
     email: "serbiz.mgt@gmail.com",
-    /** source: flyer */
-    phones: ["(02) 7002-1352", "(0915) 816 2433"],
+    /**
+     * source: flyer — each number named, so a layout reads `phones.mobile`
+     * rather than indexing a position it has to know about. Every variant
+     * shows the mobile; these are the printed forms, not the dialable ones.
+     */
+    phones: {
+      landline: "(02) 7002-1352",
+      mobile: "(0915) 816 2433",
+    },
     /** source: flyer — the mobile number in dialable form */
     mobileTel: "+639158162433",
     /** source: design — unverified */
