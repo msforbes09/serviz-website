@@ -13,13 +13,11 @@ rules in `CLAUDE.md`.
 - **Page designs.** Home, about, services, why us, FAQs and contact are
   placeholders. Sections get built under `modules/landing/` and
   `modules/site/`, not inline in a page.
-- **Claude Design authorization.** Importing a layout needs `DesignSync`, which
-  needs design-system access this session cannot grant. Run `/design-login`
-  once from an interactive `claude` terminal on this machine; headless sessions
-  then reuse it. Blocking the v1 import from
-  `claude.ai/design/p/bbfa7f03-12da-4e2d-b9bd-9889096c1191`.
-- **v2 and v3 designs.** Only `serbiz-v1-classic.html` exists so far. Their
-  routes and modules get created when their designs land, not before.
+- **Claude Design authorization.** Importing any layout needs `DesignSync`,
+  which needs design-system access this session cannot grant. Run
+  `/design-login` once from an interactive `claude` terminal on this machine;
+  headless sessions then reuse it. This one step blocks all three imports
+  below.
 
 ## Three-layout preview (decided 2026-09-12)
 
@@ -35,6 +33,30 @@ The client picks one of three presentations of the same content.
   indexed.
 - **On selection:** the winning variant is promoted to `/`, the losing routes
   and modules are deleted, and the sitemap plus indexing rules are restored.
+
+### Design sources
+
+Each variant comes from its own Claude Design project. All three are pending
+the authorization above.
+
+| Variant | Project | Entry file |
+| --- | --- | --- |
+| v1 classic | `bbfa7f03-12da-4e2d-b9bd-9889096c1191` | `serbiz-v1-classic.html` |
+| v2 | `1cc64fb6-af8e-4f02-ab35-8987bc1d1b7a` | `Serbiz Landing.dc.html` |
+| v3 | `79aa69fa-d24c-4f4f-b180-30c5ecda6830` | `Serbiz Landing Page v4.dc.html` |
+
+Files the entry pages import, which must come across with them:
+
+- **v2** — `support.js`, `uploads/Firefly_RemoveBackground.png`.
+- **v3** — `support.js`, `image-slot.js`, and under `assets/`:
+  `logo-mark.png`, `logo-wordmark.png`, `permit-bir.jpg`, `permit-cda.jpg`,
+  `permit-pasig.jpg`.
+
+Imported markup is a reference, not the deliverable. Each variant gets rebuilt
+as Server Components under `modules/<variant>/` against the shadcn primitives
+and the shared content layer — the `.dc.html` runtime helpers (`support.js`,
+`image-slot.js`) do not ship. The permit scans in v3 are real documents; check
+before publishing whether they belong on a public page.
 
 ## Housekeeping
 
