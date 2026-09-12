@@ -21,7 +21,7 @@ export function SiteNav() {
         <div className="mx-auto flex max-w-[1200px] items-center justify-between gap-6 px-6 py-3">
           <a href="#main" aria-label="SERBIZ home" className="flex items-center">
             <Image
-              src="/designs/v1/logo-full.jpg"
+              src="/designs/v1/logo-full.png"
               alt="SERBIZ Resources Income Workers Cooperative"
               width={220}
               height={44}
