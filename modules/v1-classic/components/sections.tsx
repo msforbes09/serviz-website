@@ -1,5 +1,6 @@
 import { ArrowRight, BadgeCheck, CircleCheck, MessagesSquare, Phone } from "lucide-react";
 import Image from "next/image";
+import { DocumentPlaceholder } from "@/components/ui/document-placeholder";
 import { siteConfig } from "@/lib/site-config";
 import {
   certificates,
@@ -157,7 +158,7 @@ export function WhySerbiz() {
       <div className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-12 px-6 py-20">
         <div className="reveal relative">
           <Image
-            src="/designs/v1/tower.jpg"
+            src="/designs/stock/office-tower.jpg"
             alt="Office towers in Metro Manila"
             width={900}
             height={1000}
@@ -261,16 +262,22 @@ export function Permits() {
           </p>
         </div>
         <div className="grid grid-cols-3 gap-3">
-          {certificates.map((certificate) => (
-            <Image
-              key={certificate.src}
-              src={certificate.src}
-              alt={certificate.alt}
-              width={600}
-              height={800}
-              className="reveal border-v1-line block aspect-3/4 w-full rounded-lg border object-cover"
-            />
-          ))}
+          {certificates.map((certificate) =>
+            certificate.src ? (
+              <Image
+                key={certificate.alt}
+                src={certificate.src}
+                alt={certificate.alt}
+                width={600}
+                height={800}
+                className="reveal border-v1-line block aspect-3/4 w-full rounded-lg border object-cover"
+              />
+            ) : (
+              <div key={certificate.alt} className="reveal text-v1-forest">
+                <DocumentPlaceholder label={certificate.alt} />
+              </div>
+            ),
+          )}
         </div>
       </div>
     </section>

@@ -82,7 +82,15 @@ pulled automatically. Export them from Claude Design and drop them in:
 | `public/designs/v1/` | `bbfa7f03…` `assets/` | `logo-full.jpg`, `office.jpg`, `tower.jpg`, `cert-bir.jpg`, `cert-cda.jpg`, `cert-pasig.jpg`, `ill-tax.jpg`, `ill-portal.jpg`, `ill-books.jpg`, `ill-time.jpg` |
 | `public/designs/v3/` | `79aa69fa…` `assets/` | `permit-bir.jpg`, `permit-cda.jpg`, `permit-pasig.jpg` |
 
-Until they land those images 404; every other image is in place.
+Nothing 404s in the meantime. The news thumbnails and the office tower now
+point at the self-hosted stock photos, and the six certificate slots render a
+labelled "scan to follow" card.
+
+The certificates deliberately do **not** get a stock photo. A photograph of
+some unrelated official document, sitting under a caption reading "BIR
+Certificate of Registration", reads as that certificate — and placeholders have
+a way of surviving to launch. Restoring a real scan is a one-line change: drop
+the file in and set `src` / `image` back from `null` to its path.
 
 ### Client sign-off checklist
 

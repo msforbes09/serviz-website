@@ -125,11 +125,18 @@ export const steps = [
   },
 ] as const;
 
-export const certificates = [
-  { src: "/designs/v1/cert-bir.jpg", alt: "BIR Certificate of Registration" },
-  { src: "/designs/v1/cert-cda.jpg", alt: "CDA Certificate of Compliance" },
-  { src: "/designs/v1/cert-pasig.jpg", alt: "Pasig City Mayor's Permit" },
-] as const;
+/**
+ * `src: null` means the scan has not been supplied yet and the card renders a
+ * labelled placeholder instead. Deliberately not a stock photo: an unrelated
+ * document under the caption "BIR Certificate of Registration" would read as
+ * the genuine article. Drop the file in `public/designs/v1/` and restore the
+ * path to publish it.
+ */
+export const certificates: { src: string | null; alt: string }[] = [
+  { src: null, alt: "BIR Certificate of Registration" },
+  { src: null, alt: "CDA Certificate of Compliance" },
+  { src: null, alt: "Pasig City Mayor's Permit" },
+];
 
 /** UNVERIFIED — written by the design tool, not supplied by the cooperative. */
 export const posts = [
@@ -138,28 +145,28 @@ export const posts = [
     date: "Oct 18, 2026",
     title: "Free clinic: BIR filing basics for sole proprietors",
     body: "A Saturday morning session at our Kapitolyo office. Bring your books and questions.",
-    image: "/designs/v1/ill-tax.jpg",
+    image: "/designs/stock/news-clinic.jpg",
   },
   {
     kind: "News",
     date: "Sep 2026",
     title: "IT consulting joins the service list",
     body: "Members with systems experience now help clients pick and set up payroll and accounting tools.",
-    image: "/designs/v1/ill-portal.jpg",
+    image: "/designs/stock/news-it.jpg",
   },
   {
     kind: "News",
     date: "May 2026",
     title: "CDA Certificate of Compliance renewed",
     body: "The cooperative passed its annual reporting review with the Cooperative Development Authority.",
-    image: "/designs/v1/ill-books.jpg",
+    image: "/designs/stock/accounting-reports.jpg",
   },
   {
     kind: "Event",
     date: "Nov 2026",
     title: "Annual general assembly of members",
     body: "Members meet to review the year and elect officers. Clients are welcome as observers.",
-    image: "/designs/v1/ill-time.jpg",
+    image: "/designs/stock/news-anniversary.jpg",
   },
 ] as const;
 

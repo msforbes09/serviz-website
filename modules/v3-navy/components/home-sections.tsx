@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { DocumentPlaceholder } from "@/components/ui/document-placeholder";
 import { siteConfig } from "@/lib/site-config";
 import {
   audiences,
@@ -149,13 +150,19 @@ export function Permits() {
               key={permit.title}
               className="reveal border-v3-navy/10 bg-v3-paper m-0 flex flex-col gap-3.5 rounded-[20px] border p-4 transition-[transform,box-shadow] duration-[220ms] ease-[cubic-bezier(.23,1,.32,1)] hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(15,42,68,.12)]"
             >
-              <Image
-                src={permit.image}
-                alt={permit.title}
-                width={600}
-                height={800}
-                className="block aspect-3/4 w-full rounded-xl bg-white object-cover"
-              />
+              {permit.image ? (
+                <Image
+                  src={permit.image}
+                  alt={permit.title}
+                  width={600}
+                  height={800}
+                  className="block aspect-3/4 w-full rounded-xl bg-white object-cover"
+                />
+              ) : (
+                <div className="text-v3-navy">
+                  <DocumentPlaceholder label={permit.title} />
+                </div>
+              )}
               <figcaption className="flex flex-col gap-0.5">
                 <span className="text-v3-navy text-[15px] font-semibold">
                   {permit.title}

@@ -108,23 +108,29 @@ export const otherServices: { title: string; body: string; tone: Tone; isNew?: b
   { title: "Customized Packages", body: "Mix and match to fit your business.", tone: "mint" },
 ];
 
-export const permits = [
+/**
+ * `image: null` means the scan has not been supplied yet and the card renders a
+ * labelled placeholder. Deliberately not a stock photo: an unrelated document
+ * under the caption "BIR Certificate of Registration" would read as the
+ * genuine article. Drop the file in `public/designs/v3/` and restore the path.
+ */
+export const permits: { image: string | null; title: string; detail: string }[] = [
   {
-    image: "/designs/v3/permit-bir.jpg",
+    image: null,
     title: "BIR Certificate of Registration",
     detail: "Bureau of Internal Revenue",
   },
   {
-    image: "/designs/v3/permit-cda.jpg",
+    image: null,
     title: "CDA Certificate of Compliance",
     detail: "Cooperative Development Authority · registered 2021",
   },
   {
-    image: "/designs/v3/permit-pasig.jpg",
+    image: null,
     title: "Mayor's Permit",
     detail: "City Government of Pasig",
   },
-] as const;
+];
 
 /** UNVERIFIED — written by the design tool, not supplied by the cooperative. */
 export const news = [
