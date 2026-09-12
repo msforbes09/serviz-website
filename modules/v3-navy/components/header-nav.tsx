@@ -3,36 +3,68 @@
 import { motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { siteConfig } from "@/lib/site-config";
 import { navItems } from "../lib/content";
 
+type Box = { x: number; w: number };
+
+/** Blob width before scaling. Only ever scaled, never animated as `width`. */
+const BLOB_BASE = 100;
+
 /**
- * Desktop navigation with a pill that moves to whichever route is active, plus
+ * Desktop navigation with a pill that flows to whichever route is active, plus
  * the mobile menu. The one client leaf in the v3 shell.
  *
- * The pill is a shared-layout element: one `motion.span` rendered inside the
- * active link, with a `layoutId` that is the same string on every item. When
- * the active route changes the old one unmounts and the new one mounts, and
- * Motion animates between the two boxes.
+ * The pill is two blobs, not one, sitting in a layer behind the labels with an
+ * SVG gooey filter on it. The leader springs stiffly to the new item, the
+ * trailer follows slackly; while they are apart the filter welds them into a
+ * stretched liquid shape, and as the trailer catches up they merge back into a
+ * single pill.
  *
- * That replaces measuring the active item by hand. The previous version kept
- * pixel offsets in state, re-measured on resize and again once web fonts
- * settled, and transitioned `width` — a property that triggers layout on every
- * frame. Motion animates position and size on the compositor and corrects the
- * border-radius distortion that scaling a pill would otherwise produce.
+ * Two consequences worth knowing:
+ *
+ * 1. The filter blurs everything in its subtree, so the labels *cannot* live
+ *    inside it. They sit in the normal flow above a `pointer-events-none`
+ *    filtered layer.
+ * 2. This needs real coordinates, so the measurement the plain version deleted
+ *    comes back. A shared `layoutId` positions one element implicitly; two
+ *    blobs at different spring rates have to be told where to go.
+ *
+ * The blobs are transformed, never resized — `scaleX` against a fixed base
+ * width. Scaling a rounded pill would normally give elliptical end caps, but
+ * the filter re-rounds every edge it touches, so the distortion is invisible.
  */
 export function HeaderNav() {
   const pathname = usePathname();
   const reduceMotion = useReducedMotion();
+  const trackRef = useRef<HTMLElement>(null);
+  const [box, setBox] = useState<Box | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const toggleRef = useRef<HTMLButtonElement>(null);
+
+  useLayoutEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    function measure() {
+      const active = track?.querySelector<HTMLElement>('[data-active="true"]');
+      if (!active) return;
+      setBox({ x: active.offsetLeft, w: active.offsetWidth });
+    }
+
+    measure();
+    window.addEventListener("resize", measure);
+    // Web fonts change every item's width once they land.
+    document.fonts?.ready.then(measure).catch(() => {});
+
+    return () => window.removeEventListener("resize", measure);
+  }, [pathname]);
 
   /**
    * The panel is a dropdown under the header, not a full-screen overlay, so it
    * owes Escape and focus return — but not a focus trap, a scroll lock or
-   * `aria-modal`. Those are the contract for a modal dialog, which this is not;
-   * v1's overlay is one and carries all of them.
+   * `aria-modal`. Those are the contract for a modal dialog, which this is not.
    */
   useEffect(() => {
     if (!menuOpen) return;
@@ -47,41 +79,58 @@ export function HeaderNav() {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [menuOpen]);
 
-  // Apple-style spring rather than a duration curve. The bounce is what reads
-  // as the pill settling into place instead of stopping dead, and a spring
-  // carries velocity through an interruption — clicking a third item mid-flight
-  // retargets from wherever the pill actually is.
-  const pillTransition = reduceMotion
-    ? { duration: 0 }
-    : { type: "spring" as const, duration: 0.45, bounce: 0.22 };
+  const blobStyle = box
+    ? { transform: `translateX(${box.x}px) scaleX(${box.w / BLOB_BASE})` }
+    : { transform: "translateX(0px) scaleX(0)" };
+
+  // The gap between the two springs is the whole effect. Matched rates would
+  // move the blobs as one and never stretch; too wide a gap and they separate
+  // far enough for the filter to stop bridging them.
+  const leader = { type: "spring" as const, duration: 0.42, bounce: 0.24 };
+  const trailer = { type: "spring" as const, duration: 0.62, bounce: 0.18 };
 
   return (
     <>
       <nav
+        ref={trackRef}
         aria-label="Main"
         className="relative hidden items-center gap-1 min-[1001px]:flex"
       >
+        {box && (
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 [filter:url(#v3-nav-goo)]"
+          >
+            {/* Reduced motion gets one blob and no travel: the shape is the
+                affordance, the liquid is the decoration. */}
+            {!reduceMotion && (
+              <motion.span
+                animate={blobStyle}
+                transition={trailer}
+                style={{ width: BLOB_BASE, transformOrigin: "left center" }}
+                className="bg-v3-navy absolute top-0 left-0 h-full rounded-full"
+              />
+            )}
+            <motion.span
+              animate={blobStyle}
+              transition={reduceMotion ? { duration: 0 } : leader}
+              style={{ width: BLOB_BASE, transformOrigin: "left center" }}
+              className="bg-v3-navy absolute top-0 left-0 h-full rounded-full"
+            />
+          </div>
+        )}
+
         {navItems.map((item) => {
           const active = pathname === item.href;
           return (
             <Link
               key={item.href}
               href={item.href}
+              data-active={active}
               aria-current={active ? "page" : undefined}
               className={`relative rounded-full px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-colors duration-[250ms] ${active ? "text-white" : "text-v3-ink hover:bg-v3-navy/5"}`}
             >
-              {active && (
-                <motion.span
-                  aria-hidden
-                  layoutId="v3-nav-pill"
-                  // `initial={false}` so the pill is simply in place on first
-                  // paint rather than animating in from nothing.
-                  initial={false}
-                  transition={pillTransition}
-                  className="bg-v3-navy absolute inset-0 rounded-full"
-                />
-              )}
-              <span className="relative">{item.label}</span>
+              {item.label}
             </Link>
           );
         })}
@@ -91,6 +140,22 @@ export function HeaderNav() {
         >
           Get a quote
         </a>
+
+        {/* Blur, then crank the alpha contrast so blurred edges snap back to
+            hard ones. Where two blobs are close enough for their blurs to
+            overlap, the contrast pass welds them into a single shape. */}
+        <svg aria-hidden className="pointer-events-none absolute size-0">
+          <defs>
+            <filter id="v3-nav-goo">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="blur" />
+              <feColorMatrix
+                in="blur"
+                type="matrix"
+                values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -11"
+              />
+            </filter>
+          </defs>
+        </svg>
       </nav>
 
       <button
