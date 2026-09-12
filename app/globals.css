@@ -128,3 +128,189 @@
     @apply font-sans;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Preview variant palettes and typefaces.
+
+   Three layout presentations run side by side at /v1, /v2 and /v3 while the
+   client chooses. Each owns a namespaced scale here rather than redefining the
+   shadcn tokens, so the variants cannot bleed into each other or into the real
+   site. Utilities generate as usual: bg-v2-forest, text-v3-rust, font-outfit.
+
+   When a variant is chosen its scale is promoted into the shadcn tokens above
+   and the other two blocks are deleted.
+--------------------------------------------------------------------------- */
+@theme {
+  /* v1 — classic */
+  --color-v1-forest: #0b4a24;
+  --color-v1-forest-soft: #3c7a50;
+  --color-v1-orange: #f26a1b;
+  --color-v1-ink: #14211a;
+  --color-v1-muted: #5c6b60;
+  --color-v1-placeholder: #8a958d;
+  --color-v1-paper: #fafaf7;
+  --color-v1-line: #e3e8e4;
+
+  /* v2 — warm editorial */
+  --color-v2-forest: #0b3d1f;
+  --color-v2-forest-deep: #08301a;
+  --color-v2-orange: #f26b1d;
+  --color-v2-orange-bright: #ff7d33;
+  --color-v2-ink: #12261a;
+  --color-v2-muted: #4b5e52;
+  --color-v2-cream: #f6f5f1;
+  --color-v2-mist: #e9f0ea;
+  --color-v2-on-dark: #d7e3da;
+  --color-v2-on-dark-muted: #b9c9be;
+  --color-v2-peach: #ffd7c0;
+
+  /* v3 — structured navy */
+  --color-v3-navy: #0f2a44;
+  --color-v3-navy-deep: #0b2137;
+  --color-v3-navy-darkest: #081a2c;
+  --color-v3-rust: #c9502c;
+  --color-v3-rust-bright: #de5e3a;
+  --color-v3-sky: #8cc8e8;
+  --color-v3-mint: #cfe6f5;
+  --color-v3-ink: #121a24;
+  --color-v3-slate: #4f5d6b;
+  --color-v3-slate-deep: #3a4754;
+  --color-v3-steel: #a3aeb9;
+  --color-v3-paper: #f7f9fb;
+  --color-v3-on-dark: #d6e2ee;
+  --color-v3-on-dark-muted: #b5c6d6;
+
+}
+
+/* Variant typefaces, loaded per layout with next/font. `inline` matters: the
+   --font-*-src variables are set on the variant's wrapper element, not on
+   :root, so the utility has to carry the var() and resolve it in context. */
+@theme inline {
+  --font-poppins: var(--font-poppins-src), Poppins, system-ui, sans-serif;
+  --font-sora: var(--font-sora-src), Sora, system-ui, sans-serif;
+  --font-outfit: var(--font-outfit-src), Outfit, system-ui, sans-serif;
+}
+
+/* Scroll-linked reveal used by every variant. Sections start hidden only when
+   the browser can animate them back in, so a no-JS or reduced-motion visitor
+   never gets a blank page. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 22%;
+    }
+  }
+}
+
+@keyframes reveal-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* v2 hero motion. Both are decorative and gated behind motion-safe: at the
+   call site, so a reduced-motion visitor gets a still logo and a static list. */
+@keyframes v2-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-4deg);
+  }
+  50% {
+    transform: translateY(-14px) rotate(2deg);
+  }
+}
+
+@keyframes v2-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Entrance motion for above-the-fold content.
+   
+   Built on @starting-style rather than a keyframe animation on purpose. A
+   keyframe entrance has to start from opacity 0 and rely on fill-mode to end
+   visible — so if the animation never runs, the content never appears. That is
+   not hypothetical: a document that loads in a background tab does not start
+   its animations, and the hero stayed blank.
+   
+   Here the resting style IS the visible one. @starting-style supplies the
+   hidden state only for the first render, so a browser that skips the
+   transition simply shows the content. */
+@media (prefers-reduced-motion: no-preference) {
+  .enter-rise,
+  .enter-slide {
+    transition:
+      opacity 0.55s cubic-bezier(0.23, 1, 0.32, 1),
+      transform 0.55s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .enter-delay {
+    transition-delay: 0.2s;
+  }
+
+  .enter-slide {
+    transition-delay: 0.6s;
+  }
+
+  @starting-style {
+    .enter-rise {
+      opacity: 0;
+      transform: translateY(28px);
+    }
+
+    .enter-slide {
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+  }
+}
+
+@keyframes v3-drift {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-3deg);
+  }
+  50% {
+    transform: translateY(-14px) rotate(3deg);
+  }
+}
+
+/* v1's tagline fills in word by word as the line scrolls into view.
+   
+   Scroll-driven, so it needs no JavaScript, and guarded twice: browsers
+   without scroll timelines and visitors who prefer reduced motion get the
+   finished, fully coloured line. The faded start colour lives inside the
+   guard for the same reason — it must never be the resting state. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .tagline {
+      view-timeline-name: --tagline;
+    }
+
+    .tagline > span {
+      color: color-mix(in srgb, var(--color-v1-forest) 28%, transparent);
+      animation: tagline-fill steps(1, end) both;
+      animation-timeline: --tagline;
+      /* Each word finishes a little later than the one before it, which is
+         what produces the left-to-right sweep off a single timeline. */
+      animation-range: entry 60% cover calc(24% + var(--i) * 2.4%);
+    }
+  }
+}
+
+@keyframes tagline-fill {
+  to {
+    color: var(--color-v1-forest);
+  }
+}
