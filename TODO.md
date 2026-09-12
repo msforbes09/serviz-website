@@ -52,11 +52,47 @@ Files the entry pages import, which must come across with them:
   `logo-mark.png`, `logo-wordmark.png`, `permit-bir.jpg`, `permit-cda.jpg`,
   `permit-pasig.jpg`.
 
-Imported markup is a reference, not the deliverable. Each variant gets rebuilt
-as Server Components under `modules/<variant>/` against the shadcn primitives
-and the shared content layer — the `.dc.html` runtime helpers (`support.js`,
-`image-slot.js`) do not ship. The permit scans in v3 are real documents; check
-before publishing whether they belong on a public page.
+All three are built. Imported markup was a reference, not the deliverable:
+each variant is Server Components under `modules/<variant>/`, and the
+`.dc.html` runtime helpers do not ship.
+
+### Assets still needed
+
+These exceed the design API's 256 KiB per-file read limit, so they cannot be
+pulled automatically. Export them from Claude Design and drop them in:
+
+| Put here | From project | Files |
+| --- | --- | --- |
+| `public/designs/v1/` | `bbfa7f03…` `assets/` | `logo-full.jpg`, `office.jpg`, `tower.jpg`, `cert-bir.jpg`, `cert-cda.jpg`, `cert-pasig.jpg`, `ill-tax.jpg`, `ill-portal.jpg`, `ill-books.jpg`, `ill-time.jpg` |
+| `public/designs/v3/` | `79aa69fa…` `assets/` | `permit-bir.jpg`, `permit-cda.jpg`, `permit-pasig.jpg` |
+
+Until they land those images 404; every other image is in place.
+
+### Client sign-off checklist
+
+Nothing below is confirmed by the print material in `references/Images/`. Get
+each one approved before any of this is public.
+
+- **Office address** — 18 Philam Rd., Brgy. Kapitolyo, Pasig City 1600.
+- **Office hours** — Mon–Fri, 9:00 AM – 6:00 PM.
+- **Facebook page** — facebook.com/SerbizWorkersCoop.
+- **CDA registration number** — 9520-10130003 1448, issued 1 February 2021. A
+  registration number printed on a public page is worth checking twice.
+- **Every news item and event.** All three variants carry dated posts the
+  design invented: an IT consulting launch, a free BIR clinic, a fifth
+  anniversary, a permit renewal drive, an annual general assembly, and a
+  recurring monthly deadline calendar. None came from the cooperative.
+- **Promises of service levels** — "we reply within one working day", "a
+  written quote within three working days", "from first call to first payslip
+  in under two weeks", "first consultation is free".
+- **Claims about the team** — that members are women professionals, that
+  clients have 1–80 employees, that a non-disclosure agreement is signed at
+  engagement.
+- **Permit scans.** The v3 and v1 permits sections show photographs of real
+  registration documents, which normally carry registration numbers and
+  signatures. Confirm the client wants them public.
+- **Stock photography.** Every photograph is an Unsplash placeholder showing
+  people who do not work at SERBIZ. Replace with real photos before launch.
 
 ## Housekeeping
 
