@@ -118,6 +118,43 @@ each one approved before any of this is public.
 - **Stock photography.** Every photograph is an Unsplash placeholder showing
   people who do not work at SERBIZ. Replace with real photos before launch.
 
+## Found in the v1 review (2026-09-12)
+
+Four things surfaced while summarising the v1 enhancement work. Ordered by when
+they start to matter, not by size.
+
+- **No social preview.** Nothing in `app/` sets `openGraph` beyond
+  `metadataBase`, and there is no `opengraph-image`. The three preview links are
+  about to be sent to the client, and in Messenger, Viber or Slack they will
+  render as bare URLs with no title card. This is the most time-sensitive of the
+  four purely because of what happens this week. A single `opengraph-image.tsx`
+  under each preview route, or one shared image at the root, covers it. Keep the
+  preview pages `noindex` regardless — Open Graph governs link unfurling, not
+  indexing, so the two settings do not conflict.
+
+- **The hero photograph is stock, and its alt text says otherwise.**
+  `public/designs/v1/office.jpg` is a generic co-working space. The alt text in
+  `modules/v1-classic/components/sections.tsx` reads "SERBIZ team members
+  working together at the office", which asserts to a screen reader that these
+  people work at the cooperative. That is the same problem the certificate
+  placeholders were built to avoid, hiding in the accessibility layer where it
+  is easier to miss. Fix the alt text now to describe a generic workplace;
+  replace the image with a real office photo before launch. The blanket stock
+  photography entry in the sign-off checklist above covers the image, not the
+  false description.
+
+- **The phone number is retyped in five components.** `lib/site-config.ts` opens
+  by saying never to retype a phone number or address into a component, and five
+  components do exactly that, across all three variants: v1 `sections.tsx` and
+  `contact.tsx`, v2 `contact.tsx`, v3 `home-sections.tsx`, `site-footer.tsx` and
+  `contact-sections.tsx`. They have already drifted — the config says
+  "(0915) 816 2433" and the components say "0915 816 2433". Add a display-format
+  field to the config and read it. Small, and it is precisely the drift the rule
+  exists to prevent.
+
+- **The contact form only opens a mail client.** See the Queued entry below,
+  which now records why this is worse than a cosmetic gap.
+
 ## Housekeeping
 
 - **Tests run inside the Vercel build.** `prebuild` chains lint and the test
@@ -136,13 +173,23 @@ each one approved before any of this is public.
 
 ## Queued
 
-- **Contact form.** Needs a destination decided (email, webhook or inbox) and
-  a rate-limit key before the server action is written. Covered by the security
-  self-review checklist in `CLAUDE.md`.
+- **Contact form.** Every variant's form builds a `mailto:` and hands off to the
+  visitor's mail client. On a phone with no mail account configured, pressing
+  the button does nothing at all — no error, no fallback, and the enquiry is
+  lost silently. That makes this a functional gap rather than a rough edge, and
+  the biggest one standing between the chosen layout and launch. Needs a
+  destination decided (email, webhook or inbox) and a rate-limit key before the
+  server action is written. Covered by the security self-review checklist in
+  `CLAUDE.md`: an exported server action is a public HTTP endpoint.
 - **Organization JSON-LD.** `lib/site-config.ts` already holds the legal name,
   contact points, mission and vision. Ship structured data with the real home
   page, using an escaping serializer rather than bare `JSON.stringify`.
 - **Sitemap entries.** `app/sitemap.ts` lists only the home page. Every new
   public route is added there in the same change.
+- **Active section in the v1 nav.** Smooth scrolling and correct landing
+  positions went in on 2026-09-12; the missing half is showing which section the
+  visitor is currently in. Doable with a scroll-driven CSS animation rather than
+  an observer, in keeping with the rest of v1's motion. Raised and not taken at
+  the time.
 - **Shared UI blocks.** `AppFormField`, `PageHeader` and `EmptyState` are not
   built yet. Add each one when the first real use appears, not before.
