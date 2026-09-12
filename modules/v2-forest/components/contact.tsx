@@ -4,7 +4,7 @@ import { QuoteForm } from "./quote-form";
 const contactRows = [
   {
     key: "Mobile",
-    label: "0915 816 2433",
+    label: siteConfig.contact.phones.mobile,
     href: `tel:${siteConfig.contact.mobileTel}`,
     badge: "TEL",
     badgeClass: "text-[11px]",

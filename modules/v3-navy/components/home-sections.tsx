@@ -207,7 +207,7 @@ export function HomeCta() {
               href={`tel:${siteConfig.contact.mobileTel}`}
               className="rounded-full border-[1.5px] border-white/50 bg-white/15 px-[26px] py-[15px] text-base font-semibold text-white transition-colors hover:bg-white/30"
             >
-              0915 816 2433
+              {siteConfig.contact.phones.mobile}
             </a>
           </div>
         </div>

@@ -76,7 +76,7 @@ export function Hero() {
             href={`tel:${siteConfig.contact.mobileTel}`}
             className="text-v1-forest inline-flex items-center gap-2 px-4 py-3 text-base font-semibold"
           >
-            <Phone aria-hidden className="size-5" /> 0915 816 2433
+            <Phone aria-hidden className="size-5" /> {siteConfig.contact.phones.mobile}
           </a>
         </div>
         <ul className="mt-8 flex list-none flex-wrap gap-x-6 gap-y-4 text-sm text-[#3f4b43]">

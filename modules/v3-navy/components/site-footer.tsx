@@ -65,7 +65,7 @@ export function SiteFooter() {
               href={`tel:${siteConfig.contact.mobileTel}`}
               className="hover:text-v3-rust text-white"
             >
-              0915 816 2433
+              {siteConfig.contact.phones.mobile}
             </a>
             <a
               href={siteConfig.contact.facebook}

@@ -138,14 +138,15 @@ they start to matter, not by size.
   who works at the cooperative. See the photography entry below. The image is
   still a placeholder, which the sign-off checklist covers.
 
-- **The phone number is retyped in five components.** `lib/site-config.ts` opens
-  by saying never to retype a phone number or address into a component, and five
-  components do exactly that, across all three variants: v1 `sections.tsx` and
-  `contact.tsx`, v2 `contact.tsx`, v3 `home-sections.tsx`, `site-footer.tsx` and
-  `contact-sections.tsx`. They have already drifted — the config says
-  "(0915) 816 2433" and the components say "0915 816 2433". Add a display-format
-  field to the config and read it. Small, and it is precisely the drift the rule
-  exists to prevent.
+- **The phone number is retyped in five components.** ~~Done.~~
+  `siteConfig.contact.phones` is now a named object rather than a positional
+  array, so a layout reads `phones.mobile` instead of indexing a slot it has to
+  know about, and all six call sites across the three variants read it. The
+  printed form is the config's "(0915) 816 2433"; the components had drifted to
+  "0915 816 2433".
+
+  `lib/site-config.test.ts` pins the displayed string and the dialable
+  `mobileTel` to the same digits, which is the drift that actually happened.
 
 - **The contact form only opens a mail client.** See the Queued entry below,
   which now records why this is worse than a cosmetic gap.

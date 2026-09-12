@@ -10,7 +10,7 @@ const rows = [
   },
   {
     key: "Mobile",
-    value: "0915 816 2433",
+    value: siteConfig.contact.phones.mobile,
     href: `tel:${siteConfig.contact.mobileTel}`,
     badge: "☏",
   },

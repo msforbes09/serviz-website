@@ -115,8 +115,8 @@ export function Contact() {
               href={`tel:${siteConfig.contact.mobileTel}`}
               className="text-v1-ink flex items-center gap-3"
             >
-              <Phone aria-hidden className="text-v1-forest size-6" /> 0915 816
-              2433
+              <Phone aria-hidden className="text-v1-forest size-6" />{" "}
+              {siteConfig.contact.phones.mobile}
             </a>
           </li>
           <li>
