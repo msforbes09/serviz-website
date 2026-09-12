@@ -440,6 +440,9 @@
 @layer components {
   .v1-root {
     --v1-focus-ring: var(--color-v1-forest);
+    /* The bar is set to exactly this, border included, and the hero's floor is
+       the viewport minus it. The 43px anchor landing in TODO.md assumes 69. */
+    --v1-nav-height: 69px;
   }
 
   .v1-root :focus-visible {

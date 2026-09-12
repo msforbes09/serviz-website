@@ -1,6 +1,7 @@
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
+import { siteConfig } from "@/lib/site-config";
 import { SiteNav } from "./site-nav";
 
 const toggle = () => screen.getByRole("button", { name: /menu/i });
@@ -44,6 +45,70 @@ describe("v1 logo", () => {
     render(<SiteNav />);
 
     expect(logo()).toHaveAttribute("href", "#top");
+  });
+
+  it("sets the cooperative's name in text beside the mark, not as a picture", () => {
+    render(<SiteNav />);
+
+    // The full wordmark was a PNG with a white ground baked in, which showed
+    // as a box against the paper bar. Real text takes the bar's own colour.
+    expect(logo()).toHaveTextContent(siteConfig.name);
+    expect(logo()).toHaveTextContent(
+      `Resources Income Workers Cooperative (${siteConfig.shortName})`,
+    );
+    expect(within(logo()).queryByRole("img")).toBeNull();
+  });
+});
+
+describe("v1 section links", () => {
+  // The overlay repeats every link, so ask the bar itself.
+  const servicesLink = () =>
+    within(screen.getByRole("navigation", { name: "Main" })).getByRole("link", {
+      name: "Services",
+    });
+
+  const withTarget = () => {
+    const target = document.createElement("section");
+    target.id = "services";
+    document.body.appendChild(target);
+    return target;
+  };
+
+  it("scrolls to the section from script and leaves the address bar alone", async () => {
+    const user = userEvent.setup();
+    const scrollIntoView = vi.fn();
+    Element.prototype.scrollIntoView = scrollIntoView;
+    const target = withTarget();
+    render(<SiteNav />);
+
+    await user.click(servicesLink());
+
+    // A fragment left in the URL is what made a refresh reopen the page part
+    // way down. The scroll happens without one.
+    expect(scrollIntoView).toHaveBeenCalledTimes(1);
+    expect(scrollIntoView.mock.instances[0]).toBe(target);
+    expect(window.location.hash).toBe("");
+
+    target.remove();
+  });
+
+  it("moves focus to the section, as a real fragment jump would", async () => {
+    const user = userEvent.setup();
+    Element.prototype.scrollIntoView = vi.fn();
+    const target = withTarget();
+    render(<SiteNav />);
+
+    await user.click(servicesLink());
+
+    expect(target).toHaveFocus();
+
+    target.remove();
+  });
+
+  it("keeps the fragment href for a visitor without scripting", () => {
+    render(<SiteNav />);
+
+    expect(servicesLink()).toHaveAttribute("href", "#services");
   });
 });
 

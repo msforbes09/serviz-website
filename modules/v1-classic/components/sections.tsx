@@ -32,9 +32,15 @@ import { Icon } from "./icon";
 //
 // The aspect ratio is also what gives the box a definite height. A centred grid
 // column has none, so `h-full` inside it has nothing to resolve against.
+//
+// The floor is the viewport less the nav, so the hero owns the first screen and
+// the services band waits below the fold instead of poking in, at any window
+// height. `svh` is the small viewport: on a phone it is the height with the
+// browser chrome showing, so the hero never overshoots when the chrome is in.
+// A floor, not a height, so a short window still gets the whole hero.
 export function Hero() {
   return (
-    <section className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-12 px-6 pt-16 pb-24 min-[900px]:grid-cols-[1.35fr_1fr]">
+    <section className="mx-auto grid min-h-[calc(100svh-var(--v1-nav-height))] max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-12 px-6 pt-16 pb-24 min-[900px]:grid-cols-[1.35fr_1fr]">
       <div className="max-w-[680px]">
         <p
           style={{ "--i": 0 } as React.CSSProperties}
