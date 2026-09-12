@@ -89,14 +89,17 @@ export function ServicesGrid() {
 
 export function WhyUs() {
   return (
-    <section className="bg-v3-navy relative overflow-hidden text-white [--v3-focus-ring:var(--color-v3-paper)]">
+    <section className="bg-v3-navy relative overflow-clip text-white [--v3-focus-ring:var(--color-v3-paper)]">
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <div className="bg-v3-rust absolute bottom-[-20%] left-[-6%] h-[70%] w-[45%] opacity-90 [clip-path:polygon(0_30%,60%_0,100%_100%,0_100%)]" />
         <div className="bg-v3-navy-deep absolute bottom-[-10%] left-[-6%] h-[50%] w-[40%] [clip-path:polygon(0_40%,55%_0,100%_100%,0_100%)]" />
       </div>
 
       <div className="relative mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-start gap-12 px-5 py-22">
-        <div className="reveal">
+        <div
+          style={{ "--from-x": "-48px" } as React.CSSProperties}
+          className="reveal reveal-x"
+        >
           <p className="text-v3-sky mb-3 text-[13px] font-semibold tracking-[0.18em] uppercase">
             Why SERBIZ
           </p>

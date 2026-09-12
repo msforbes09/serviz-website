@@ -11,7 +11,7 @@ export function PageHero({
   corner?: "right" | "bottom";
 }) {
   return (
-    <section className="bg-v3-navy relative overflow-hidden text-white">
+    <section className="bg-v3-navy relative overflow-clip text-white">
       <div
         aria-hidden
         className={

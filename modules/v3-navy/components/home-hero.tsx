@@ -5,7 +5,7 @@ import { basePath } from "../lib/content";
 
 export function HomeHero() {
   return (
-    <section className="bg-v3-navy relative overflow-hidden text-white [--v3-focus-ring:var(--color-v3-paper)]">
+    <section className="bg-v3-navy relative overflow-clip text-white [--v3-focus-ring:var(--color-v3-paper)]">
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <div className="bg-v3-navy-deep absolute top-[-10%] right-[-8%] h-[120%] w-[60%] opacity-90 [clip-path:polygon(28%_0,100%_0,100%_100%,0_100%)]" />
         <div className="bg-v3-rust absolute top-0 right-0 h-full w-[34%] opacity-95 [clip-path:polygon(70%_0,100%_0,100%_100%,40%_100%)]" />

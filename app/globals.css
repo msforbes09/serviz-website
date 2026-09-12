@@ -255,6 +255,37 @@
    index turns that into a left-to-right sweep. Same trick as the tagline, and
    it stays inside the .reveal guards: without scroll timelines or with reduced
    motion the cards are simply there. */
+/* Some blocks come in from the side rather than from below. Borrowed from
+   e.gov.ph, which mixes `translateX(48px)` and `translateY(-20px)` into an
+   otherwise upward set — the variety is what stops a long page reading as one
+   repeated gesture.
+
+   Used sparingly and only where it reinforces the layout: in a two-column
+   block the text column enters from its own side while the list beside it
+   keeps the upward stagger. Both sides sliding reads as busy.
+
+   Direction comes from `--from-x` at the call site, so one class serves either
+   side. Same guards and the same timeline as `.reveal`; only the path differs,
+   and the resting state is still the visible one. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal-x {
+      animation-name: reveal-slide;
+    }
+  }
+}
+
+@keyframes reveal-slide {
+  from {
+    opacity: 0;
+    transform: translateX(var(--from-x, 48px));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {
     .reveal-step {

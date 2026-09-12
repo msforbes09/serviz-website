@@ -4,7 +4,7 @@ import { reasons } from "../lib/content";
 
 export function AboutIntro() {
   return (
-    <section className="relative overflow-hidden bg-white">
+    <section className="relative overflow-clip bg-white">
       <div
         aria-hidden
         className="absolute inset-x-0 top-0 h-2 bg-[linear-gradient(90deg,var(--color-v3-navy)_0_60%,var(--color-v3-rust)_60%_100%)]"
@@ -84,7 +84,10 @@ export function WhyClientsStay() {
   return (
     <section className="bg-white">
       <div className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-10 px-5 pt-15 pb-22">
-        <div className="reveal">
+        <div
+          style={{ "--from-x": "-48px" } as React.CSSProperties}
+          className="reveal reveal-x"
+        >
           <p className="text-v3-rust mb-3 text-[13px] font-semibold tracking-[0.18em] uppercase">
             Why clients stay
           </p>

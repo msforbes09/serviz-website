@@ -500,6 +500,31 @@ services section alone, so there was nothing to trim.
   properties would have needed two transitions.
 
 
+- **`overflow: hidden` silently breaks a `view()` scroll timeline.** It
+  establishes a scroll container, so `animation-timeline: view()` on anything
+  inside resolves against a box that never scrolls — the animation sits at a
+  fixed progress and the element is simply always in its end state. Measured on
+  v3's home page: of 18 reveals below the fold, **4 were already fully visible**,
+  and all four shared one ancestor, the navy section with `overflow-hidden`. The
+  healthy ones had no clipped ancestor at all.
+
+  `overflow: clip` clips identically and does **not** create a scroll container,
+  so it is the fix. v3's four clipping sections now use it and the count is 0.
+
+  **v1 and v2 still have this.** `v1-classic/components/sections.tsx` and
+  `v2-forest/components/why-serbiz.tsx` each clip a section with
+  `overflow-hidden` and contain reveals, so the same reveals are very likely
+  dead there too. Left alone deliberately: the brief was v3, and changing merged
+  variants unasked is the opportunistic edit `CLAUDE.md` rules out. Measure each
+  first — count below-fold reveals sitting at opacity 1 — then change it.
+
+- **A side-entrance variant now exists.** `.reveal-x` swaps the keyframes for a
+  horizontal path, with direction from `--from-x` at the call site, borrowed
+  from e.gov.ph's mix of `translateX(48px)` and `translateY(-20px)` among
+  otherwise upward reveals. Used on two v3 two-column blocks only, where the
+  text column enters from its own side while the list beside it keeps the
+  upward stagger. Both sides sliding reads as busy.
+
 ## Housekeeping
 
 - **e.gov.ph's scroll reveal was re-examined at the client's request, and
