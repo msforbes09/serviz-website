@@ -12,6 +12,7 @@ import {
   taglineWords,
 } from "../lib/content";
 import { Icon } from "./icon";
+import { SpotlightCard } from "./spotlight-card";
 
 // Two even columns left the headline 552px to work in while its own
 // `max-w-[680px]` said it wanted 680px, so 60px type broke into six lines, two
@@ -34,10 +35,18 @@ export function Hero() {
             The floor is 32px rather than 36px for the same reason. At 36px on
             a 375px screen the line count goes to six, two of them barely half
             width; 32px fits it into five even lines. Nothing above 720px
-            changes, so the desktop composition is untouched. */}
-        <h1 className="v1-gradient-heading mt-6 bg-[linear-gradient(90deg,var(--color-v1-forest),var(--color-v1-forest-soft))] bg-clip-text text-[clamp(32px,5vw,60px)] leading-[1.05] font-bold tracking-[-0.02em] text-balance text-transparent">
-          Payroll, books and compliance, handled by people who care about your
-          small business.
+            changes, so the desktop composition is untouched.
+
+            Solid ink with the payoff phrase in orange, rather than a gradient
+            clipped to the glyphs. The gradient read as texture instead of
+            emphasis, and because it made the text itself transparent it also
+            needed rescuing in forced-colours modes. This says the same thing
+            with colour that is actually there. */}
+        <h1 className="text-v1-forest mt-6 text-[clamp(32px,5vw,60px)] leading-[1.05] font-bold tracking-[-0.02em] text-balance">
+          Payroll, books and compliance, handled by{" "}
+          <span className="text-v1-orange">
+            people who care about your small business.
+          </span>
         </h1>
         <p className="mt-6 max-w-[560px] text-lg leading-7 text-[#3f4b43]">
           SERBIZ runs the back office for sole proprietors, one person
@@ -101,19 +110,20 @@ export function Services() {
             What we do
           </p>
           <h2 className="text-v1-forest mt-3 text-[clamp(30px,4vw,48px)] leading-[1.1] font-bold text-balance">
-            Everything tedious about running a business, taken off your desk.
+            Everything tedious about running a business,{" "}
+            <span className="text-v1-orange">taken off your desk.</span>
           </h2>
         </div>
 
         <div className="mt-12 grid grid-cols-[repeat(auto-fill,minmax(270px,1fr))] gap-4">
           {services.map((service, index) => (
-            <article
+            <SpotlightCard
               key={service.title}
               style={{ "--i": index } as React.CSSProperties}
               className="reveal reveal-step border-v1-line bg-v1-paper hover:border-v1-forest flex flex-col gap-3 rounded-2xl border p-6 transition-[transform,border-color,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(11,74,36,.08)]"
             >
               <div className="flex items-center justify-between">
-                <span className="text-v1-forest grid size-12 place-items-center rounded-xl bg-[#eaf4ec]">
+                <span className="v1-icon-tint grid size-12 place-items-center rounded-xl">
                   <Icon name={service.icon} className="size-6" />
                 </span>
                 {service.isNew && (
@@ -124,7 +134,7 @@ export function Services() {
               </div>
               <h3 className="text-xl leading-7 font-semibold">{service.title}</h3>
               <p className="text-base leading-6 text-[#3f4b43]">{service.body}</p>
-            </article>
+            </SpotlightCard>
           ))}
 
           <a
@@ -198,7 +208,10 @@ export function WhySerbiz() {
             Why SERBIZ
           </p>
           <h2 className="mt-3 max-w-[680px] text-[clamp(30px,4vw,48px)] leading-[1.1] font-bold text-balance">
-            Built for SPs, OPCs and SMEs, not scaled down from a big firm.
+            Built for SPs, OPCs and SMEs,{" "}
+            <span className="text-[#ffb784]">
+              not scaled down from a big firm.
+            </span>
           </h2>
           <div className="mt-10 grid gap-6">
             {reasons.map((reason, index) => (
@@ -235,24 +248,44 @@ export function HowItWorks() {
           How it works
         </p>
         <h2 className="text-v1-forest mt-3 text-[clamp(30px,4vw,48px)] leading-[1.1] font-bold text-balance">
-          From first call to first payslip in under two weeks.
+          From first call to first payslip{" "}
+          <span className="text-v1-orange">in under two weeks.</span>
         </h2>
       </div>
-      <ol className="mt-12 grid list-none grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-4">
-        {steps.map((step, index) => (
-          <li
-            key={step.n}
-            style={{ "--i": index } as React.CSSProperties}
-            className="reveal reveal-step border-v1-line rounded-2xl border bg-white p-6"
-          >
-            <span className="text-v1-orange text-5xl leading-none font-bold">
-              {step.n}
-            </span>
-            <h3 className="mt-4 text-xl leading-7 font-semibold">{step.title}</h3>
-            <p className="mt-2 text-base leading-6 text-[#3f4b43]">{step.body}</p>
-          </li>
-        ))}
-      </ol>
+      <div className="relative mt-14">
+        {/* The rule that turns three cards into one sequence. It runs between
+            the first and last node centres, which in a three-column grid is a
+            sixth in from each edge, and fades out at both ends so it reads as
+            a connection rather than a border. Decorative, and gone entirely
+            once the columns stack. */}
+        <div
+          aria-hidden
+          className="via-v1-line absolute top-7 right-[16.67%] left-[16.67%] hidden h-px bg-gradient-to-r from-transparent to-transparent md:block"
+        />
+
+        <ol className="grid list-none gap-10 md:grid-cols-3 md:gap-6">
+          {steps.map((step, index) => (
+            <li
+              key={step.n}
+              style={{ "--i": index } as React.CSSProperties}
+              className="reveal reveal-step md:text-center"
+            >
+              {/* Positioned, so it sits over the rule rather than under it,
+                  and filled with the page colour so the rule stops at its
+                  edge instead of striking through the number. */}
+              <span className="border-v1-line bg-v1-paper text-v1-orange relative grid size-14 place-items-center rounded-full border text-lg font-bold md:mx-auto">
+                {step.n}
+              </span>
+              <h3 className="mt-5 text-xl leading-7 font-semibold">
+                {step.title}
+              </h3>
+              <p className="mt-2 text-base leading-6 text-[#3f4b43]">
+                {step.body}
+              </p>
+            </li>
+          ))}
+        </ol>
+      </div>
     </section>
   );
 }
@@ -266,7 +299,8 @@ export function Permits() {
             Permits and licenses
           </p>
           <h2 className="text-v1-forest mt-3 text-[clamp(30px,4vw,48px)] leading-[1.1] font-bold text-balance">
-            Registered, compliant and inspectable.
+            Registered, compliant and{" "}
+            <span className="text-v1-orange">inspectable.</span>
           </h2>
           <p className="mt-4 text-base leading-6 text-[#3f4b43]">
             We hold our own paperwork to the standard we hold yours. SERBIZ is
@@ -311,7 +345,8 @@ export function News() {
             News and events
           </p>
           <h2 className="text-v1-forest mt-3 text-[clamp(30px,4vw,48px)] leading-[1.1] font-bold">
-            What the cooperative is up to.
+            What the cooperative is{" "}
+            <span className="text-v1-orange">up to.</span>
           </h2>
         </div>
         <a
@@ -326,10 +361,10 @@ export function News() {
 
       <div className="mt-10 grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-4">
         {posts.map((post, index) => (
-          <article
+          <SpotlightCard
             key={post.title}
             style={{ "--i": index } as React.CSSProperties}
-            className="reveal reveal-step border-v1-line flex flex-col overflow-hidden rounded-2xl border bg-white transition-[transform,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(11,74,36,.08)]"
+            className="reveal reveal-step border-v1-line flex flex-col rounded-2xl border bg-white transition-[transform,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(11,74,36,.08)]"
           >
             <Image
               src={post.image}
@@ -348,7 +383,7 @@ export function News() {
               <h3 className="text-lg leading-7 font-semibold">{post.title}</h3>
               <p className="text-sm leading-5 text-[#3f4b43]">{post.body}</p>
             </div>
-          </article>
+          </SpotlightCard>
         ))}
       </div>
     </section>

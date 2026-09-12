@@ -17,7 +17,8 @@ export function Faq() {
             Questions
           </p>
           <h2 className="text-v1-forest mt-3 text-[clamp(30px,4vw,48px)] leading-[1.1] font-bold text-balance">
-            Things owners ask us before signing.
+            Things owners ask us{" "}
+            <span className="text-v1-orange">before signing.</span>
           </h2>
           <p className="mt-4 text-base leading-6 text-[#3f4b43]">
             Something else on your mind?{" "}

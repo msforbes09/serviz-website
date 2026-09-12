@@ -254,17 +254,49 @@
   }
 }
 
-/* The v1 headline is painted as a gradient clipped to the glyphs, which means
-   the text itself is transparent. Forced-colours modes drop background images,
-   so the headline would render as nothing at all. Same failure shape as an
-   entrance animation that never runs: the fallback has to be the visible
-   state, not the hidden one. */
-@media (forced-colors: active) {
-  .v1-gradient-heading {
-    background: none;
-    color: CanvasText;
-    -webkit-text-fill-color: currentColor;
+/* A soft brand-coloured light that follows the pointer across a card. The
+   position arrives as two custom properties written by SpotlightCard, so moving
+   the mouse repaints one gradient and re-renders no React at all.
+
+   Gated on real hover. On a touch screen a stray mousemove would light a card
+   up and leave it lit with nothing to switch it off. */
+@media (hover: hover) {
+  .v1-spotlight {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    background: radial-gradient(
+      220px circle at var(--mx, 50%) var(--my, 50%),
+      color-mix(in srgb, var(--color-v1-forest) 9%, transparent),
+      transparent 72%
+    );
   }
+
+  :hover > .v1-spotlight {
+    opacity: 1;
+  }
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .v1-spotlight {
+    transition: opacity 0.25s ease;
+  }
+}
+
+/* Each service icon takes its own step along a blend from forest to orange, so
+   a grid of seven reads as a sequence rather than a wall of identical tiles.
+   Every tint is a mix of the two brand colours, which means the ramp cannot
+   drift off-brand however many cards are added to it. */
+.v1-icon-tint {
+  --v1-tint: color-mix(
+    in oklab,
+    var(--color-v1-forest),
+    var(--color-v1-orange) calc(var(--i, 0) * 10%)
+  );
+
+  color: var(--v1-tint);
+  background-color: color-mix(in srgb, var(--v1-tint) 12%, transparent);
 }
 
 /* One focus treatment for the whole v1 layout. It was previously declared on

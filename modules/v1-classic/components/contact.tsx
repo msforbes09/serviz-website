@@ -89,8 +89,8 @@ export function Contact() {
           Free consultation
         </p>
         <h2 className="text-v1-forest mt-3 max-w-[680px] text-[clamp(30px,4vw,48px)] leading-[1.1] font-bold text-balance">
-          Tell us about your business. We will map out what to take off your
-          plate.
+          Tell us about your business. We will map out{" "}
+          <span className="text-v1-orange">what to take off your plate.</span>
         </h2>
         <p className="mt-4 max-w-[520px] text-base leading-6 text-[#3f4b43]">
           A 30 minute call, no obligation. You leave with a written quote within
