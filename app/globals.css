@@ -232,7 +232,17 @@
 @keyframes reveal-rise {
   from {
     opacity: 0;
-    transform: translateY(18px);
+    /* 32px, measured off e.gov.ph, which the client pointed at as the feel to
+       match. 18px was too short to read as an entrance once the element was
+       already sliding up the viewport.
+
+       The distance is the only thing borrowed. Their reveal is Framer Motion
+       writing inline `opacity: 0` on 53 elements and waiting on an observer;
+       scrolled through in a browser, seven of those were measured sitting
+       inside the viewport still at zero, with a blank band on screen where the
+       content should have been. This one is a scroll-driven CSS timeline that
+       costs no JavaScript and whose resting state is visible. */
+    transform: translateY(32px);
   }
   to {
     opacity: 1;

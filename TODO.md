@@ -502,6 +502,24 @@ services section alone, so there was nothing to trim.
 
 ## Housekeeping
 
+- **e.gov.ph's scroll reveal was re-examined at the client's request, and
+  rejected again — this time with measurements.** Their page holds 53 elements
+  at `opacity: 0` via inline styles written by Framer Motion, waiting on an
+  observer. Scrolled through in a browser, **seven of those were sitting inside
+  the viewport still at zero**, with a blank band on screen where the content
+  should have been. (Caveat: programmatic scrolling may not trigger their
+  observer the way a human scroll would. But content in the viewport held
+  invisible by inline styles is the risk itself, and it is the same failure that
+  left our own hero blank in a background tab.)
+
+  What was borrowed is the travel distance only: `reveal-rise` goes from 18px to
+  **32px**, measured off their `translateY(32px)`. 18px was too short to read as
+  an entrance once an element was already sliding up the viewport.
+
+  **This changes all three variants**, since `.reveal` is the shared system —
+  21 uses in v1, 12 in v2, 24 in v3. That is deliberate: two travel distances
+  would be a fork of a system that exists to be one thing.
+
 - **The `.enter-*` rules in `globals.css` are unlayered**, so their `transition`
   shorthand beats any Tailwind utility whatever its specificity — layered rules
   lose to unlayered ones. A `duration-[260ms]` class on the element compiles
