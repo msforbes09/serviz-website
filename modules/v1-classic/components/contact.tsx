@@ -82,7 +82,7 @@ export function Contact() {
   return (
     <section
       id="contact"
-      className="mx-auto grid max-w-[1200px] scroll-mt-20 grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-12 px-6 py-20"
+      className="mx-auto grid max-w-[1200px] scroll-mt-8 grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-12 px-6 py-20"
     >
       <div className="reveal">
         <p className="text-v1-orange text-sm font-semibold tracking-[0.08em] uppercase">

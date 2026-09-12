@@ -194,6 +194,19 @@
   --font-outfit: var(--font-outfit-src), Outfit, system-ui, sans-serif;
 }
 
+/* Anchor jumps glide instead of teleporting, so it stays obvious which way the
+   page moved and how far. Global rather than scoped to one variant: v2 and v3
+   should behave the same way as they are built out.
+
+   Inside the motion guard, because smooth scrolling is exactly the kind of
+   movement someone who asked for less of it is asking to be spared. They get
+   an instant jump, which is the browser default. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 /* Scroll-linked reveal used by every variant. Sections start hidden only when
    the browser can animate them back in, so a no-JS or reduced-motion visitor
    never gets a blank page. */

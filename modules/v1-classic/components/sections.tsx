@@ -103,7 +103,7 @@ export function Hero() {
 
 export function Services() {
   return (
-    <section id="services" className="border-v1-line scroll-mt-20 border-y bg-white">
+    <section id="services" className="border-v1-line scroll-mt-8 border-y bg-white">
       <div className="mx-auto max-w-[1200px] px-6 py-20">
         <div className="reveal max-w-[680px]">
           <p className="text-v1-orange text-sm font-semibold tracking-[0.08em] uppercase">
@@ -177,7 +177,7 @@ export function Tagline() {
 
 export function WhySerbiz() {
   return (
-    <section id="why" className="bg-v1-forest scroll-mt-20 text-white">
+    <section id="why" className="bg-v1-forest scroll-mt-8 text-white">
       <div className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-12 px-6 py-20">
         <div className="reveal relative">
           <Image
@@ -242,7 +242,7 @@ export function WhySerbiz() {
 
 export function HowItWorks() {
   return (
-    <section id="how" className="mx-auto max-w-[1200px] scroll-mt-20 px-6 py-20">
+    <section id="how" className="mx-auto max-w-[1200px] scroll-mt-8 px-6 py-20">
       <div className="reveal max-w-[680px]">
         <p className="text-v1-orange text-sm font-semibold tracking-[0.08em] uppercase">
           How it works
@@ -292,7 +292,7 @@ export function HowItWorks() {
 
 export function Permits() {
   return (
-    <section id="proof" className="border-v1-line scroll-mt-20 border-y bg-white">
+    <section id="proof" className="border-v1-line scroll-mt-8 border-y bg-white">
       <div className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(280px,1fr))] items-center gap-12 px-6 py-20">
         <div className="reveal max-w-[480px]">
           <p className="text-v1-orange text-sm font-semibold tracking-[0.08em] uppercase">
@@ -338,7 +338,7 @@ export function Permits() {
 
 export function News() {
   return (
-    <section id="news" className="mx-auto max-w-[1200px] scroll-mt-20 px-6 py-20">
+    <section id="news" className="mx-auto max-w-[1200px] scroll-mt-8 px-6 py-20">
       <div className="reveal flex flex-wrap items-end justify-between gap-4">
         <div className="max-w-[680px]">
           <p className="text-v1-orange text-sm font-semibold tracking-[0.08em] uppercase">
