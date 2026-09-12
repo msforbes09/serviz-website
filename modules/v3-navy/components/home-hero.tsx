@@ -62,14 +62,14 @@ export function HomeHero() {
             is this page's LCP element. Each child now animates on its own terms:
             the photo scales without fading, the quote card slides, the logo drifts. */}
         <div className="relative flex min-h-[340px] items-center justify-center">
-          <div className="absolute inset-x-[6%] inset-y-[8%] overflow-hidden rounded-[28px] bg-white shadow-[0_40px_80px_rgba(0,0,0,.35)] [clip-path:polygon(25%_0,100%_0,100%_75%,75%_100%,0_100%,0_25%)]">
+          <div className="group absolute inset-x-[6%] inset-y-[8%] overflow-hidden rounded-[28px] bg-white shadow-[0_40px_80px_rgba(0,0,0,.35)] [clip-path:polygon(25%_0,100%_0,100%_75%,75%_100%,0_100%,0_25%)]">
             <Image
               src="/designs/stock/v3-hero-corridor.jpg"
               alt="A corridor in a modern office, with a deep blue wall and a slatted ceiling"
               fill
               priority
               sizes="(max-width: 900px) 100vw, 560px"
-              className="enter-zoom object-cover"
+              className="enter-zoom object-cover motion-safe:group-hover:[transform:scale(1.04)]"
             />
           </div>
 
@@ -81,15 +81,6 @@ export function HomeHero() {
               “{siteConfig.motto}”
             </p>
           </div>
-
-          <Image
-            src="/designs/v3/logo-mark.png"
-            alt=""
-            width={96}
-            height={96}
-            aria-hidden
-            className="absolute top-0 right-[2%] size-24 object-contain drop-shadow-[0_12px_24px_rgba(0,0,0,.35)] motion-safe:animate-[v3-drift_6s_ease-in-out_infinite]"
-          />
         </div>
       </div>
     </section>

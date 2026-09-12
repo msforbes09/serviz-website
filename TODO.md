@@ -478,13 +478,36 @@ services section alone, so there was nothing to trim.
   items — posed at the widest jump the blobs never bridge — and it costs back the
   measurement the `layoutId` version deleted. Closed as PR #10.
 
-**Still open for v3:** `payroll-desk.jpg`, used on the services page, shows a
-**United States IRS withholding form**. It is people-free so it fell outside this
-pass, but it is the wrong jurisdiction for a Philippine cooperative and a client
-may well spot it.
+- **Services payroll image replaced.** `payroll-desk.jpg` showed a **United
+  States IRS withholding form** — wrong jurisdiction for a Philippine
+  cooperative. v3 now points at `v3-payroll-planner.jpg`, a blank monthly
+  planner, which suits a group whose promise is "paid on time, every cut-off"
+  and dates itself to nothing. Two calendar candidates were rejected for
+  exactly that reason: one read "Aug 2022", the other "JUIN 2016" — a legible
+  stale date on a live page is a credibility problem, and the second was in
+  French besides. The declared `width`/`height` were also corrected from 920×690
+  to the file's real 1120×840.
+
+  **`payroll-desk.jpg` is still referenced by v2**, which has had no pass at
+  all, so the US form is still live there.
+
+- **The v3 hero lost its floating logo mark** at the user's request, which
+  orphaned the `v3-drift` keyframes; those were removed with it. The photograph
+  now also zooms to 1.04 on hover, sharing the single `transform` transition the
+  entrance already uses. Written as an arbitrary `[transform:scale(1.04)]`
+  rather than Tailwind's `scale-*`, because v4's scale utilities set the
+  separate `scale` property, which the entrance does not transition — two
+  properties would have needed two transitions.
 
 
 ## Housekeeping
+
+- **`lint`, `typecheck` and `test` do not parse CSS.** A stray brace in
+  `app/globals.css` passed all three and only surfaced as a blank page, because
+  ESLint reads JS/TS, `tsc` reads types, and Vitest never imports the
+  stylesheet. `npm run build` is the only command in the project that parses it.
+  Run the build, not just the baseline, after editing `globals.css`.
+
 
 - **Tests run inside the Vercel build.** `prebuild` chains lint and the test
   suite ahead of `next build`, so a test-environment quirk fails a deployment

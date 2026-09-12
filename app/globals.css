@@ -442,16 +442,6 @@
   }
 }
 
-@keyframes v3-drift {
-  0%,
-  100% {
-    transform: translateY(0) rotate(-3deg);
-  }
-  50% {
-    transform: translateY(-14px) rotate(3deg);
-  }
-}
-
 /* v1's tagline fills in word by word as the line scrolls into view.
    
    Scroll-driven, so it needs no JavaScript, and guarded twice: browsers

@@ -26,8 +26,8 @@ export function ServiceGroups() {
               <Image
                 src={group.image}
                 alt={group.alt}
-                width={920}
-                height={690}
+                width={1120}
+                height={840}
                 className="aspect-4/3 w-full max-w-[460px] rounded-[20px] object-cover"
               />
             </div>

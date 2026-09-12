@@ -77,8 +77,8 @@ export const serviceGroups: ServiceGroup[] = [
     num: "1",
     kicker: "Payroll & Benefits",
     title: "Payroll and Benefits",
-    image: "/designs/stock/payroll-desk.jpg",
-    alt: "Paperwork and a calculator on a desk",
+    image: "/designs/stock/v3-payroll-planner.jpg",
+    alt: "A blank monthly planner on a desk beside a laptop",
     items: [
       { n: "1", title: "Timekeeping & Attendance", body: "Accurate hours, monitored and reported." },
       { n: "2", title: "Payroll Processing", body: "Correct pay, released on time — every cut-off." },
