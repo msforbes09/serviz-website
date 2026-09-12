@@ -120,6 +120,12 @@ each one approved before any of this is public.
 
 ## Housekeeping
 
+- **Tests run inside the Vercel build.** `prebuild` chains lint and the test
+  suite ahead of `next build`, so a test-environment quirk fails a deployment
+  rather than a CI job. That is what broke the first deploy. Moving both into a
+  GitHub Actions workflow, and leaving `build` as just `next build`, would
+  decouple them.
+
 - **Repository name spelling.** The remote is `msforbes09/serviz-website` while
   the brand, the package name and every string in `lib/site-config.ts` are
   SERBIZ with a b. Rename the repository if that was a typo; ignore this entry

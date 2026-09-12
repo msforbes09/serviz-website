@@ -18,10 +18,27 @@ describe("parseEnv", () => {
     expect(env.NEXT_PUBLIC_SITE_URL).toBe("http://localhost:3000");
   });
 
-  it("rejects a site URL that is not a URL", () => {
-    expect(() => parseEnv({ NEXT_PUBLIC_SITE_URL: "serbiz.coop" })).toThrow(
-      /NEXT_PUBLIC_SITE_URL/,
-    );
+  it("assumes https when the site URL is given as a bare hostname", () => {
+    // Typing a hostname without a scheme into a hosting dashboard is the
+    // natural thing to do, and it used to fail the build with a stack trace.
+    // We already accept that shape from the host's own variable.
+    const env = parseEnv({ NEXT_PUBLIC_SITE_URL: "serbiz.coop" });
+
+    expect(env.NEXT_PUBLIC_SITE_URL).toBe("https://serbiz.coop");
+  });
+
+  it("leaves an explicit scheme alone", () => {
+    const env = parseEnv({ NEXT_PUBLIC_SITE_URL: "http://localhost:3000" });
+
+    expect(env.NEXT_PUBLIC_SITE_URL).toBe("http://localhost:3000");
+  });
+
+  it("still rejects a value that cannot be a URL at all", () => {
+    for (const value of ["not a url", "https://", "http:// serbiz.coop"]) {
+      expect(() => parseEnv({ NEXT_PUBLIC_SITE_URL: value }), value).toThrow(
+        /NEXT_PUBLIC_SITE_URL/,
+      );
+    }
   });
 
   it("falls back to the host's production domain when no site URL is set", () => {

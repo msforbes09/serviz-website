@@ -19,25 +19,36 @@ const envSchema = z.object({
 
 export type Env = z.infer<typeof envSchema>;
 
+/** Assumes https for a value given as a bare hostname. */
+function withScheme(value: string): string {
+  return /^https?:\/\//.test(value) ? value : `https://${value}`;
+}
+
 /**
- * Vercel injects `VERCEL_PROJECT_PRODUCTION_URL` into every build as a bare
- * hostname. Using it as the fallback means a fresh deploy has correct canonical
- * URLs on its first build, instead of needing one deploy to learn the URL and a
- * second to apply it.
+ * Resolves the public origin, most specific source first.
  *
- * This is a server-side variable, which is safe here only because `env` is
+ * A bare hostname is accepted from either source. Typing `example.com` into a
+ * hosting dashboard is the natural thing to do, and rejecting it surfaced as a
+ * failed deployment with a stack trace rather than anything a person could act
+ * on. Genuinely malformed values are still rejected by the schema.
+ *
+ * `VERCEL_PROJECT_PRODUCTION_URL` is injected into every Vercel build, so a
+ * fresh deploy has correct canonical URLs on its first build instead of needing
+ * one deploy to learn its own address and a second to apply it.
+ *
+ * That is a server-side variable, which is safe here only because `env` is
  * imported by the root layout, the sitemap and robots — never by a client
  * component. Were that to change, the browser would see a different value from
  * the server and hydration would diverge.
  */
 function resolveSiteUrl(source: Record<string, string | undefined>): string | undefined {
   const explicit = source.NEXT_PUBLIC_SITE_URL?.trim();
-  if (explicit) return explicit;
+  if (explicit) return withScheme(explicit);
 
   const host = source.VERCEL_PROJECT_PRODUCTION_URL?.trim();
   if (!host) return undefined;
 
-  return /^https?:\/\//.test(host) ? host : `https://${host}`;
+  return withScheme(host);
 }
 
 export function parseEnv(source: Record<string, string | undefined>): Env {
