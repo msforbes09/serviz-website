@@ -511,12 +511,10 @@ services section alone, so there was nothing to trim.
   `overflow: clip` clips identically and does **not** create a scroll container,
   so it is the fix. v3's four clipping sections now use it and the count is 0.
 
-  **v1 and v2 still have this.** `v1-classic/components/sections.tsx` and
-  `v2-forest/components/why-serbiz.tsx` each clip a section with
-  `overflow-hidden` and contain reveals, so the same reveals are very likely
-  dead there too. Left alone deliberately: the brief was v3, and changing merged
-  variants unasked is the opportunistic edit `CLAUDE.md` rules out. Measure each
-  first — count below-fold reveals sitting at opacity 1 — then change it.
+  **v1 and v2 had it too**, and it was measured rather than assumed: v1 had 1
+  dead reveal of 31 below the fold, v2 had 4 of 22. Both are fixed in a separate
+  pull request, [#11](https://github.com/msforbes09/serviz-website/pull/11),
+  kept apart from the v3 work because v1 is already merged and client-facing.
 
 - **A side-entrance variant now exists.** `.reveal-x` swaps the keyframes for a
   horizontal path, with direction from `--from-x` at the call site, borrowed
