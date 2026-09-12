@@ -378,6 +378,19 @@
     transition-delay: 0.2s;
   }
 
+  /* Index-driven delay, so a stack of entering elements arrives in reading
+     order rather than as one block. Same `--i` the scroll reveal uses, set on
+     each child at the call site. 60ms: below ~30 the stagger stops reading as
+     sequence, above ~80 the last element feels late.
+
+     Note the `.enter-*` rules are unlayered and so outrank Tailwind's
+     transition utilities. Putting one on an element that already has a tuned
+     `transition-[...]` silently replaces it — that is why v1's hero caption
+     card, which transitions box-shadow on hover, does not carry one. */
+  .enter-step {
+    transition-delay: calc(var(--i, 0) * 60ms);
+  }
+
   .enter-slide {
     transition-delay: 0.6s;
   }

@@ -36,7 +36,10 @@ export function Hero() {
   return (
     <section className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-12 px-6 pt-16 pb-24 min-[900px]:grid-cols-[1.35fr_1fr]">
       <div className="max-w-[680px]">
-        <p className="text-v1-forest inline-flex items-center gap-2 rounded-full bg-[#eaf4ec] px-3 py-1 text-sm font-semibold">
+        <p
+          style={{ "--i": 0 } as React.CSSProperties}
+          className="text-v1-forest enter-rise enter-step inline-flex items-center gap-2 rounded-full bg-[#eaf4ec] px-3 py-1 text-sm font-semibold"
+        >
           <BadgeCheck aria-hidden className="size-4" />A workers cooperative in
           Pasig City, since 2021
         </p>
@@ -55,17 +58,26 @@ export function Hero() {
             emphasis, and because it made the text itself transparent it also
             needed rescuing in forced-colours modes. This says the same thing
             with colour that is actually there. */}
-        <h1 className="text-v1-forest mt-6 text-[clamp(32px,5vw,60px)] leading-[1.05] font-bold tracking-[-0.02em] text-balance">
+        <h1
+          style={{ "--i": 1 } as React.CSSProperties}
+          className="text-v1-forest enter-rise enter-step mt-6 text-[clamp(32px,5vw,60px)] leading-[1.05] font-bold tracking-[-0.02em] text-balance"
+        >
           Payroll, books and compliance, handled by{" "}
           <span className="text-v1-orange">people who care</span> about your
           small business.
         </h1>
-        <p className="mt-6 max-w-[560px] text-lg leading-7 text-[#3f4b43]">
+        <p
+          style={{ "--i": 2 } as React.CSSProperties}
+          className="enter-rise enter-step mt-6 max-w-[560px] text-lg leading-7 text-[#3f4b43]"
+        >
           SERBIZ runs the back office for sole proprietors, one person
           corporations and SMEs. Payslips out on time, BIR filings on schedule,
           reports you can read. You get your evenings back.
         </p>
-        <div className="mt-8 flex flex-wrap items-center gap-3">
+        <div
+          style={{ "--i": 3 } as React.CSSProperties}
+          className="enter-rise enter-step mt-8 flex flex-wrap items-center gap-3"
+        >
           <a
             href="#contact"
             className="bg-v1-orange hover:bg-v1-forest rounded-lg px-6 py-3 text-base font-semibold text-white transition-[background-color,transform] duration-200 hover:-translate-y-0.5"
@@ -79,7 +91,10 @@ export function Hero() {
             <Phone aria-hidden className="size-5" /> {siteConfig.contact.phones.mobile}
           </a>
         </div>
-        <ul className="mt-8 flex list-none flex-wrap gap-x-6 gap-y-4 text-sm text-[#3f4b43]">
+        <ul
+          style={{ "--i": 4 } as React.CSSProperties}
+          className="enter-rise enter-step mt-8 flex list-none flex-wrap gap-x-6 gap-y-4 text-sm text-[#3f4b43]"
+        >
           {heroBadges.map((badge) => (
             <li key={badge} className="inline-flex items-center gap-2">
               <CircleCheck aria-hidden className="text-v1-forest size-[18px]" />
