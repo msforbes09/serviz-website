@@ -4,6 +4,7 @@ import { Faq } from "@/modules/v1-classic/components/faq";
 import {
   Hero,
   HowItWorks,
+  Mission,
   News,
   Permits,
   Services,
@@ -45,6 +46,7 @@ export default function V1Page() {
         <Tagline />
         <WhySerbiz />
         <HowItWorks />
+        <Mission />
         <Permits />
         <News />
         <Faq />

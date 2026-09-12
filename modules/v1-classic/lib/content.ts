@@ -46,27 +46,27 @@ export const services: Service[] = [
   {
     icon: "banknote",
     title: "Payroll and benefits outsourcing",
-    body: "Timekeeping, payslips, 13th month, SSS, PhilHealth and Pag-IBIG remittances and claims. On time every cutoff.",
+    body: "Timekeeping, payslips, 13th month, SSS, PhilHealth and Pag-IBIG remittances and claims.",
   },
   {
     icon: "book",
     title: "Accounting outsourcing",
-    body: "Bookkeeping, accounts receivable and payable, and monthly financial reports you can actually read.",
+    body: "Bookkeeping, accounts receivable and payable, and monthly financial reports.",
   },
   {
     icon: "receipt",
     title: "Tax compliance",
-    body: "BIR periodic returns prepared, filed and paid on schedule, online or onsite, whichever your RDO needs.",
+    body: "BIR periodic returns prepared, filed and paid on schedule, online or onsite.",
   },
   {
     icon: "users",
     title: "HR support",
-    body: "Recruitment documentation, 201 files, employee records and benefits administration for teams under 100.",
+    body: "Recruitment documentation, 201 files, employee records and benefits administration.",
   },
   {
     icon: "building",
     title: "Business registration assistance",
-    body: "DTI or SEC, BIR, Mayor's permit and agency registrations handled end to end, with a checklist you can follow.",
+    body: "DTI or SEC, BIR, Mayor's permit and agency registrations handled end to end.",
   },
   {
     icon: "package",
@@ -174,7 +174,7 @@ export const posts = [
 export const faqs = [
   {
     q: "Who do you work with?",
-    a: "Sole proprietors, one person corporations, small and medium enterprises and other cooperatives. Most clients have between 1 and 80 employees.",
+    a: "Sole proprietors, one person corporations, small and medium enterprises and other cooperatives.",
   },
   {
     q: "Do we have to be in Pasig?",

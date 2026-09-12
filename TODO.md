@@ -109,9 +109,11 @@ each one approved before any of this is public.
 - **Promises of service levels** — "we reply within one working day", "a
   written quote within three working days", "from first call to first payslip
   in under two weeks", "first consultation is free".
-- **Claims about the team** — that members are women professionals, that
-  clients have 1–80 employees, that a non-disclosure agreement is signed at
-  engagement.
+- **Claims about the team** — that members are women professionals, and that a
+  non-disclosure agreement is signed at engagement. The "1–80 employees" claim
+  has been **removed**, not queued: the cooperative says it handles well over a
+  thousand, so both places that stated a bound were deleted rather than
+  restated. A real range is theirs to supply if they want one back.
 - **Permit scans.** The v3 and v1 permits sections show photographs of real
   registration documents, which normally carry registration numbers and
   signatures. Confirm the client wants them public.
@@ -251,6 +253,68 @@ minimal fix deliberately did not take.
   The other three e.gov.ph devices stay: two-tone headlines, the connected step
   nodes and the icon ramp. Update the PR description on [#6](https://github.com/msforbes09/serviz-website/pull/6)
   before it merges, since it still lists four.
+
+- **A mission band now breaks the middle of the v1 page.** Measured before
+  changing anything: the page is 786 words, which is not heavy, but five
+  consecutive sections used the same shape — eyebrow, heading, then a grid of
+  title-plus-paragraph blocks — and only three of nine sections carried any
+  photograph, all at the top or the bottom. Services through Permits had no
+  image at all.
+
+  `Mission` in `modules/v1-classic/components/sections.tsx` is a full-bleed band
+  between How it works and Permits. It carries `siteConfig.mission`, which comes
+  from the flyers and appeared nowhere on v1, so the band earns its height
+  rather than filling it. The photograph is Metro Manila at dusk, which is also
+  the first Philippine-specific image on a page built for a Pasig City
+  cooperative.
+
+  | Detail | Value |
+  | --- | --- |
+  | File | `public/designs/stock/metro-manila.jpg`, 1800×640 |
+  | Unsplash | [Urban city photo during golden hour](https://unsplash.com/photos/urban-city-photo-during-golden-hour-wRDEHYSyEGI) |
+  | Scrim | Forest at 78% |
+
+  **78% is measured, not chosen.** It is the lightest tint that still clears
+  4.5:1 for white text against the brightest pixel in that specific photograph,
+  a near-white cloud at rgb(244, 247, 241). Re-measure if the picture is ever
+  swapped: the number belongs to the image, not to the design. The eyebrow is
+  white rather than the peach used on the other dark section, because at 14px
+  peach never reaches 4.5:1 over this photograph at any usable tint; the brand
+  accent there is a rule, which carries no text and owes no ratio.
+
+- **The v1 motto is retyped, like the phone number was.** The white card over
+  the Why SERBIZ photograph reads "Empowering excellence / through
+  collaboration" as a literal string, while `siteConfig.motto` holds
+  "Empowering Excellence through Collaboration". Reading from the config is a
+  one-line change but alters the visible capitalisation, so it is a copy
+  decision rather than a refactor. Same class of problem as the phone number,
+  found while adding the mission band.
+
+- **v1 service copy was trimmed by subtraction.** Service bodies went from 109
+  words to 87, about 20%, without a single sentence being rewritten. The content
+  file records two tiers of copy — services, mission and permits from the
+  flyers; news and FAQ invented by the design tool — and inside each service
+  body there was a consistent shape: a list of deliverables from the flyer
+  followed by an editorial tail in design-tool voice.
+
+  Only the tails came off: "On time every cutoff", "you can actually read",
+  "whichever your RDO needs", "with a checklist you can follow". Three of those
+  were unconfirmed service-level promises, so cutting them shortened the page
+  *and* shrank the sign-off surface.
+
+  The rule was **subtract, never rewrite.** Cutting cannot invent a fact;
+  rewriting can. Every remaining sentence is the original words minus some, and
+  every deliverable noun from the flyers survived.
+
+  Two headcount claims were deleted outright rather than trimmed, on the
+  cooperative's own correction that it handles well over a thousand employees:
+  "for teams under 100" in the HR service, and "Most clients have between 1 and
+  80 employees" in the FAQ. No replacement range was invented.
+
+  Expectations, measured: this is 22 words against a page of roughly 900. The
+  page's weight is structural — fourteen title-plus-paragraph pairs across
+  Services, Why and How — not volumetric. Trimming was worth doing because it is
+  free and lowers risk, not because it fixes the feeling.
 
 ## Housekeeping
 

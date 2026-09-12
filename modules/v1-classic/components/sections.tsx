@@ -318,10 +318,63 @@ export function HowItWorks() {
   );
 }
 
+/**
+ * A full-bleed pause between the step grid and the permits grid.
+ *
+ * Services, How it works and Permits run back to back as three card grids with
+ * no photograph between them, which is most of why the middle of this page
+ * reads heavier than its word count deserves. This breaks that run.
+ *
+ * It carries the mission rather than decoration. The mission comes from the
+ * flyers in `references/Images/`, it is one of the few confirmed facts about
+ * the cooperative, and until now it appeared nowhere on v1 — so the band earns
+ * its height instead of just filling it.
+ */
+export function Mission() {
+  return (
+    <section className="relative isolate overflow-hidden">
+      <Image
+        src="/designs/stock/metro-manila.jpg"
+        alt=""
+        width={1800}
+        height={640}
+        className="absolute inset-0 -z-10 size-full object-cover"
+      />
+      {/* A flat forest tint, not a gradient. The photograph's brightness varies
+          across the frame, so a gradient would give the text a different
+          contrast ratio depending on where a line happened to fall; a flat tint
+          makes it a constant.
+
+          78% is the lightest that still clears 4.5:1 for white against the
+          brightest pixel in this particular photograph, a near-white cloud at
+          rgb(244, 247, 241). Measured, not guessed. Re-measure if the picture
+          is ever swapped — the number belongs to the image, not to the design.
+
+          The eyebrow is white rather than the peach used on the other dark
+          section. At 14px peach needs 4.5:1 and never reaches it over this
+          photograph at any tint worth using, so the brand accent here is the
+          rule above it, which carries no text and owes no ratio. */}
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-10 bg-[color-mix(in_srgb,var(--color-v1-forest)_78%,transparent)]"
+      />
+      <div className="reveal mx-auto max-w-[1200px] px-6 py-16 sm:py-28">
+        <span aria-hidden className="bg-v1-orange block h-1 w-14 rounded-full" />
+        <p className="mt-5 text-sm font-semibold tracking-[0.08em] text-white uppercase">
+          Our mission
+        </p>
+        <p className="mt-4 max-w-[900px] text-[clamp(22px,3vw,32px)] leading-[1.35] font-semibold text-balance text-white">
+          {siteConfig.mission}
+        </p>
+      </div>
+    </section>
+  );
+}
+
 export function Permits() {
   return (
-    <section id="proof" className="border-v1-line scroll-mt-8 border-y bg-white">
-      <div className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(280px,1fr))] items-center gap-12 px-6 py-20">
+    <section id="proof" className="border-v1-line scroll-mt-4 border-y bg-white">
+      <div className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(280px,1fr))] items-center gap-12 px-6 py-24">
         <div className="reveal max-w-[480px]">
           <p className="text-v1-orange text-sm font-semibold tracking-[0.08em] uppercase">
             Permits and licenses
