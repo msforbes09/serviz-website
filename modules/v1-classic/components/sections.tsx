@@ -120,12 +120,13 @@ export function Hero() {
             edge, and both would be cut off. */}
         <div className="border-v1-line relative block aspect-[5/4] w-full overflow-hidden rounded-3xl border">
           <Image
+            style={{ "--from-x": "56px" } as React.CSSProperties}
             src="/designs/stock/hero-workspace.jpg"
             alt="A quiet office room with a long white desk, monitors, a tall plant and a wooden ceiling"
             width={940}
             height={752}
             priority
-            className="block size-full object-cover motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-[1.04]"
+            className="enter-x block size-full object-cover motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-[1.04]"
           />
         </div>
         <p className="bg-v1-forest absolute bottom-[-4px] left-4 max-w-[260px] rounded-xl p-4 text-sm leading-5 text-white motion-safe:transition-[transform,box-shadow] motion-safe:duration-300 motion-safe:group-hover:-translate-y-1 motion-safe:group-hover:shadow-[0_18px_40px_rgba(11,74,36,.32)]">
@@ -234,7 +235,10 @@ export function WhySerbiz() {
   return (
     <section id="why" className="bg-v1-forest scroll-mt-4 text-white">
       <div className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-12 px-6 py-24">
-        <div className="reveal group relative">
+        <div
+          style={{ "--from-x": "-48px" } as React.CSSProperties}
+          className="reveal reveal-x group relative"
+        >
           {/* A small shop rather than the glass towers that used to sit here.
               The heading beside it says SERBIZ is not scaled down from a big
               firm, and a photograph of a corporate skyline argued the
@@ -390,7 +394,7 @@ export function Mission() {
         aria-hidden
         className="absolute inset-0 -z-10 bg-[color-mix(in_srgb,var(--color-v1-forest)_78%,transparent)]"
       />
-      <div className="reveal mx-auto max-w-[1200px] px-6 py-16 sm:py-28">
+      <div className="reveal reveal-scale mx-auto max-w-[1200px] px-6 py-16 sm:py-28">
         <span aria-hidden className="bg-v1-orange block h-1 w-14 rounded-full" />
         <p className="mt-5 text-sm font-semibold tracking-[0.08em] text-white uppercase">
           Our mission

@@ -31,8 +31,10 @@ export function RevealController() {
     if (typeof IntersectionObserver === "undefined") return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
+    // `.tagline` joins the reveals so its word-by-word fill runs on a clock
+    // too, rather than being scrubbed by scroll position.
     const targets = Array.from(
-      document.querySelectorAll<HTMLElement>(".reveal"),
+      document.querySelectorAll<HTMLElement>(".reveal, .tagline"),
     );
     if (targets.length === 0) return;
 

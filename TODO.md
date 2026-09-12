@@ -416,6 +416,36 @@ minimal fix deliberately did not take.
   their turn comes; the controller is variant-neutral and only needs mounting.
 
 
+- **v1 entrance variants, and the tagline moved onto a clock.** Four changes,
+  all on the JavaScript path so none depends on scroll-timeline support:
+
+  | Variant | Shape | Where |
+  | --- | --- | --- |
+  | `.reveal-x` | `translateX(--from-x)` | Why SERBIZ photo column, from the left |
+  | `.reveal-scale` | `scale(0.92)` | The mission band |
+  | `.enter-x` | `translateX(--from-x)`, no opacity | The hero photograph |
+  | tagline | word fill on `transition-delay` | Replaces the scroll-linked version |
+
+  `scale(0.92)` is measured off e.gov.ph's Solution section, which mixes
+  `translateY(32px)` and `scale(0.92)` in one block.
+
+  **The tagline is the one that fixes a visible fault.** It was scroll-linked,
+  so each word's colour was a function of scroll position and stopping mid-page
+  parked a word half-coloured — the client sent a screenshot of exactly that,
+  "us?" sitting pale grey. On the observer it runs on a clock and finishes once
+  started.
+
+  `.enter-x` deliberately supplies **only** a starting position, no `transition`
+  of its own, unlike its `.enter-*` siblings. The hero image already carries a
+  Tailwind `duration-*` for its hover, and these rules are unlayered — a
+  `transition` here would outrank that utility and silently retime the hover.
+  That trap has now bitten three times; letting the call site own the transition
+  is the way out.
+
+  The load entrance also slowed from 0.55s to 0.75s with the stagger from 60ms
+  to 80ms, at the client's request, to sit closer to e.gov.ph's pace.
+
+
 ## Housekeeping
 
 - **Tests run inside the Vercel build.** `prebuild` chains lint and the test

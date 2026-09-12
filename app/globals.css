@@ -265,6 +265,34 @@
     opacity: 1;
     transform: none;
   }
+
+  /* Sideways, for a column that sits beside something else. Direction comes
+     from `--from-x` at the call site, so one class serves either side. */
+  [data-reveal-ready] .reveal-x {
+    transform: translateX(var(--from-x, 48px));
+  }
+
+  /* Scale-up, for a full-bleed band that should arrive rather than slide.
+     0.92 is measured off e.gov.ph's Solution section, and is the shape an
+     entrance wants: never from nothing, always from nearly-there. */
+  [data-reveal-ready] .reveal-scale {
+    transform: scale(0.92);
+  }
+
+  /* The tagline fills word by word. Under the observer it runs on a clock, so
+     stopping mid-scroll no longer parks a word half-coloured — which is the
+     scroll-linked behaviour this replaces. `steps(1, end)` keeps each word
+     snapping rather than fading, as the original did. */
+  [data-reveal-ready] .tagline > span {
+    animation: none;
+    color: color-mix(in srgb, var(--color-v1-forest) 28%, transparent);
+    transition: color 1ms steps(1, end);
+    transition-delay: calc(var(--i, 0) * 55ms);
+  }
+
+  [data-reveal-ready] .tagline[data-revealed] > span {
+    color: var(--color-v1-forest);
+  }
 }
 
 /* Cards sitting in the same row share a scroll position, so a plain .reveal
@@ -401,8 +429,8 @@
   .enter-rise,
   .enter-slide {
     transition:
-      opacity 0.55s cubic-bezier(0.23, 1, 0.32, 1),
-      transform 0.55s cubic-bezier(0.23, 1, 0.32, 1);
+      opacity 0.75s cubic-bezier(0.23, 1, 0.32, 1),
+      transform 0.75s cubic-bezier(0.23, 1, 0.32, 1);
   }
 
   .enter-delay {
@@ -419,7 +447,7 @@
      `transition-[...]` silently replaces it — that is why v1's hero caption
      card, which transitions box-shadow on hover, does not carry one. */
   .enter-step {
-    transition-delay: calc(var(--i, 0) * 60ms);
+    transition-delay: calc(var(--i, 0) * 80ms);
   }
 
   .enter-slide {
@@ -427,6 +455,21 @@
   }
 
   @starting-style {
+    /* A hero photograph sliding in. Transform only, deliberately no opacity:
+       that image is its page's LCP element, and fading it from zero pushes the
+       LCP timestamp out by the length of the transition. A slide costs nothing,
+       because transform never blocks paint.
+
+       This class supplies *only* the starting position — no `transition` of its
+       own, unlike its siblings above. The element already carries a Tailwind
+       `transition-transform duration-*` for its hover, and these `.enter-*`
+       rules are unlayered: a `transition` here would outrank that utility and
+       silently retime the hover. Letting the call site own the transition keeps
+       both on one timing. */
+    .enter-x {
+      transform: translateX(var(--from-x, 48px));
+    }
+
     .enter-rise {
       opacity: 0;
       transform: translateY(28px);
