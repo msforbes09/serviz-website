@@ -110,7 +110,10 @@ export function Hero() {
           `hover:` utility in a hover media query, so a touch device gets the
           still image with no extra gating. Nothing is hidden behind the hover,
           so there is no keyboard equivalent to owe. */}
-      <div className="group relative">
+      <div
+        style={{ "--from-x": "56px" } as React.CSSProperties}
+        className="enter-x group relative motion-safe:transition-transform motion-safe:duration-700 motion-safe:ease-[cubic-bezier(.23,1,.32,1)]"
+      >
         <div
           aria-hidden
           className="bg-v1-orange absolute -right-3 -bottom-3 left-6 top-6 rounded-3xl motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:translate-x-1 motion-safe:group-hover:translate-y-1"
@@ -120,13 +123,12 @@ export function Hero() {
             edge, and both would be cut off. */}
         <div className="border-v1-line relative block aspect-[5/4] w-full overflow-hidden rounded-3xl border">
           <Image
-            style={{ "--from-x": "56px" } as React.CSSProperties}
             src="/designs/stock/hero-workspace.jpg"
             alt="A quiet office room with a long white desk, monitors, a tall plant and a wooden ceiling"
             width={940}
             height={752}
             priority
-            className="enter-x block size-full object-cover motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-[1.04]"
+            className="block size-full object-cover motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-[1.04]"
           />
         </div>
         <p className="bg-v1-forest absolute bottom-[-4px] left-4 max-w-[260px] rounded-xl p-4 text-sm leading-5 text-white motion-safe:transition-[transform,box-shadow] motion-safe:duration-300 motion-safe:group-hover:-translate-y-1 motion-safe:group-hover:shadow-[0_18px_40px_rgba(11,74,36,.32)]">

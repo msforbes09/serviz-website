@@ -446,8 +446,12 @@
      transition utilities. Putting one on an element that already has a tuned
      `transition-[...]` silently replaces it — that is why v1's hero caption
      card, which transitions box-shadow on hover, does not carry one. */
+  /* 100ms per step, measured off e.gov.ph's load cascade: eight above-fold
+     elements arriving 100ms apart. Their first one lands at ~300ms, but that is
+     hydration latency before Framer Motion can run, not a designed pause, so
+     it is not copied — ours starts on first paint. */
   .enter-step {
-    transition-delay: calc(var(--i, 0) * 80ms);
+    transition-delay: calc(var(--i, 0) * 100ms);
   }
 
   .enter-slide {

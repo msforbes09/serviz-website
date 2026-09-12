@@ -442,8 +442,17 @@ minimal fix deliberately did not take.
   That trap has now bitten three times; letting the call site own the transition
   is the way out.
 
-  The load entrance also slowed from 0.55s to 0.75s with the stagger from 60ms
-  to 80ms, at the client's request, to sit closer to e.gov.ph's pace.
+  **The load cascade was then matched to e.gov.ph by measurement.** Their
+  above-fold sequence is eight elements arriving 100ms apart, spanning roughly
+  300ms to 1000ms, with the sideways slides leading and the headline following.
+  The stagger is now 100ms and the duration 0.75s. Their 300ms dead time before
+  the first element is hydration latency before Framer Motion can run, not a
+  designed pause, and was deliberately not copied.
+
+  **The hero composition enters as one object.** The entrance moved from the
+  photograph to its wrapper, so the orange offset block, the framed photo and
+  the caption card slide in together rather than the photo alone. Still
+  transform-only, so the LCP image inside never fades.
 
 
 ## Housekeeping
