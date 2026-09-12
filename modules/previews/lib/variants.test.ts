@@ -1,3 +1,12 @@
+/**
+ * @vitest-environment node
+ *
+ * This suite reads the filesystem to confirm each variant still has a route.
+ * Under the default jsdom environment that works locally but breaks in a
+ * production build, where Vite externalises `node:` built-ins for the browser
+ * and the import resolves to nothing. It cost a deployment; the environment is
+ * now declared rather than inherited.
+ */
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";

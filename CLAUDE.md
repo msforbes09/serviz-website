@@ -47,7 +47,7 @@ The public shell is the `(site)` route group: `app/(site)/layout.tsx` renders `S
 
 `lib/env.ts` is the only place `process.env` is read. It parses with Zod, strips the trailing slash off the site URL and throws on malformed input. App code imports `env`. Anything read in the browser must be `NEXT_PUBLIC_`-prefixed and must not be a secret — Next inlines those into the client bundle.
 
-The site URL falls back to Vercel's injected production domain when it is not set explicitly. That fallback reads a server-side variable, which is only safe because `env` is imported by the root layout, sitemap and robots and never by a client component. Importing it into a client component would make the browser and the server disagree.
+The site URL accepts a bare hostname and assumes https, and falls back to Vercel's injected production domain when it is not set explicitly. That fallback reads a server-side variable, which is only safe because `env` is imported by the root layout, sitemap and robots and never by a client component. Importing it into a client component would make the browser and the server disagree.
 
 New public routes must be added to `app/sitemap.ts` in the same change.
 
