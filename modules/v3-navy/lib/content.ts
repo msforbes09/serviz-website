@@ -147,16 +147,16 @@ export const news = [
     date: "Year-end season",
     title: "Get ahead of year-end payroll and BIR annualization",
     body: "13th-month pay, annualized tax and alphalist — start early.",
-    image: "/designs/stock/news-paperwork.jpg",
-    alt: "A person signing documents",
+    image: "/designs/stock/v3-news-ledgers.jpg",
+    alt: "Budget sheets and a pen laid out on a desk",
   },
   {
     tag: "Community",
     date: "Ongoing",
     title: "Weekly reminders on Facebook",
     body: "Filing dates and agency advisories, posted every week.",
-    image: "/designs/stock/news-handshake.jpg",
-    alt: "Two people shaking hands across a desk",
+    image: "/designs/stock/v3-news-desk.jpg",
+    alt: "Stacked ledgers and a calculator on a sunlit desk",
   },
 ] as const;
 

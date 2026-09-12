@@ -27,8 +27,8 @@ export function AboutIntro() {
         <div className="relative min-h-[320px]">
           <div className="bg-v3-navy absolute inset-0 overflow-hidden rounded-[28px] [clip-path:polygon(0_0,80%_0,100%_20%,100%_100%,20%_100%,0_80%)]">
             <Image
-              src="/designs/stock/team-meeting.jpg"
-              alt="Colleagues talking in a meeting room"
+              src="/designs/stock/v3-about-workspace.jpg"
+              alt="An open plan office of empty desks under linear ceiling lights"
               fill
               sizes="(max-width: 900px) 100vw, 560px"
               className="object-cover"

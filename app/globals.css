@@ -409,11 +409,27 @@
     transition-delay: calc(var(--i, 0) * 60ms);
   }
 
+  /* Transform only, deliberately no opacity. This is for a hero photograph,
+     which is the LCP element on its page: fading it from zero pushes the LCP
+     timestamp out by the length of the transition, because the browser cannot
+     record the element as painted until it is visible. A scale settle costs
+     nothing, since transform never blocks paint.
+
+     Longer than the text entrances at 0.8s — a photograph easing to rest reads
+     as settling, where the same move at 0.5s reads as a jolt. */
+  .enter-zoom {
+    transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
   .enter-slide {
     transition-delay: 0.6s;
   }
 
   @starting-style {
+    .enter-zoom {
+      transform: scale(1.06);
+    }
+
     .enter-rise {
       opacity: 0;
       transform: translateY(28px);

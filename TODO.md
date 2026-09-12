@@ -432,6 +432,34 @@ services section alone, so there was nothing to trim.
   hero text column was split so the eyebrow, headline, lede and buttons arrive
   in reading order instead of as one block.
 
+- **Imagery.** The four v3 photographs containing people were replaced with
+  people-free ones, which retires the sign-off objection about images of people
+  who do not work at the cooperative for the whole variant. v1 and v3 are now
+  both people-free; **v2 has not been checked.**
+
+  | Slot | Was | Now |
+  | --- | --- | --- |
+  | Home hero | `hero-office.jpg`, four people in a startup office | `v3-hero-corridor.jpg`, a corridor whose navy wall is near the v3 token |
+  | About | `team-meeting.jpg`, a single portrait | `v3-about-workspace.jpg`, an open plan office of empty desks |
+  | News, year-end payroll | `news-paperwork.jpg`, hands signing | `v3-news-ledgers.jpg`, budget sheets and a pen |
+  | News, weekly reminders | `news-handshake.jpg`, a handshake | `v3-news-desk.jpg`, stacked ledgers on a sunlit desk |
+
+  The about slot had a second fault worth recording: its alt text read
+  "Colleagues talking in a meeting room" while the file was a single portrait by
+  a window. The alt described a scene that was not in the picture.
+
+  Rejected candidates and why: two architectural options were clearly CGI
+  renders; one filing shot carried Japanese signage, the same region mismatch as
+  the Swahili shop sign rejected for v1; one desk shot ran six colours and fought
+  v3's navy-and-rust discipline.
+
+- **Hero photograph now settles rather than fading.** `.enter-zoom` scales it
+  from 1.06 with **no opacity**, because it is `priority` and therefore the LCP
+  element: fading from zero pushes the LCP timestamp out by the length of the
+  transition. Its wrapper used to carry `.enter-rise`, which faded the whole
+  subtree including the photograph — the same fault v1 was built to avoid. Each
+  child now animates on its own terms.
+
 **Checked and deliberately not changed:**
 
 - **The contact form.** An earlier read of this called it unvalidated. That was
@@ -444,6 +472,16 @@ services section alone, so there was nothing to trim.
 - **Two-tone headlines and the icon ramp.** v1 design devices. Copying them
   makes the three previews converge, which defeats showing the client three
   distinct presentations.
+
+- **A gooey metaball nav pill** was built and rejected. It produced the two-lobe
+  liquid shape the client asked about, but only reads as liquid between adjacent
+  items — posed at the widest jump the blobs never bridge — and it costs back the
+  measurement the `layoutId` version deleted. Closed as PR #10.
+
+**Still open for v3:** `payroll-desk.jpg`, used on the services page, shows a
+**United States IRS withholding form**. It is people-free so it fell outside this
+pass, but it is the wrong jurisdiction for a Philippine cooperative and a client
+may well spot it.
 
 
 ## Housekeeping
