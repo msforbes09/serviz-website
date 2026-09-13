@@ -138,8 +138,7 @@ export function SiteNav() {
               of the bar, which is the bug this fixes. A fragment of "top" with
               no element to match is defined as the top of the document, so the
               href alone is correct and still works without scripting; the
-              click handler makes it certain. The skip link keeps `#main`, since
-              getting past the nav is the whole point of that one. */}
+              click handler makes it certain. */}
           <a
             href="#top"
             onClick={handleLogoClick}

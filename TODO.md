@@ -119,6 +119,11 @@ each one approved before any of this is public.
   signatures. Confirm the client wants them public.
 - **Stock photography.** Every photograph is an Unsplash placeholder showing
   people who do not work at SERBIZ. Replace with real photos before launch.
+- **v1 skip link removed (2026-09-13)** at the client's request, after seeing
+  it appear on keyboard focus. Keyboard visitors now tab through the whole nav
+  to reach content, which an accessibility audit will flag. Restore it if that
+  matters at launch: it was a `SectionLink` to `#main` in
+  `app/8sfz8dn5ts/layout.tsx`, `sr-only` until focused.
 
 ## Found in the v1 review (2026-09-12)
 

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { SectionLink } from "@/modules/v1-classic/components/section-link";
 import { orbitron, poppins } from "@/modules/v1-classic/lib/fonts";
 
 export const metadata: Metadata = {
@@ -16,14 +15,6 @@ export default function V1Layout({ children }: LayoutProps<"/8sfz8dn5ts">) {
     <div
       className={`v1-root ${orbitron.variable} ${poppins.variable} font-poppins bg-v1-paper overflow-x-clip text-v1-ink`}
     >
-      {/* First stop for a keyboard visitor, and invisible until it is focused.
-          Without it every anchor jump means tabbing the whole nav again. */}
-      <SectionLink
-        href="#main"
-        className="bg-v1-forest sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-60 focus:rounded-lg focus:px-4 focus:py-2 focus:font-semibold focus:text-white"
-      >
-        Skip to content
-      </SectionLink>
       {children}
     </div>
   );
