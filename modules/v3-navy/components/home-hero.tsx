@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { siteConfig } from "@/lib/site-config";
 import { basePath } from "../lib/content";
+import { HeroTilt } from "./hero-tilt";
 import { AudienceStrip } from "./home-sections";
 import { QuickMessageDialog } from "./quick-message-dialog";
 
@@ -112,14 +113,18 @@ export function HomeHero() {
             settles without fading, the quote card slides in from the left.
             The photo moves at once; only the card is held until the buttons
             have landed, so it is the last thing on the first screen to move. */}
-        <div
+        <HeroTilt
           style={{ "--from-x": "56px" } as React.CSSProperties}
-          className="enter-x relative flex min-h-[340px] items-center justify-center motion-safe:transition-transform motion-safe:duration-700 motion-safe:ease-[cubic-bezier(.23,1,.32,1)]"
+          className="enter-x v3-tilt relative flex min-h-[340px] items-center justify-center motion-safe:transition-transform motion-safe:duration-700 motion-safe:ease-[cubic-bezier(.23,1,.32,1)]"
         >
-          <div className="group absolute inset-x-[6%] inset-y-[8%] overflow-hidden rounded-[28px] bg-white shadow-[0_40px_80px_rgba(0,0,0,.35)] [clip-path:polygon(25%_0,100%_0,100%_75%,75%_100%,0_100%,0_25%)]">
+          {/* Full column width at the original height: the 6% side inset it
+              used to keep left the right half of the first screen mostly
+              navy, while the 8% top and bottom stay. Drifts up a little as the hero scrolls out
+              (`.v3-hero-drift`). */}
+          <div className="group v3-hero-drift v3-tilt-card absolute inset-x-0 inset-y-[8%] overflow-hidden rounded-[28px] bg-white shadow-[0_40px_80px_rgba(0,0,0,.35)] [clip-path:polygon(25%_0,100%_0,100%_75%,75%_100%,0_100%,0_25%)]">
             <Image
-              src="/designs/stock/v3-hero-corridor.jpg"
-              alt="A corridor in a modern office, with a deep blue wall and a slatted ceiling"
+              src="/designs/stock/v3-hero-window-mug.jpg"
+              alt="A dark mug and a notebook on a desk in front of a bright office window"
               fill
               priority
               sizes="(max-width: 900px) 100vw, 560px"
@@ -132,7 +137,7 @@ export function HomeHero() {
               thing that outranks the unlayered `.enter-*` rules. */}
           <div
             style={{ transitionDelay: "1.15s" }}
-            className="bg-v3-navy absolute bottom-[2%] left-0 max-w-[280px] rounded-2xl border border-white/10 px-5 py-4 text-white shadow-[0_18px_40px_rgba(0,0,0,.35)] enter-slide"
+            className="v3-hero-drift v3-hero-drift-card bg-v3-navy absolute bottom-[2%] left-0 max-w-[280px] rounded-2xl border border-white/10 px-5 py-4 text-white shadow-[0_18px_40px_rgba(0,0,0,.35)] enter-slide"
           >
             <p className="text-v3-sky mb-1.5 text-[11px] font-semibold tracking-[0.14em] uppercase">
               Our promise
@@ -141,7 +146,7 @@ export function HomeHero() {
               “{siteConfig.motto}”
             </p>
           </div>
-        </div>
+        </HeroTilt>
       </div>
     </section>
   );

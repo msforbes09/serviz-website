@@ -138,7 +138,11 @@ each one approved before any of this is public.
   `news-donation.jpg`, `news-ewaste.jpg` and `news-thailand.jpg` (Unsplash
   free licence, fetched 2026-09-13 at 1400×800). The e-waste photo shows
   legible brand names on old graphics cards. Swap in the real Facebook photos
-  when the cooperative supplies them. `news-anniversary.jpg`, `news-clinic.jpg`,
+  when the cooperative supplies them. The v3 hero is now
+  `v3-hero-window-mug.jpg` (Unsplash free licence, a dark mug and notebook
+  against an office window, fetched 2026-09-13 at 1400×1000);
+  `v3-hero-desk-mug.jpg` was the runner-up and is kept unreferenced, as is
+  `v3-hero-corridor.jpg`. `news-anniversary.jpg`, `news-clinic.jpg`,
   `news-it.jpg`, `news-laptops.jpg`, `v3-news-desk.jpg` and
   `v3-news-ledgers.jpg` are now unreferenced by v1 and v3.
 - **Tax Compliance and HR Support item lists (v3, 2026-09-13).** The flyers
