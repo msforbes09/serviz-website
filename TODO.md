@@ -27,11 +27,11 @@ The client picks one of three presentations of the same content.
   and theme tokens. Variant sections live in `modules/v1-classic/` and siblings;
   the registry in `modules/previews/lib/variants.ts` maps slug to layout.
 
-  | Layout | Send the client |
-  | --- | --- |
-  | v1 Classic | `/8sfz8dn5ts` |
-  | v2 Warm editorial | `/u2feptyuzu` |
-  | v3 Structured navy | `/4sjhdc5awq` |
+  | Layout             | Send the client |
+  | ------------------ | --------------- |
+  | v1 Classic         | `/8sfz8dn5ts`   |
+  | v2 Warm editorial  | `/u2feptyuzu`   |
+  | v3 Structured navy | `/4sjhdc5awq`   |
 
   Random rather than `/v1`–`/v3` so that seeing one preview never reveals the
   others, and so no layout arrives pre-labelled as a first or second attempt.
@@ -55,11 +55,11 @@ The client picks one of three presentations of the same content.
 Each variant comes from its own Claude Design project. All three are pending
 the authorization above.
 
-| Variant | Project | Entry file |
-| --- | --- | --- |
-| v1 classic | `bbfa7f03-12da-4e2d-b9bd-9889096c1191` | `serbiz-v1-classic.html` |
-| v2 | `1cc64fb6-af8e-4f02-ab35-8987bc1d1b7a` | `Serbiz Landing.dc.html` |
-| v3 | `79aa69fa-d24c-4f4f-b180-30c5ecda6830` | `Serbiz Landing Page v4.dc.html` |
+| Variant    | Project                                | Entry file                       |
+| ---------- | -------------------------------------- | -------------------------------- |
+| v1 classic | `bbfa7f03-12da-4e2d-b9bd-9889096c1191` | `serbiz-v1-classic.html`         |
+| v2         | `1cc64fb6-af8e-4f02-ab35-8987bc1d1b7a` | `Serbiz Landing.dc.html`         |
+| v3         | `79aa69fa-d24c-4f4f-b180-30c5ecda6830` | `Serbiz Landing Page v4.dc.html` |
 
 Files the entry pages import, which must come across with them:
 
@@ -77,10 +77,10 @@ each variant is Server Components under `modules/<variant>/`, and the
 These exceed the design API's 256 KiB per-file read limit, so they cannot be
 pulled automatically. Export them from Claude Design and drop them in:
 
-| Put here | From project | Files |
-| --- | --- | --- |
+| Put here             | From project          | Files                                                                                                                                                          |
+| -------------------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `public/designs/v1/` | `bbfa7f03…` `assets/` | `logo-full.jpg`, `office.jpg`, `tower.jpg`, `cert-bir.jpg`, `cert-cda.jpg`, `cert-pasig.jpg`, `ill-tax.jpg`, `ill-portal.jpg`, `ill-books.jpg`, `ill-time.jpg` |
-| `public/designs/v3/` | `79aa69fa…` `assets/` | `permit-bir.jpg`, `permit-cda.jpg`, `permit-pasig.jpg` |
+| `public/designs/v3/` | `79aa69fa…` `assets/` | `permit-bir.jpg`, `permit-cda.jpg`, `permit-pasig.jpg`                                                                                                         |
 
 Nothing 404s in the meantime. The news thumbnails and the office tower now
 point at the self-hosted stock photos, and the six certificate slots render a
@@ -131,6 +131,13 @@ each one approved before any of this is public.
   to reach content, which an accessibility audit will flag. Restore it if that
   matters at launch: it was a `SectionLink` to `#main` in
   `app/8sfz8dn5ts/layout.tsx`, `sr-only` until focused.
+- **v3 skip link removed (2026-09-13)**, same request, same consequence. It was
+  a plain `<a href="#main">` in `app/4sjhdc5awq/layout.tsx`, `sr-only` until
+  focused; `<main id="main">` is still there for it to come back to.
+- **Browser tab titles (2026-09-13).** Both home pages now inherit the root
+  default title, so the two tabs read identically and name no layout; v3's
+  inner pages are "About | SERBIZ" and so on. `page-titles.test.ts` pins it.
+  Our own index still shows the internal names.
 
 ## Found in the v1 review (2026-09-12)
 
@@ -181,39 +188,48 @@ The interface review of `feat/v1-egov-devices` raised six findings. Five were
 fixed in that branch. What is left is the part of the colour finding that a
 minimal fix deliberately did not take.
 
-- **The v1 orange still fails 4.5:1 for small text and for button labels.**
-  `--color-v1-orange` in `app/globals.css` was darkened from `#f26a1b` to
-  `#e36419` so that the accent phrase closing every heading clears the 3:1 that
-  heading text needs. Small text needs 4.5:1 and two uses still fall short:
+- ~~**The v1 orange still fails 4.5:1 for small text and for button labels.**~~
+  Done 2026-09-13, one orange everywhere. `--color-v1-orange` in
+  `app/globals.css` went `#f26a1b` → `#e36419` → `#b64f14`:
 
-  | Use | Measured | Needs |
-  | --- | --- | --- |
-  | Eyebrow labels, 14px semibold, six of them | 3.29:1 on paper, 3.06:1 on the FAQ mint | 4.5:1 |
-  | White label on the orange button fill | 3.44:1 | 4.5:1 |
+  | Use                                     | Was    | Now    | Needs |
+  | --------------------------------------- | ------ | ------ | ----- |
+  | Eyebrow labels, 14px semibold, on paper | 3.29:1 | 4.88:1 | 4.5:1 |
+  | Eyebrow label on the FAQ mint `#eaf4ec` | 3.06:1 | 4.53:1 | 4.5:1 |
+  | White label on the orange button fill   | 3.44:1 | 5.10:1 | 4.5:1 |
 
-  `#b34e14` clears 4.5:1 on all three v1 backgrounds and would retire both rows,
-  but it reads as burnt sienna rather than the brand orange, so it is a change
-  the client should see rather than one to make during a review. Decide it
-  alongside the brand palette entry at the top of this file, and apply the same
-  check to v2's `--color-v2-orange` and v3's `--color-v3-rust`, which were never
-  measured.
+  **Awaiting the user's eye.** The new value reads deeper than the print
+  orange. Check on the v1 preview: the accent phrase closing each heading, the
+  six eyebrow labels, the hero and contact buttons, the "New" badge on the
+  news cards, and the offset block behind the "Why SERBIZ" photograph. If it
+  reads as brown rather than orange, the alternative is two tokens — this one
+  for small text and button fills, `#e36419` back for heading accents and
+  decorative shapes — at the cost of two oranges on one page.
+
+  v3's `--color-v3-rust` _was_ measured in an earlier pass, contrary to what
+  this entry used to say: `#c14d2a` is 4.56:1 on the v3 paper and 4.81:1 under
+  white, both clear. Re-measured 2026-09-13. The one tight pair is the rust
+  numeral on a navy circle in the services sidebar at 3.04:1, which is bold
+  and large enough for the 3:1 that applies, and the brighter rust hover fill
+  drops a button label to 3.64:1 while hovered. Both left alone.
+  v2's `--color-v2-orange` is still unmeasured.
 
 - **The two v1 photographs were swapped, and the replacements are people-free.**
   Both slots previously ran at the wrong declared size, which stretched them:
   the hero file was 877×390 behind a declared 900×700, and the tower was 900×600
   behind a declared 900×1000. Both now declare what they actually are.
 
-  | Slot | File | Unsplash |
-  | --- | --- | --- |
-  | Hero | `public/designs/stock/hero-workspace.jpg`, 940×940 | [Modern office space with plants and artwork](https://unsplash.com/photos/modern-office-space-with-plants-and-artwork-xTmez98cqAM) |
-  | Why SERBIZ | `public/designs/stock/small-shop.jpg`, 1100×1000 | [Sunlit cafe interior with wooden furniture](https://unsplash.com/photos/sunlit-cafe-interior-with-wooden-furniture-yDduhQk5-7k) |
+  | Slot       | File                                               | Unsplash                                                                                                                           |
+  | ---------- | -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+  | Hero       | `public/designs/stock/hero-workspace.jpg`, 940×940 | [Modern office space with plants and artwork](https://unsplash.com/photos/modern-office-space-with-plants-and-artwork-xTmez98cqAM) |
+  | Why SERBIZ | `public/designs/stock/small-shop.jpg`, 1100×1000   | [Sunlit cafe interior with wooden furniture](https://unsplash.com/photos/sunlit-cafe-interior-with-wooden-furniture-yDduhQk5-7k)   |
 
   The hero file is square because the hero slot is: see the layout entry below.
   Both files are cut to the size the slot actually renders at 2x, so
   `next/image` serves them without upscaling or wasted bytes.
 
   The old office tower was replaced on content grounds, not taste: it showed a
-  corporate skyline directly beside a heading promising SERBIZ is *not* scaled
+  corporate skyline directly beside a heading promising SERBIZ is _not_ scaled
   down from a big firm. Choosing photographs without people also retires the
   sign-off objection about images of people who do not work at the cooperative,
   for these two slots only. Both remain placeholders.
@@ -236,11 +252,11 @@ minimal fix deliberately did not take.
   text column and breaks to six below it:
 
   | Text column | Headline lines | Image width |
-  | --- | --- | --- |
-  | 552 | 6 | 552 |
-  | 602 | 6 | 502 |
-  | **634** | **5** | **470** |
-  | 679 | 5 | 425 |
+  | ----------- | -------------- | ----------- |
+  | 552         | 6              | 552         |
+  | 602         | 6              | 502         |
+  | **634**     | **5**          | **470**     |
+  | 679         | 5              | 425         |
 
   So the ratio is now `1.35fr`, the break-even point, and the image is
   `aspect-[5/4]` and stays centred: 468×374, within a few pixels of the height
@@ -282,11 +298,11 @@ minimal fix deliberately did not take.
   the first Philippine-specific image on a page built for a Pasig City
   cooperative.
 
-  | Detail | Value |
-  | --- | --- |
-  | File | `public/designs/stock/metro-manila.jpg`, 1800×640 |
+  | Detail   | Value                                                                                                              |
+  | -------- | ------------------------------------------------------------------------------------------------------------------ |
+  | File     | `public/designs/stock/metro-manila.jpg`, 1800×640                                                                  |
   | Unsplash | [Urban city photo during golden hour](https://unsplash.com/photos/urban-city-photo-during-golden-hour-wRDEHYSyEGI) |
-  | Scrim | Forest at 78% |
+  | Scrim    | Forest at 78%                                                                                                      |
 
   **78% is measured, not chosen.** It is the lightest tint that still clears
   4.5:1 for white text against the brightest pixel in that specific photograph,
@@ -308,13 +324,13 @@ minimal fix deliberately did not take.
   varied was how consistently one relationship got spaced. Three problems, all
   measured before changing anything:
 
-  | Relationship | Was | Now |
-  | --- | --- | --- |
-  | Section vertical padding | 80 | 96 |
-  | Section intro to body | 40 / 48 / 56 | 48 |
-  | Card gutter | 16, against 24px card padding | 24 |
-  | Tagline, the one typographic pause | 96 | 128 |
-  | Hero bottom padding | 48 | 96 |
+  | Relationship                       | Was                           | Now |
+  | ---------------------------------- | ----------------------------- | --- |
+  | Section vertical padding           | 80                            | 96  |
+  | Section intro to body              | 40 / 48 / 56                  | 48  |
+  | Card gutter                        | 16, against 24px card padding | 24  |
+  | Tagline, the one typographic pause | 96                            | 128 |
+  | Hero bottom padding                | 48                            | 96  |
 
   The card gutter was the worst of them: 16px between cards that each carry 24px
   of internal padding makes a grid read as one dense block, because the space
@@ -342,7 +358,7 @@ minimal fix deliberately did not take.
   Only the tails came off: "On time every cutoff", "you can actually read",
   "whichever your RDO needs", "with a checklist you can follow". Three of those
   were unconfirmed service-level promises, so cutting them shortened the page
-  *and* shrank the sign-off surface.
+  _and_ shrank the sign-off surface.
 
   The rule was **subtract, never rewrite.** Cutting cannot invent a fact;
   rewriting can. Every remaining sentence is the original words minus some, and
@@ -381,11 +397,11 @@ minimal fix deliberately did not take.
   above it. The wash keeps the ramp legible without the weight: the glyph
   carries the colour at full strength and the tile only tints behind it.
 
-  | Card | Tile | Glyph on tile |
-  | --- | --- | --- |
-  | 1 Payroll | `rgb(207, 218, 208)` | 8.41 |
-  | 4 HR | `rgb(228, 222, 209)` | 6.22 |
-  | 7 IT | `rgb(245, 223, 207)` | 4.35 |
+  | Card      | Tile                 | Glyph on tile |
+  | --------- | -------------------- | ------------- |
+  | 1 Payroll | `rgb(207, 218, 208)` | 8.41          |
+  | 4 HR      | `rgb(228, 222, 209)` | 6.22          |
+  | 7 IT      | `rgb(245, 223, 207)` | 4.35          |
 
   The glyph takes 28% ink because the ramp walks toward a light colour. At full
   tint the last card's orange glyph on its own peach tint measured 2.79:1 and
@@ -500,7 +516,7 @@ services section alone, so there was nothing to trim.
   lock or `aria-modal` — that is v1's contract, not this one. Two tests, red
   first.
 - **Skip link and `<main id>`**, which v3 had neither of.
-- **Focus ring.** v3 had *zero* `focus-visible` declarations; every ring was the
+- **Focus ring.** v3 had _zero_ `focus-visible` declarations; every ring was the
   browser default on a variant built around navy panels. `.v3-root` now scopes
   one, with `--v3-focus-ring` restated on the hero, the navy section, the footer
   and the contact form. Measures 13.87 on navy and 16.66 on the darkest panel.
@@ -520,12 +536,12 @@ services section alone, so there was nothing to trim.
   who do not work at the cooperative for the whole variant. v1 and v3 are now
   both people-free; **v2 has not been checked.**
 
-  | Slot | Was | Now |
-  | --- | --- | --- |
-  | Home hero | `hero-office.jpg`, four people in a startup office | `v3-hero-corridor.jpg`, a corridor whose navy wall is near the v3 token |
-  | About | `team-meeting.jpg`, a single portrait | `v3-about-workspace.jpg`, an open plan office of empty desks |
-  | News, year-end payroll | `news-paperwork.jpg`, hands signing | `v3-news-ledgers.jpg`, budget sheets and a pen |
-  | News, weekly reminders | `news-handshake.jpg`, a handshake | `v3-news-desk.jpg`, stacked ledgers on a sunlit desk |
+  | Slot                   | Was                                                | Now                                                                     |
+  | ---------------------- | -------------------------------------------------- | ----------------------------------------------------------------------- |
+  | Home hero              | `hero-office.jpg`, four people in a startup office | `v3-hero-corridor.jpg`, a corridor whose navy wall is near the v3 token |
+  | About                  | `team-meeting.jpg`, a single portrait              | `v3-about-workspace.jpg`, an open plan office of empty desks            |
+  | News, year-end payroll | `news-paperwork.jpg`, hands signing                | `v3-news-ledgers.jpg`, budget sheets and a pen                          |
+  | News, weekly reminders | `news-handshake.jpg`, a handshake                  | `v3-news-desk.jpg`, stacked ledgers on a sunlit desk                    |
 
   The about slot had a second fault worth recording: its alt text read
   "Colleagues talking in a meeting room" while the file was a single portrait by
@@ -581,7 +597,6 @@ services section alone, so there was nothing to trim.
   rather than Tailwind's `scale-*`, because v4's scale utilities set the
   separate `scale` property, which the entrance does not transition — two
   properties would have needed two transitions.
-
 
 - **`overflow: hidden` silently breaks a `view()` scroll timeline.** It
   establishes a scroll container, so `animation-timeline: view()` on anything
@@ -715,8 +730,7 @@ services section alone, so there was nothing to trim.
     `min-h-[320px]`, and an aspect ratio transfers a minimum height into a
     minimum width: 427px, so at 375 the page was 446 wide and the sticky
     header sat narrower than the page — the second thing in the capture. The
-    minimum height is gone; at 335 wide the map is 251 tall, at desktop 556 by
-    417.
+    minimum height is gone; at 335 wide the map is 251 tall, at desktop 556 by 417.
   - **The services image covered its list.** Each group's intro column was
     `sticky top-24` at every width, so in the single phone column it pinned
     under the header while the list scrolled beneath the photograph. Sticky
@@ -759,7 +773,7 @@ services section alone, so there was nothing to trim.
   live. Worth knowing before trusting an element count.
 
 - **v1's scroll reveals are now JavaScript-driven.** `animation-timeline:
-  view()` is unsupported in older Safari and Firefox, where the CSS-only reveal
+view()` is unsupported in older Safari and Firefox, where the CSS-only reveal
   does nothing at all — correct, but it means many visitors saw no entrance,
   which is what prompted this. `components/motion/reveal-controller.tsx` is a
   render-nothing client component mounted once in v1's layout, so every section
@@ -772,8 +786,8 @@ services section alone, so there was nothing to trim.
   or reduced motion all leave the page plainly visible.
 
   That is the inverse of e.gov.ph, which ships `opacity: 0` in the markup and
-  waits on an observer. The gap worth knowing about is an observer that *exists
-  but never fires* — a hidden or backgrounded tab does exactly that, and it is
+  waits on an observer. The gap worth knowing about is an observer that _exists
+  but never fires_ — a hidden or backgrounded tab does exactly that, and it is
   the state e.gov.ph was measured in with seven elements inside the viewport
   still invisible. A `sweep()` covers it: it reveals anything currently in the
   viewport regardless of the observer, and runs before arming, on
@@ -783,16 +797,15 @@ services section alone, so there was nothing to trim.
   comes; the controller is variant-neutral and only needs mounting. v3 was
   moved on 2026-09-13, see the v3 pass above.
 
-
 - **v1 entrance variants, and the tagline moved onto a clock.** Four changes,
   all on the JavaScript path so none depends on scroll-timeline support:
 
-  | Variant | Shape | Where |
-  | --- | --- | --- |
-  | `.reveal-x` | `translateX(--from-x)` | Why SERBIZ photo column, from the left |
-  | `.reveal-scale` | `scale(0.92)` | The mission band |
-  | `.enter-x` | `translateX(--from-x)`, no opacity | The hero photograph |
-  | tagline | word fill on `transition-delay` | Replaces the scroll-linked version |
+  | Variant         | Shape                              | Where                                  |
+  | --------------- | ---------------------------------- | -------------------------------------- |
+  | `.reveal-x`     | `translateX(--from-x)`             | Why SERBIZ photo column, from the left |
+  | `.reveal-scale` | `scale(0.92)`                      | The mission band                       |
+  | `.enter-x`      | `translateX(--from-x)`, no opacity | The hero photograph                    |
+  | tagline         | word fill on `transition-delay`    | Replaces the scroll-linked version     |
 
   `scale(0.92)` is measured off e.gov.ph's Solution section, which mixes
   `translateY(32px)` and `scale(0.92)` in one block.
@@ -821,7 +834,6 @@ services section alone, so there was nothing to trim.
   photograph to its wrapper, so the orange offset block, the framed photo and
   the caption card slide in together rather than the photo alone. Still
   transform-only, so the LCP image inside never fades.
-
 
 - **v1 hero builds item by item, the FAQ enters one at a time, and the primary
   CTA glints.** Three more things measured off e.gov.ph.
@@ -854,7 +866,6 @@ services section alone, so there was nothing to trim.
   The `.v1-shine` class is variant-neutral in substance and one addition away
   from the nav pill or v2/v3's CTAs.
 
-
 - **Entrances run to completion on scroll stop, and three v1 sections were
   re-paced.** The client reported the FAQ freezing when scrolling stopped. On
   the JS path entrances already run on a clock, so the cause was the observer's
@@ -876,7 +887,6 @@ services section alone, so there was nothing to trim.
   120ms steps. `.reveal-scale` was retired with it; nothing else used it.
 
   The three permit cards used to land as one block; they now cascade at 100ms.
-
 
 ## Housekeeping
 
@@ -911,7 +921,6 @@ services section alone, so there was nothing to trim.
   ESLint reads JS/TS, `tsc` reads types, and Vitest never imports the
   stylesheet. `npm run build` is the only command in the project that parses it.
   Run the build, not just the baseline, after editing `globals.css`.
-
 
 - **Tests run inside the Vercel build.** `prebuild` chains lint and the test
   suite ahead of `next build`, so a test-environment quirk fails a deployment

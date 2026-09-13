@@ -39,7 +39,7 @@ export const variants: Variant[] = [
     name: "v1 — Classic",
     description:
       "One long page, generous white space, restrained type. Reads as an established professional firm.",
-    swatches: ["#0B4A24", "#F26A1B", "#FAFAF7"],
+    swatches: ["#0B4A24", "#B64F14", "#FAFAF7"],
     type: "Poppins throughout",
   },
   {

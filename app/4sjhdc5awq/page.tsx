@@ -9,7 +9,8 @@ import {
 } from "@/modules/v3-navy/components/home-sections";
 
 export const metadata: Metadata = {
-  title: "v3 — Structured navy",
+  // No `title`: the tab inherits the root default, so it reads the same as
+  // v1's and names neither layout. The description is ours, for our own index.
   description:
     "Layout preview: five pages, angular shapes, a navy-and-rust palette.",
 };

@@ -17,8 +17,8 @@ import { SiteNav } from "@/modules/v1-classic/components/site-nav";
 import { previewSocialMetadata } from "@/modules/previews/lib/preview-metadata";
 
 export const metadata: Metadata = {
-  // Ours, for the browser tab and our own index.
-  title: "v1 — Classic",
+  // No `title`: the tab inherits the root default, so it reads the same as
+  // v3's and names neither layout. The description is ours, for our own index.
   description:
     "Layout preview: one long page, generous white space, restrained type.",
   // The client's. A shared link unfurls from these, not from the two above, so

@@ -8,7 +8,7 @@ import {
 } from "@/modules/v3-navy/components/services-sections";
 
 export const metadata: Metadata = {
-  title: "v3 — Services",
+  title: "Services",
   description: "Layout preview: the v3 services page.",
 };
 

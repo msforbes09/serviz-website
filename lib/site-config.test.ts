@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { siteConfig } from "./site-config";
+import { officeMapsUrl, siteConfig } from "./site-config";
 
 describe("contact numbers", () => {
   it("names each phone, so a component never has to index an array", () => {
@@ -24,5 +24,17 @@ describe("business name", () => {
   it("carries no SRI abbreviation anywhere, at the user's request", () => {
     expect(JSON.stringify(siteConfig)).not.toMatch(/\bSRI\b/);
     expect("shortName" in siteConfig).toBe(false);
+  });
+});
+
+describe("office", () => {
+  // Both contact pages link the address to a map. One URL, built here from the
+  // same query the embedded map uses, so the pin and the link never disagree.
+  it("links the address to Google Maps with the map's own query", () => {
+    const url = new URL(officeMapsUrl);
+
+    expect(url.origin).toBe("https://www.google.com");
+    expect(url.pathname).toBe("/maps/search/");
+    expect(url.searchParams.get("query")).toBe(siteConfig.office.mapsQuery);
   });
 });

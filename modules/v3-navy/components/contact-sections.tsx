@@ -1,4 +1,4 @@
-import { officeAddress, siteConfig } from "@/lib/site-config";
+import { officeAddress, officeMapsUrl, siteConfig } from "@/lib/site-config";
 import { ContactForm } from "./contact-form";
 
 const rows = [
@@ -62,24 +62,35 @@ export function ContactDetails() {
           </li>
         ))}
 
-        <li className="border-v3-navy/10 bg-v3-paper flex items-start gap-4 rounded-2xl border px-5 py-[18px]">
-          <span
-            aria-hidden
-            className="bg-v3-navy text-v3-rust font-outfit flex size-11 shrink-0 items-center justify-center rounded-xl font-extrabold"
+        <li>
+          {/* The office opens Google Maps, the way the rows above open mail
+              and the dialler. A new tab, like the Facebook row: the visitor
+              is mid-way through a contact page and should find it where they
+              left it. */}
+          <a
+            href={officeMapsUrl}
+            target="_blank"
+            rel="noopener"
+            className="border-v3-navy/10 bg-v3-paper hover:border-v3-rust flex items-start gap-4 rounded-2xl border px-5 py-[18px] transition-colors"
           >
-            ⌖
-          </span>
-          <span>
-            <span className="text-v3-slate block text-xs font-semibold tracking-[0.1em] uppercase">
-              Office
+            <span
+              aria-hidden
+              className="bg-v3-navy text-v3-rust font-outfit flex size-11 shrink-0 items-center justify-center rounded-xl font-extrabold"
+            >
+              ⌖
             </span>
-            <span className="text-v3-navy block text-[17px] leading-snug font-semibold">
-              {officeAddress}
+            <span>
+              <span className="text-v3-slate block text-xs font-semibold tracking-[0.1em] uppercase">
+                Office
+              </span>
+              <span className="text-v3-navy block text-[17px] leading-snug font-semibold">
+                {officeAddress}
+              </span>
+              <span className="text-v3-slate mt-1 block text-[13px]">
+                {siteConfig.office.hours}
+              </span>
             </span>
-            <span className="text-v3-slate mt-1 block text-[13px]">
-              {siteConfig.office.hours}
-            </span>
-          </span>
+          </a>
         </li>
       </ul>
     </div>

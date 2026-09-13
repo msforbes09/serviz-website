@@ -59,3 +59,10 @@ export type SiteConfig = typeof siteConfig;
 
 /** Full office address on one line. */
 export const officeAddress = `${siteConfig.office.street}, ${siteConfig.office.city} ${siteConfig.office.postalCode}`;
+
+/**
+ * The office on Google Maps, from the same query the embedded map uses so the
+ * pin and the link never disagree. The search URL form works without an API
+ * key and opens the Maps app on a phone.
+ */
+export const officeMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(siteConfig.office.mapsQuery)}`;

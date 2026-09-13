@@ -24,3 +24,16 @@ describe("AudienceStrip", () => {
     expect(document.querySelectorAll("[aria-hidden]")).toHaveLength(0);
   });
 });
+
+describe("AudienceStrip entrance", () => {
+  // The strip lands with the headline (step 1), not after the buttons: read
+  // together they are one statement — the promise, then who it is for.
+  it("enters on the headline's step", () => {
+    render(<AudienceStrip />);
+
+    const strip = screen.getByRole("heading", { name: /we work with/i })
+      .parentElement as HTMLElement;
+
+    expect(strip.style.getPropertyValue("--i")).toBe("1");
+  });
+});

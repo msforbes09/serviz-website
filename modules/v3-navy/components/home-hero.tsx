@@ -77,8 +77,8 @@ export function HomeHero() {
             in the Philippines.
           </p>
           {/* The calls to action are the last beat of the text column: after
-              the kicker, headline and lede (0–2), the steel bars (3–6) and
-              the audience strip below the hero (7). */}
+              the kicker, headline and lede (0–2) and the steel bars (3–6).
+              The audience strip below the hero shares the headline's step. */}
           <div className="flex flex-wrap gap-3 max-md:flex-col max-md:items-stretch">
             {/* The entrance wrapper is a span around the trigger rather than
                 on it: the `.enter-*` transition shorthand would replace the

@@ -6,7 +6,7 @@ import {
 } from "@/modules/v3-navy/components/contact-sections";
 
 export const metadata: Metadata = {
-  title: "v3 — Contact",
+  title: "Contact",
   description: "Layout preview: the v3 contact page.",
 };
 
