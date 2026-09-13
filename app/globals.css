@@ -265,6 +265,43 @@
   }
 }
 
+/* v1 hero. Hover: a flat parallax, no tilt — the photo frame follows the
+   pointer a few pixels and the caption card goes the other way, so the two
+   read as separate layers over the orange block, which holds still.
+   `--tilt-x`/`--tilt-y` come from `HeroTilt`, -1..1. `translate` rather than
+   `transform`: both elements already carry a Tailwind transform for their
+   hover, and the two properties compose. Fine pointers only, never under
+   reduced motion. */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .v1-parallax-photo {
+    translate: calc(var(--tilt-x, 0) * -8px) calc(var(--tilt-y, 0) * -6px);
+    transition: translate 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .v1-parallax-card {
+    translate: calc(var(--tilt-x, 0) * 6px) calc(var(--tilt-y, 0) * 5px);
+    transition: translate 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+}
+
+/* Scroll: the photo zooms in slowly as the hero leaves, on `scale` so it
+   composes with the hover transform. Scroll-driven, no JavaScript. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .v1-hero-zoom {
+      animation: v1-hero-zoom linear both;
+      animation-timeline: view();
+      animation-range: exit 0% exit 100%;
+    }
+  }
+}
+
+@keyframes v1-hero-zoom {
+  to {
+    scale: 1.08;
+  }
+}
+
 /* Scroll-linked reveal used by every variant. Sections start hidden only when
    the browser can animate them back in, so a no-JS or reduced-motion visitor
    never gets a blank page. */

@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { siteConfig } from "@/lib/site-config";
 import { basePath } from "../lib/content";
-import { HeroTilt } from "./hero-tilt";
+import { HeroTilt } from "@/components/motion/hero-tilt";
 import { AudienceStrip } from "./home-sections";
 import { QuickMessageDialog } from "./quick-message-dialog";
 
@@ -117,11 +117,13 @@ export function HomeHero() {
           style={{ "--from-x": "56px" } as React.CSSProperties}
           className="enter-x v3-tilt relative flex min-h-[340px] items-center justify-center motion-safe:transition-transform motion-safe:duration-700 motion-safe:ease-[cubic-bezier(.23,1,.32,1)]"
         >
-          {/* Full column width at the original height: the 6% side inset it
-              used to keep left the right half of the first screen mostly
-              navy, while the 8% top and bottom stay. Drifts up a little as the hero scrolls out
+          {/* Column width at the original height, shifted 6% to the right on
+              desktop so its left edge sits where it did before the frame
+              grew — the promise card overhangs it the way it used to. The
+              section clips overflow, so the right edge running past the
+              column is fine. 8% top and bottom stay. Drifts up a little as the hero scrolls out
               (`.v3-hero-drift`). */}
-          <div className="group v3-hero-drift v3-tilt-card absolute inset-x-0 inset-y-[8%] overflow-hidden rounded-[28px] bg-white shadow-[0_40px_80px_rgba(0,0,0,.35)] [clip-path:polygon(25%_0,100%_0,100%_75%,75%_100%,0_100%,0_25%)]">
+          <div className="group v3-hero-drift v3-tilt-card absolute inset-x-0 inset-y-[8%] md:-right-[6%] md:left-[6%] overflow-hidden rounded-[28px] bg-white [clip-path:polygon(25%_0,100%_0,100%_75%,75%_100%,0_100%,0_25%)]">
             <Image
               src="/designs/stock/v3-hero-window-mug.jpg"
               alt="A dark mug and a notebook on a desk in front of a bright office window"

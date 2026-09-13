@@ -3,10 +3,11 @@
 import type { ComponentProps } from "react";
 
 /**
- * Pointer-tracking wrapper for the hero composition. Writes `--tilt-x` and
+ * Pointer-tracking wrapper for a hero composition. Writes `--tilt-x` and
  * `--tilt-y`, each -1..1 across the element, onto its own element; the CSS
- * (`.v3-tilt*` in globals.css) turns them into a few degrees of tilt on the
- * photo. Leaving sets both to 0 and the
+ * turns them into whatever the variant wants — a few degrees of tilt in v3
+ * (`.v3-tilt*`), a flat parallax in v1 (`.v1-parallax*`), both in
+ * globals.css. Leaving sets both to 0 and the
  * CSS transition eases everything back. Nothing runs on a touch screen or
  * under reduced motion — the CSS is gated, and the variables are harmless.
  *
