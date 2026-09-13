@@ -1,10 +1,14 @@
 /**
  * Copy for the v3 layout, transcribed from `Serbiz Landing Page v4.dc.html`.
  *
- * Service names and descriptions come from the flyers. The news items, the
- * event calendar and the response-time promise came from the design and are
- * NOT confirmed — see the sign-off checklist in `TODO.md`.
+ * Service names and descriptions come from the flyers. The news posts are the
+ * shared list in `lib/news.ts`, transcribed from Facebook. The response-time
+ * promise came from the design and is NOT confirmed — see the sign-off
+ * checklist in `TODO.md`.
  */
+
+import { format, parseISO } from "date-fns";
+import { newsPosts, ongoing } from "@/lib/news";
 
 /**
  * Route prefix for this preview. Deliberately unguessable: the three layouts
@@ -40,13 +44,49 @@ export type ServiceCard = {
 };
 
 export const serviceCards: ServiceCard[] = [
-  { num: "01", title: "Payroll & Benefits Outsourcing", sub: "Paid on time, every cut-off.", tone: "dark" },
-  { num: "02", title: "Accounting Outsourcing", sub: "Books that balance.", tone: "light" },
-  { num: "03", title: "Tax Compliance", sub: "BIR filings, never late.", tone: "light" },
-  { num: "04", title: "HR Support", sub: "Records, papers, benefits admin.", tone: "mint" },
-  { num: "05", title: "Business Registration", sub: "Paperwork and agency liaison.", tone: "light" },
-  { num: "06", title: "IT Consultant", sub: "Systems, cloud, data security.", tone: "light", isNew: true },
-  { num: "07", title: "Customized Service Packages", sub: "Mix and match to fit you.", tone: "dark" },
+  {
+    num: "01",
+    title: "Payroll & Benefits Outsourcing",
+    sub: "Paid on time, every cut-off.",
+    tone: "dark",
+  },
+  {
+    num: "02",
+    title: "Accounting Outsourcing",
+    sub: "Books that balance.",
+    tone: "light",
+  },
+  {
+    num: "03",
+    title: "Tax Compliance",
+    sub: "BIR filings, never late.",
+    tone: "light",
+  },
+  {
+    num: "04",
+    title: "HR Support",
+    sub: "Records, papers, benefits admin.",
+    tone: "mint",
+  },
+  {
+    num: "05",
+    title: "Business Registration",
+    sub: "Paperwork and agency liaison.",
+    tone: "light",
+  },
+  {
+    num: "06",
+    title: "IT Consultant",
+    sub: "Systems, cloud, data security.",
+    tone: "light",
+    isNew: true,
+  },
+  {
+    num: "07",
+    title: "Customized Service Packages",
+    sub: "Mix and match to fit you.",
+    tone: "dark",
+  },
 ];
 
 export const reasons = [
@@ -88,10 +128,26 @@ const details: Record<string, Omit<ServiceSection, keyof ServiceCard>> = {
       alt: "A blank monthly planner on a desk beside a laptop",
     },
     items: [
-      { n: "1", title: "Timekeeping & Attendance", body: "Accurate hours, monitored and reported." },
-      { n: "2", title: "Payroll Processing", body: "Correct pay, released on time — every cut-off." },
-      { n: "3", title: "Government Benefits", body: "SSS, PhilHealth, Pag-IBIG remittances and claims." },
-      { n: "4", title: "Employee Web Portal", body: "Payslips, leaves and records online." },
+      {
+        n: "1",
+        title: "Timekeeping & Attendance",
+        body: "Accurate hours, monitored and reported.",
+      },
+      {
+        n: "2",
+        title: "Payroll Processing",
+        body: "Correct pay, released on time — every cut-off.",
+      },
+      {
+        n: "3",
+        title: "Government Benefits",
+        body: "SSS, PhilHealth, Pag-IBIG remittances and claims.",
+      },
+      {
+        n: "4",
+        title: "Employee Web Portal",
+        body: "Payslips, leaves and records online.",
+      },
     ],
   },
   "02": {
@@ -101,9 +157,21 @@ const details: Record<string, Omit<ServiceSection, keyof ServiceCard>> = {
       alt: "Financial charts on a laptop screen",
     },
     items: [
-      { n: "1", title: "Bookkeeping", body: "Books of accounts and daily transactions." },
-      { n: "2", title: "Accounts Receivable", body: "Billed and collected on time." },
-      { n: "3", title: "Accounts Payable", body: "Classified, computed and reported." },
+      {
+        n: "1",
+        title: "Bookkeeping",
+        body: "Books of accounts and daily transactions.",
+      },
+      {
+        n: "2",
+        title: "Accounts Receivable",
+        body: "Billed and collected on time.",
+      },
+      {
+        n: "3",
+        title: "Accounts Payable",
+        body: "Classified, computed and reported.",
+      },
     ],
   },
   // The tax and HR items are split from the flyers' one-paragraph descriptions
@@ -117,10 +185,26 @@ const details: Record<string, Omit<ServiceSection, keyof ServiceCard>> = {
       alt: "Hands signing a printed form with a pen",
     },
     items: [
-      { n: "1", title: "Reportorial Requirements", body: "Accurate reports, prepared for every filing period." },
-      { n: "2", title: "BIR Periodic Filings", body: "Monthly, quarterly and annual returns filed on time." },
-      { n: "3", title: "Payment on Schedule", body: "Taxes due are paid before the deadline, not after." },
-      { n: "4", title: "Online or Onsite", body: "Filed through eBIR or at the revenue office, whichever your case needs." },
+      {
+        n: "1",
+        title: "Reportorial Requirements",
+        body: "Accurate reports, prepared for every filing period.",
+      },
+      {
+        n: "2",
+        title: "BIR Periodic Filings",
+        body: "Monthly, quarterly and annual returns filed on time.",
+      },
+      {
+        n: "3",
+        title: "Payment on Schedule",
+        body: "Taxes due are paid before the deadline, not after.",
+      },
+      {
+        n: "4",
+        title: "Online or Onsite",
+        body: "Filed through eBIR or at the revenue office, whichever your case needs.",
+      },
     ],
   },
   "04": {
@@ -131,12 +215,27 @@ const details: Record<string, Omit<ServiceSection, keyof ServiceCard>> = {
       alt: "Two empty desks with monitors beside a tall plant",
     },
     items: [
-      { n: "1", title: "Recruitment Documentation", body: "Offer letters, contracts and onboarding papers prepared." },
-      { n: "2", title: "Employee Records", body: "201 files kept complete and current." },
-      { n: "3", title: "Benefits Administration", body: "Enrolment, updates and claims handled for your staff." },
+      {
+        n: "1",
+        title: "Recruitment Documentation",
+        body: "Offer letters, contracts and onboarding papers prepared.",
+      },
+      {
+        n: "2",
+        title: "Employee Records",
+        body: "201 files kept complete and current.",
+      },
+      {
+        n: "3",
+        title: "Benefits Administration",
+        body: "Enrolment, updates and claims handled for your staff.",
+      },
     ],
   },
-  "05": { id: "registration", body: "Paperwork and agency liaison, done right." },
+  "05": {
+    id: "registration",
+    body: "Paperwork and agency liaison, done right.",
+  },
   "06": { id: "it", body: "Systems, cloud and data security for small teams." },
   "07": { id: "packages", body: "Mix and match to fit your business." },
 };
@@ -162,7 +261,11 @@ export const otherServices = serviceSections.filter((s) => !s.items);
  * under the caption "BIR Certificate of Registration" would read as the
  * genuine article. Drop the file in `public/designs/v3/` and restore the path.
  */
-export const permits: { image: string | null; title: string; detail: string }[] = [
+export const permits: {
+  image: string | null;
+  title: string;
+  detail: string;
+}[] = [
   {
     image: null,
     title: "BIR Certificate of Registration",
@@ -180,37 +283,17 @@ export const permits: { image: string | null; title: string; detail: string }[] 
   },
 ];
 
-/** UNVERIFIED — written by the design tool, not supplied by the cooperative. */
-export const news = [
-  {
-    tag: "New service",
-    date: "September 2026",
-    title: "IT Consultant services now available",
-    body: "Systems set-up, cloud records and data security for small teams.",
-    image: "/designs/stock/news-laptops.jpg",
-    alt: "Open laptops on a shared desk",
-  },
-  {
-    tag: "Compliance",
-    date: "Year-end season",
-    title: "Get ahead of year-end payroll and BIR annualization",
-    body: "13th-month pay, annualized tax and alphalist — start early.",
-    image: "/designs/stock/v3-news-ledgers.jpg",
-    alt: "Budget sheets and a pen laid out on a desk",
-  },
-  {
-    tag: "Community",
-    date: "Ongoing",
-    title: "Weekly reminders on Facebook",
-    body: "Filing dates and agency advisories, posted every week.",
-    image: "/designs/stock/v3-news-desk.jpg",
-    alt: "Stacked ledgers and a calculator on a sunlit desk",
-  },
-] as const;
+/** The shared Facebook list, dated in this layout's long form. */
+export const news = newsPosts.map((post) => ({
+  tag: post.tag,
+  date: format(parseISO(post.date), "MMMM d, yyyy"),
+  title: post.title,
+  body: post.body,
+  image: post.image,
+  alt: post.alt,
+}));
 
-/** UNVERIFIED — recurring dates the design invented. */
+/** The standing item beside the list. */
 export const events = [
-  { day: "10", month: "Monthly", title: "BIR monthly filings", body: "Withholding tax returns and remittances." },
-  { day: "15", month: "Monthly", title: "Payroll release", body: "Mid-month payroll for semi-monthly clients." },
-  { day: "31", month: "Monthly", title: "SSS · PhilHealth · Pag-IBIG", body: "Contribution deadlines — we track yours." },
+  { day: "M–F", month: "Weekly", title: ongoing.title, body: ongoing.body },
 ] as const;

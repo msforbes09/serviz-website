@@ -1,14 +1,18 @@
 /**
  * Copy for the v1 layout, transcribed from `serbiz-v1-classic.html`.
  *
- * Services, mission and permit facts come from the flyers. The news items and
- * the FAQ answers came from the design and are NOT confirmed — see the
- * sign-off checklist in `TODO.md`.
+ * Services, mission and permit facts come from the flyers. The news posts are
+ * the shared list in `lib/news.ts`, transcribed from Facebook. The FAQ answers
+ * came from the design and are NOT confirmed — see the sign-off checklist in
+ * `TODO.md`.
  *
  * Icons are named, not imported, so this stays a plain data module: the
  * component maps each name onto a Lucide icon. The design used Phosphor from a
  * CDN; Lucide is already in the project and ships nothing extra.
  */
+
+import { format, parseISO } from "date-fns";
+import { newsPosts } from "@/lib/news";
 export type IconName =
   | "banknote"
   | "book"
@@ -138,37 +142,14 @@ export const certificates: { src: string | null; alt: string }[] = [
   { src: null, alt: "Pasig City Mayor's Permit" },
 ];
 
-/** UNVERIFIED — written by the design tool, not supplied by the cooperative. */
-export const posts = [
-  {
-    kind: "Event",
-    date: "Oct 18, 2026",
-    title: "Free clinic: BIR filing basics for sole proprietors",
-    body: "A Saturday morning session at our Kapitolyo office. Bring your books and questions.",
-    image: "/designs/stock/news-clinic.jpg",
-  },
-  {
-    kind: "News",
-    date: "Sep 2026",
-    title: "IT consulting joins the service list",
-    body: "Members with systems experience now help clients pick and set up payroll and accounting tools.",
-    image: "/designs/stock/news-it.jpg",
-  },
-  {
-    kind: "News",
-    date: "May 2026",
-    title: "CDA Certificate of Compliance renewed",
-    body: "The cooperative passed its annual reporting review with the Cooperative Development Authority.",
-    image: "/designs/stock/accounting-reports.jpg",
-  },
-  {
-    kind: "Event",
-    date: "Nov 2026",
-    title: "Annual general assembly of members",
-    body: "Members meet to review the year and elect officers. Clients are welcome as observers.",
-    image: "/designs/stock/news-anniversary.jpg",
-  },
-] as const;
+/** The shared Facebook list, dated in this layout's short form. */
+export const posts = newsPosts.map((post) => ({
+  kind: post.tag,
+  date: format(parseISO(post.date), "MMM d, yyyy"),
+  title: post.title,
+  body: post.body,
+  image: post.image,
+}));
 
 /** UNVERIFIED — the answers make commitments the cooperative has not confirmed. */
 export const faqs = [

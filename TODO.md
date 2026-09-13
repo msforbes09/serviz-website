@@ -102,10 +102,14 @@ each one approved before any of this is public.
 - **Facebook page** — facebook.com/SerbizWorkersCoop.
 - **CDA registration number** — 9520-10130003 1448, issued 1 February 2021. A
   registration number printed on a public page is worth checking twice.
-- **Every news item and event.** All three variants carry dated posts the
-  design invented: an IT consulting launch, a free BIR clinic, a fifth
-  anniversary, a permit renewal drive, an annual general assembly, and a
-  recurring monthly deadline calendar. None came from the cooperative.
+- **News items and events.** v1 and v3 now show four posts transcribed from
+  the cooperative's Facebook page (2026-09-13; `lib/news.ts`, newest first:
+  the Galing Kooperatiba onsite validation, the SERBIZ Cares fire relief, the
+  e-waste drop box, and the Thailand planning trip), with the bodies condensed
+  from the captions. v3's invented monthly deadline calendar is gone; its
+  side column now carries the e-waste drop box as the one standing item.
+  The cooperative should still read the condensed wording. **v2 still
+  carries the invented posts.**
 - **Promises of service levels** — "we reply within one working day", "a
   written quote within three working days", "from first call to first payslip
   in under two weeks", "first consultation is free".
@@ -119,6 +123,14 @@ each one approved before any of this is public.
   signatures. Confirm the client wants them public.
 - **Stock photography.** Every photograph is an Unsplash placeholder showing
   people who do not work at SERBIZ. Replace with real photos before launch.
+  The four news photos are placeholders matched to each post, not the
+  Facebook photos: `news-handshake.jpg` (already in the repo),
+  `news-donation.jpg`, `news-ewaste.jpg` and `news-thailand.jpg` (Unsplash
+  free licence, fetched 2026-09-13 at 1400×800). The e-waste photo shows
+  legible brand names on old graphics cards. Swap in the real Facebook photos
+  when the cooperative supplies them. `news-anniversary.jpg`, `news-clinic.jpg`,
+  `news-it.jpg`, `news-laptops.jpg`, `v3-news-desk.jpg` and
+  `v3-news-ledgers.jpg` are now unreferenced by v1 and v3.
 - **Tax Compliance and HR Support item lists (v3, 2026-09-13).** The flyers
   describe each in one paragraph; the services page now shows them as
   numbered items like Payroll and Accounting, so the paragraphs were split
@@ -203,10 +215,10 @@ minimal fix deliberately did not take.
   the 3:1 that heading text needs. Small text needs 4.5:1 and two uses fall
   short:
 
-  | Use | Measured | Needs |
-  | --- | --- | --- |
+  | Use                                        | Measured                                | Needs |
+  | ------------------------------------------ | --------------------------------------- | ----- |
   | Eyebrow labels, 14px semibold, six of them | 3.29:1 on paper, 3.06:1 on the FAQ mint | 4.5:1 |
-  | White label on the orange button fill | 3.44:1 | 4.5:1 |
+  | White label on the orange button fill      | 3.44:1                                  | 4.5:1 |
 
   `#b64f14` clears both (4.88 on paper, 5.10 under white, 4.53 on the FAQ
   mint) and was applied on 2026-09-13; the user looked at it and preferred
@@ -216,7 +228,7 @@ minimal fix deliberately did not take.
   tokens — `#b64f14` for eyebrow labels and button fills, `#e36419` for
   heading accents and decorative shapes.
 
-  v3's `--color-v3-rust` *was* measured in an earlier pass, contrary to what
+  v3's `--color-v3-rust` _was_ measured in an earlier pass, contrary to what
   this entry used to say: `#c14d2a` is 4.56:1 on the v3 paper and 4.81:1 under
   white, both clear. Re-measured 2026-09-13. The one tight pair is the rust
   numeral on a navy circle in the services sidebar at 3.04:1, which is bold
