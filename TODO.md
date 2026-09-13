@@ -523,6 +523,125 @@ services section alone, so there was nothing to trim.
   text column enters from its own side while the list beside it keeps the
   upward stagger. Both sides sliding reads as busy.
 
+- **v1's scroll reveals are now JavaScript-driven.** `animation-timeline:
+  view()` is unsupported in older Safari and Firefox, where the CSS-only reveal
+  does nothing at all — correct, but it means many visitors saw no entrance,
+  which is what prompted this. `components/motion/reveal-controller.tsx` is a
+  render-nothing client component mounted once in v1's layout, so every section
+  it animates stays a Server Component.
+
+  **The design rule is that nothing is hidden until the script is running and
+  able to show it again.** The stylesheet holds no resting `opacity: 0`; the
+  hidden state is gated behind `data-reveal-ready`, which only the controller
+  sets. No JavaScript, a thrown error, a browser without `IntersectionObserver`,
+  or reduced motion all leave the page plainly visible.
+
+  That is the inverse of e.gov.ph, which ships `opacity: 0` in the markup and
+  waits on an observer. The gap worth knowing about is an observer that *exists
+  but never fires* — a hidden or backgrounded tab does exactly that, and it is
+  the state e.gov.ph was measured in with seven elements inside the viewport
+  still invisible. A `sweep()` covers it: it reveals anything currently in the
+  viewport regardless of the observer, and runs before arming, on
+  `visibilitychange`, and once on a 1.2s timeout.
+
+  **v2 and v3 still use the CSS-only path.** Move them over the same way when
+  their turn comes; the controller is variant-neutral and only needs mounting.
+
+
+- **v1 entrance variants, and the tagline moved onto a clock.** Four changes,
+  all on the JavaScript path so none depends on scroll-timeline support:
+
+  | Variant | Shape | Where |
+  | --- | --- | --- |
+  | `.reveal-x` | `translateX(--from-x)` | Why SERBIZ photo column, from the left |
+  | `.reveal-scale` | `scale(0.92)` | The mission band |
+  | `.enter-x` | `translateX(--from-x)`, no opacity | The hero photograph |
+  | tagline | word fill on `transition-delay` | Replaces the scroll-linked version |
+
+  `scale(0.92)` is measured off e.gov.ph's Solution section, which mixes
+  `translateY(32px)` and `scale(0.92)` in one block.
+
+  **The tagline is the one that fixes a visible fault.** It was scroll-linked,
+  so each word's colour was a function of scroll position and stopping mid-page
+  parked a word half-coloured — the client sent a screenshot of exactly that,
+  "us?" sitting pale grey. On the observer it runs on a clock and finishes once
+  started.
+
+  `.enter-x` deliberately supplies **only** a starting position, no `transition`
+  of its own, unlike its `.enter-*` siblings. The hero image already carries a
+  Tailwind `duration-*` for its hover, and these rules are unlayered — a
+  `transition` here would outrank that utility and silently retime the hover.
+  That trap has now bitten three times; letting the call site own the transition
+  is the way out.
+
+  **The load cascade was then matched to e.gov.ph by measurement.** Their
+  above-fold sequence is eight elements arriving 100ms apart, spanning roughly
+  300ms to 1000ms, with the sideways slides leading and the headline following.
+  The stagger is now 100ms and the duration 0.75s. Their 300ms dead time before
+  the first element is hydration latency before Framer Motion can run, not a
+  designed pause, and was deliberately not copied.
+
+  **The hero composition enters as one object.** The entrance moved from the
+  photograph to its wrapper, so the orange offset block, the framed photo and
+  the caption card slide in together rather than the photo alone. Still
+  transform-only, so the LCP image inside never fades.
+
+
+- **v1 hero builds item by item, the FAQ enters one at a time, and the primary
+  CTA glints.** Three more things measured off e.gov.ph.
+
+  The hero's CTA row and trust row used to enter as two blocks. Each item now
+  has its own step: badge, headline, lede, button, phone, then the three
+  badges — eight steps at 100ms, the last landing at 1.45s. The reference for
+  this was their stats row (40M+ downloads, 700M+ transactions) entering one at
+  a time. **The stats themselves were not built:** those are real figures for
+  them, and the rule against inventing numbers already covers it. The slot is
+  ready if the client supplies a client count.
+
+  The seven FAQ items enter from the right, one at a time. A new
+  `--reveal-gap` custom property lets one list widen the JS-path stagger
+  without touching the global 60ms; the FAQ sets 100ms, because at 60ms seven
+  items read as one wave. From the right and not the left, since the list sits
+  to the right of the intro column and arriving from that edge never crosses
+  the text.
+
+  `.v1-shine` sweeps a white band across the hero CTA once, 1.5s after load —
+  right as the cascade finishes — and again on hover. Measured: e.gov.ph's
+  band is 70px across a 139px button and **loops every 3.5s**. Ours does not.
+  Looping decoration competes with content for attention, which is why the v3
+  logo drift was removed; a single pass at the end of the cascade sits inside
+  the delight budget and hover is feedback. If the loop is wanted, it is
+  `animation-iteration-count: infinite` plus a longer duration to carry the
+  rest between passes. No `from` keyframe and no fill, so a browser that never
+  runs it shows a plain button and the band snaps back off-screen unseen.
+
+  The `.v1-shine` class is variant-neutral in substance and one addition away
+  from the nav pill or v2/v3's CTAs.
+
+
+- **Entrances run to completion on scroll stop, and three v1 sections were
+  re-paced.** The client reported the FAQ freezing when scrolling stopped. On
+  the JS path entrances already run on a clock, so the cause was the observer's
+  12% bottom margin: an item sitting in that band is on screen but not yet
+  "intersecting", and stopping there left it hidden. Two fixes: the margin is
+  now 4%, and the controller sweeps on scroll stop (debounced 150ms), so
+  anything on screen is revealed whatever the observer has reported. That is
+  the fourth safety net after mount, `visibilitychange` and the 1.2s timeout,
+  and the one that turns "continues once started" into a guarantee. Tested.
+
+  `--reveal-offset` is new: it holds a whole group back so a list beside an
+  intro column starts after the intro has begun. The FAQ and the permits both
+  set 250ms, so the left column leads.
+
+  The mission band's single fade was too quiet against the dark ground. It now
+  assembles: the photograph settles from `scale(1.08)` over 1.2s with no fade
+  (`.reveal-zoom`, transform only — a full-bleed image fading in from paper
+  reads as a broken load), while the rule, eyebrow and mission rise in at
+  120ms steps. `.reveal-scale` was retired with it; nothing else used it.
+
+  The three permit cards used to land as one block; they now cascade at 100ms.
+
+
 ## Housekeeping
 
 - **e.gov.ph's scroll reveal was re-examined at the client's request, and
