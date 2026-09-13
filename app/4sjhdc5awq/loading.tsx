@@ -1,5 +1,3 @@
-import { LoadingAtTop } from "@/modules/v3-navy/components/route-top";
-
 /**
  * Shaped like the home hero it stands in for, on the same height floor, so a
  * page that is still arriving looks like a page rather than a navy hole, and
@@ -12,8 +10,6 @@ export default function V3Loading() {
       aria-hidden="true"
       className="bg-v3-navy relative flex min-h-[calc(100svh-var(--v3-nav-height))] flex-col overflow-clip"
     >
-      {/* Scrolls to the top on mount after a link press; see route-top.tsx. */}
-      <LoadingAtTop />
       <div className="bg-v3-rust absolute top-0 right-0 h-full w-[34%] opacity-95 [clip-path:polygon(70%_0,100%_0,100%_100%,40%_100%)]" />
       <div className="relative mx-auto grid w-full max-w-[1200px] flex-1 grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-10 px-5 pt-18 pb-20">
         <div>

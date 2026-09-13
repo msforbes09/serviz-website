@@ -1,60 +1,41 @@
 "use client";
 
-import { usePathname } from "next/navigation";
-import { useEffect, useLayoutEffect } from "react";
+import { useEffect } from "react";
 
 /**
- * Why a route change from a scrolled page could still look like a slide up.
+ * Renders nothing. Scrolls the window to the top the instant a link to
+ * another route is pressed, before the router does anything.
  *
- * `data-scroll-behavior` on `<html>` (root layout) makes the router's jump to
- * the top instant once the new page lands. But with a prefetched route the
- * loading skeleton paints first, at whatever position the old page was
- * scrolled to, and the router does not scroll until the real page arrives —
- * so the visitor watched the skeleton sit halfway down and the page then
- * pop to the top.
+ * Two things went wrong when the visitor changed page from a scrolled one,
+ * and both come from the scroll position changing part-way through the
+ * navigation. The nav pill is a Motion shared-layout element measured in
+ * page coordinates: the old pill was snapshotted at the old scroll and the
+ * new one measured at the top, so the scroll distance landed in the pill's
+ * start position and it slid up from below the fold. And a prefetched
+ * route's loading skeleton painted at the old position and only jumped to
+ * the top when the real page landed.
  *
- * A link press to another route arms a flag; the skeleton, on mounting,
- * spends it on an instant scroll to the top. Back and forward never come from
- * a link press, so they keep the browser's own scroll restore. The flag is
- * dropped on any route change so it cannot outlive the navigation it was
- * armed for.
+ * Scrolling first means every measurement the navigation makes happens at
+ * the top. `data-scroll-behavior` on `<html>` (root layout) still covers the
+ * router's own jump for navigations that do not come through a link press.
+ * Back and forward do not come through here and keep the browser's restore.
+ *
+ * A capture-phase listener on the document rather than a handler on each
+ * `Link`: the header, footer and hero all link between routes, and one
+ * listener covers a link added later without it having to know.
  */
-let armed = false;
-
-/** Mounted once in the v3 shell. Renders nothing. */
-export function RouteTopArmer() {
-  const pathname = usePathname();
-
+export function RouteTop() {
   useEffect(() => {
     function handleClick(event: MouseEvent) {
       const anchor = (event.target as Element | null)?.closest("a[href]");
       if (!(anchor instanceof HTMLAnchorElement)) return;
       if (anchor.origin !== window.location.origin) return;
       if (anchor.pathname === window.location.pathname) return;
-      armed = true;
+      window.scrollTo({ top: 0, behavior: "instant" });
     }
 
-    // Capture phase, so it runs before `Link`'s own handler starts the
-    // navigation.
     document.addEventListener("click", handleClick, true);
     return () => document.removeEventListener("click", handleClick, true);
-  }, []);
-
-  useEffect(() => {
-    armed = false;
-  }, [pathname]);
-
-  return null;
-}
-
-/** Mounted inside the segment's `loading.tsx`. Renders nothing. */
-export function LoadingAtTop() {
-  // Layout effect: before the skeleton is painted, so there is no frame of
-  // it at the old position.
-  useLayoutEffect(() => {
-    if (!armed) return;
-    armed = false;
-    window.scrollTo({ top: 0, behavior: "instant" });
   }, []);
 
   return null;

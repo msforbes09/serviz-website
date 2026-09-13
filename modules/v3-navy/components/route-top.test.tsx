@@ -1,9 +1,6 @@
 import { render } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { LoadingAtTop, RouteTopArmer } from "./route-top";
-
-let pathname = "/4sjhdc5awq";
-vi.mock("next/navigation", () => ({ usePathname: () => pathname }));
+import { RouteTop } from "./route-top";
 
 function clickLink(href: string) {
   const link = document.createElement("a");
@@ -22,89 +19,35 @@ beforeEach(() => {
 
 afterEach(() => {
   scrollTo.mockReset();
-  pathname = "/4sjhdc5awq";
 });
 
 /**
- * With a prefetched route the loading skeleton paints at once, at whatever
- * scroll position the old page was at, and the router only jumps to the top
- * when the real page lands. So a link press arms a flag and the skeleton,
- * on mounting, spends it on an instant scroll to the top. Back and forward
- * never come from a link press, so they keep the browser's own restore.
+ * The window goes to the top the moment a link to another route is pressed,
+ * so nothing the navigation measures — the nav pill's shared-layout
+ * animation, the loading skeleton — sees the scroll position change under
+ * it. Same-page anchors and other sites are not route changes.
  */
-describe("RouteTopArmer and LoadingAtTop", () => {
-  it("scrolls the skeleton to the top after a link to another route", () => {
-    const view = render(<RouteTopArmer />);
-    clickLink("/4sjhdc5awq/about");
+describe("RouteTop", () => {
+  it("scrolls to the top instantly when a link to another route is pressed", () => {
+    render(<RouteTop />);
 
-    view.rerender(
-      <>
-        <RouteTopArmer />
-        <LoadingAtTop />
-      </>,
-    );
+    clickLink("/4sjhdc5awq/about");
 
     expect(scrollTo).toHaveBeenCalledWith({ top: 0, behavior: "instant" });
   });
 
-  it("leaves the skeleton alone when nothing was pressed, as on back or forward", () => {
-    render(
-      <>
-        <RouteTopArmer />
-        <LoadingAtTop />
-      </>,
-    );
+  it("leaves a same-page fragment link alone, so anchors still glide", () => {
+    render(<RouteTop />);
 
-    expect(scrollTo).not.toHaveBeenCalled();
-  });
-
-  it("spends the flag once", () => {
-    const view = render(<RouteTopArmer />);
-    clickLink("/4sjhdc5awq/about");
-    view.rerender(
-      <>
-        <RouteTopArmer />
-        <LoadingAtTop />
-      </>,
-    );
-    view.rerender(<RouteTopArmer />);
-    view.rerender(
-      <>
-        <RouteTopArmer />
-        <LoadingAtTop />
-      </>,
-    );
-
-    expect(scrollTo).toHaveBeenCalledTimes(1);
-  });
-
-  it("ignores a same-page fragment and a link to another site", () => {
-    const view = render(<RouteTopArmer />);
     clickLink("#payroll");
-    clickLink("https://www.google.com/maps");
-
-    view.rerender(
-      <>
-        <RouteTopArmer />
-        <LoadingAtTop />
-      </>,
-    );
 
     expect(scrollTo).not.toHaveBeenCalled();
   });
 
-  it("drops a stale flag once the route has changed without a skeleton", () => {
-    const view = render(<RouteTopArmer />);
-    clickLink("/4sjhdc5awq/about");
-    pathname = "/4sjhdc5awq/about";
-    view.rerender(<RouteTopArmer />);
+  it("leaves a link to another site alone", () => {
+    render(<RouteTop />);
 
-    view.rerender(
-      <>
-        <RouteTopArmer />
-        <LoadingAtTop />
-      </>,
-    );
+    clickLink("https://www.google.com/maps");
 
     expect(scrollTo).not.toHaveBeenCalled();
   });

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { RouteTopArmer } from "@/modules/v3-navy/components/route-top";
+import { RouteTop } from "@/modules/v3-navy/components/route-top";
 import { SiteFooter } from "@/modules/v3-navy/components/site-footer";
 import { SiteHeader } from "@/modules/v3-navy/components/site-header";
 import { previewSocialMetadata } from "@/modules/previews/lib/preview-metadata";
@@ -27,7 +27,7 @@ export default function V3Layout({ children }: LayoutProps<"/4sjhdc5awq">) {
     <div
       className={`v3-root ${orbitron.variable} ${outfit.variable} ${poppins.variable} font-poppins bg-v3-paper text-v3-ink flex min-h-dvh flex-col`}
     >
-      <RouteTopArmer />
+      <RouteTop />
       <SiteHeader />
       <main id="main" className="flex-1">
         {children}

@@ -134,6 +134,15 @@ each one approved before any of this is public.
 - **v3 skip link removed (2026-09-13)**, same request, same consequence. It was
   a plain `<a href="#main">` in `app/4sjhdc5awq/layout.tsx`, `sr-only` until
   focused; `<main id="main">` is still there for it to come back to.
+- **v3 nav pill on back/forward (2026-09-13).** The pill is a Motion
+  shared-layout element measured in page coordinates. A route change from a
+  scrolled page made it slide up from below the fold, because the window
+  jumped to the top between the old pill's snapshot and the new one's
+  measurement. Fixed for link presses by scrolling to the top on the click
+  itself (`modules/v3-navy/components/route-top.tsx`). Back and forward do
+  not come through a click and the browser restores scroll during them, so
+  the same slide can still show there. `layoutRoot` on the bar was tried and
+  did not help. Revisit if it is noticed.
 - **Browser tab titles (2026-09-13).** Both home pages now inherit the root
   default title, so the two tabs read identically and name no layout; v3's
   inner pages are "About | SERBIZ" and so on. `page-titles.test.ts` pins it.
