@@ -234,7 +234,7 @@ const details: Record<string, Omit<ServiceSection, keyof ServiceCard>> = {
   },
   "05": {
     id: "registration",
-    body: "Paperwork and agency liaison, done right.",
+    body: "DTI or SEC, BIR, the Mayor's permit and the agency registrations that follow, handled end to end — the forms prepared, the visits made, the certificates delivered — so a new business opens on time.",
   },
   // Proposed by the user, a full-stack web developer, as a service delivered
   // through the cooperative with them as its development partner. Names the
@@ -243,7 +243,10 @@ const details: Record<string, Omit<ServiceSection, keyof ServiceCard>> = {
     id: "web",
     body: "Custom websites, online portals and the systems behind a business — inventory, billing, records — built with our development partner, a full-stack web developer focused on backend systems, and supported after launch.",
   },
-  "07": { id: "packages", body: "Mix and match to fit your business." },
+  "07": {
+    id: "packages",
+    body: "Mix payroll, accounting, tax, HR and more into one monthly package sized to your headcount and transaction volume, quoted in writing after a free consultation and adjusted as you grow.",
+  },
 };
 
 export const serviceSections: ServiceSection[] = serviceCards.map((card) => ({
