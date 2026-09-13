@@ -1,4 +1,10 @@
-import { ArrowRight, BadgeCheck, CircleCheck, MessagesSquare, Phone } from "lucide-react";
+import {
+  ArrowRight,
+  BadgeCheck,
+  CircleCheck,
+  MessagesSquare,
+  Phone,
+} from "lucide-react";
 import Image from "next/image";
 import { DocumentPlaceholder } from "@/components/ui/document-placeholder";
 import { siteConfig } from "@/lib/site-config";
@@ -41,8 +47,10 @@ import { SectionLink } from "./section-link";
 // A floor, not a height, so a short window still gets the whole hero.
 export function Hero() {
   return (
-    <section className="mx-auto grid min-h-[calc(100svh-var(--v1-nav-height))] max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-12 px-6 pt-16 pb-24 min-[900px]:grid-cols-[1.35fr_1fr]">
-      <div className="max-w-[680px]">
+    <section className="mx-auto grid min-h-[calc(100svh-var(--v1-nav-height))] max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-12 px-6 pt-8 pb-16 min-[900px]:grid-cols-[1.35fr_1fr]">
+      {/* Centred on a phone, where the column is the full width and a left
+          edge has nothing to align with; left from `md`, beside the photo. */}
+      <div className="max-w-[680px] max-md:text-center">
         <p
           style={{ "--i": 0 } as React.CSSProperties}
           className="text-v1-forest enter-rise enter-step inline-flex items-center gap-2 rounded-full bg-[#eaf4ec] px-3 py-1 text-sm font-semibold"
@@ -81,23 +89,24 @@ export function Hero() {
           corporations and SMEs. Payslips out on time, BIR filings on schedule,
           reports you can read. You get your evenings back.
         </p>
-        <div className="mt-8 flex flex-wrap items-center gap-3">
+        <div className="mt-8 flex flex-wrap items-center gap-3 max-md:flex-col max-md:items-stretch">
           <SectionLink
             href="#contact"
             style={{ "--i": 3 } as React.CSSProperties}
-            className="enter-rise enter-step v1-shine bg-v1-orange hover:bg-v1-forest rounded-lg px-6 py-3 text-base font-semibold text-white transition-[background-color,transform] duration-200 hover:-translate-y-0.5"
+            className="enter-rise enter-step v1-shine bg-v1-orange hover:bg-v1-forest rounded-lg px-6 py-3 text-center text-base font-semibold text-white max-md:w-full transition-[background-color,transform] duration-200 hover:-translate-y-0.5"
           >
             Book a free consultation
           </SectionLink>
           <a
             href={`tel:${siteConfig.contact.mobileTel}`}
             style={{ "--i": 4 } as React.CSSProperties}
-            className="enter-rise enter-step text-v1-forest inline-flex items-center gap-2 px-4 py-3 text-base font-semibold"
+            className="enter-rise enter-step text-v1-forest inline-flex items-center gap-2 px-4 py-3 text-base font-semibold max-md:justify-center"
           >
-            <Phone aria-hidden className="size-5" /> {siteConfig.contact.phones.mobile}
+            <Phone aria-hidden className="size-5" />{" "}
+            {siteConfig.contact.phones.mobile}
           </a>
         </div>
-        <ul className="mt-8 flex list-none flex-wrap gap-x-6 gap-y-4 text-sm text-[#3f4b43]">
+        <ul className="mt-8 flex list-none flex-wrap gap-x-6 gap-y-4 text-sm text-[#3f4b43] max-md:justify-center">
           {heroBadges.map((badge, index) => (
             <li
               key={badge}
@@ -151,9 +160,12 @@ export function Hero() {
 
 export function Services() {
   return (
-    <section id="services" className="border-v1-line scroll-mt-4 border-y bg-white">
+    <section
+      id="services"
+      className="border-v1-line scroll-mt-4 border-y bg-white"
+    >
       <div className="mx-auto max-w-[1200px] px-6 py-24">
-        <div className="reveal max-w-[680px]">
+        <div className="reveal max-w-[680px] max-md:mx-auto max-md:text-center">
           <p className="text-v1-orange text-sm font-semibold tracking-[0.08em] uppercase">
             What we do
           </p>
@@ -192,7 +204,9 @@ export function Services() {
                 )}
               </div>
               <div>
-                <h3 className="text-lg leading-6 font-semibold">{service.title}</h3>
+                <h3 className="text-lg leading-6 font-semibold">
+                  {service.title}
+                </h3>
                 {/* 14px, and measured: #3f4b43 on the paper card is 8.74:1,
                     well clear of the 4.5:1 that small text owes. */}
                 <p className="mt-1.5 text-sm leading-5 text-[#3f4b43]">
@@ -213,7 +227,8 @@ export function Services() {
               suggest a package.
             </span>
             <span className="inline-flex items-center gap-2 text-sm font-semibold">
-              Start the conversation <ArrowRight aria-hidden className="size-4" />
+              Start the conversation{" "}
+              <ArrowRight aria-hidden className="size-4" />
             </span>
           </SectionLink>
         </div>
@@ -225,7 +240,7 @@ export function Services() {
 export function Tagline() {
   return (
     <section className="mx-auto max-w-[1200px] px-6 py-32">
-      <p className="tagline text-v1-forest max-w-[900px] text-[clamp(36px,5vw,60px)] leading-[1.1] font-bold tracking-[-0.02em]">
+      <p className="tagline text-v1-forest max-w-[900px] max-md:text-center text-[clamp(36px,5vw,60px)] leading-[1.1] font-bold tracking-[-0.02em]">
         {taglineWords.map((word, index) => (
           <span
             key={`${word}-${index}`}
@@ -278,14 +293,16 @@ export function WhySerbiz() {
         </div>
 
         <div>
-          <p className="text-sm font-semibold tracking-[0.08em] text-[#ffb784] uppercase">
-            Why SERBIZ
-          </p>
-          <h2 className="mt-3 max-w-[680px] text-[clamp(30px,4vw,48px)] leading-[1.1] font-bold text-balance">
-            Built for SPs, OPCs and SMEs,{" "}
-            <span className="text-[#ffb784]">not scaled down</span> from a big
-            firm.
-          </h2>
+          <div className="max-md:text-center">
+            <p className="text-sm font-semibold tracking-[0.08em] text-[#ffb784] uppercase">
+              Why SERBIZ
+            </p>
+            <h2 className="mt-3 max-w-[680px] text-[clamp(30px,4vw,48px)] leading-[1.1] font-bold text-balance">
+              Built for SPs, OPCs and SMEs,{" "}
+              <span className="text-[#ffb784]">not scaled down</span> from a big
+              firm.
+            </h2>
+          </div>
           <div className="mt-12 grid gap-6">
             {reasons.map((reason, index) => (
               <div
@@ -316,7 +333,7 @@ export function WhySerbiz() {
 export function HowItWorks() {
   return (
     <section id="how" className="mx-auto max-w-[1200px] scroll-mt-4 px-6 py-24">
-      <div className="reveal max-w-[680px]">
+      <div className="reveal max-w-[680px] max-md:mx-auto max-md:text-center">
         <p className="text-v1-orange text-sm font-semibold tracking-[0.08em] uppercase">
           How it works
         </p>
@@ -434,9 +451,12 @@ export function Mission() {
 
 export function Permits() {
   return (
-    <section id="proof" className="border-v1-line scroll-mt-4 border-y bg-white">
+    <section
+      id="proof"
+      className="border-v1-line scroll-mt-4 border-y bg-white"
+    >
       <div className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(280px,1fr))] items-center gap-12 px-6 py-24">
-        <div className="reveal max-w-[480px]">
+        <div className="reveal max-w-[480px] max-md:mx-auto max-md:text-center">
           <p className="text-v1-orange text-sm font-semibold tracking-[0.08em] uppercase">
             Permits and licenses
           </p>
@@ -460,7 +480,13 @@ export function Permits() {
             certificate.src ? (
               <Image
                 key={certificate.alt}
-                style={{ "--i": index, "--reveal-offset": "250ms", "--reveal-gap": "100ms" } as React.CSSProperties}
+                style={
+                  {
+                    "--i": index,
+                    "--reveal-offset": "250ms",
+                    "--reveal-gap": "100ms",
+                  } as React.CSSProperties
+                }
                 src={certificate.src}
                 alt={certificate.alt}
                 width={600}
@@ -470,7 +496,13 @@ export function Permits() {
             ) : (
               <div
                 key={certificate.alt}
-                style={{ "--i": index, "--reveal-offset": "250ms", "--reveal-gap": "100ms" } as React.CSSProperties}
+                style={
+                  {
+                    "--i": index,
+                    "--reveal-offset": "250ms",
+                    "--reveal-gap": "100ms",
+                  } as React.CSSProperties
+                }
                 className="reveal reveal-step text-v1-forest"
               >
                 <DocumentPlaceholder label={certificate.alt} />
@@ -485,8 +517,11 @@ export function Permits() {
 
 export function News() {
   return (
-    <section id="news" className="mx-auto max-w-[1200px] scroll-mt-4 px-6 py-24">
-      <div className="reveal flex flex-wrap items-end justify-between gap-4">
+    <section
+      id="news"
+      className="mx-auto max-w-[1200px] scroll-mt-4 px-6 py-24"
+    >
+      <div className="reveal flex flex-wrap items-end justify-between gap-4 max-md:justify-center max-md:text-center">
         <div className="max-w-[680px]">
           <p className="text-v1-orange text-sm font-semibold tracking-[0.08em] uppercase">
             News and events

@@ -47,6 +47,18 @@ describe("Hero", () => {
   });
 });
 
+describe("Hero on a phone", () => {
+  it("centres its text and stretches the primary button to the full width", () => {
+    render(<Hero />);
+
+    const heading = screen.getByRole("heading", { level: 1 });
+    const book = screen.getByRole("link", { name: "Book a free consultation" });
+
+    expect(heading.parentElement?.className).toMatch(/max-md:text-center/);
+    expect(book.className).toMatch(/max-md:w-full/);
+  });
+});
+
 describe("contact links", () => {
   const originalScrollIntoView = Element.prototype.scrollIntoView;
 
