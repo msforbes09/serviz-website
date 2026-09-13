@@ -59,12 +59,17 @@ export function Hero() {
         >
           <BadgeCheck aria-hidden className="shrink-0 size-4" />
           {/* The full sentence wrapped "2021" onto its own line on a phone.
-              The city goes below `md`, where the pill then holds one line at
-              375px; `text-balance` covers a narrower phone, splitting the
-              sentence evenly rather than orphaning the year. */}
+              The city goes below 900px, the grid's own breakpoint: under it
+              the hero is already two equal columns from about 700px, and a
+              column of 340 to 375px is too narrow for the sentence, which
+              wrapped it on a phone held sideways. Without the city the pill
+              holds one line at 375px; `text-balance` covers a narrower
+              phone, splitting the sentence evenly rather than orphaning the
+              year. */}
           <span className="text-balance">
             A workers cooperative
-            <span className="max-md:hidden"> in Pasig City,</span> since 2021
+            <span className="max-[900px]:hidden"> in Pasig City,</span> since
+            2021
           </span>
         </p>
         {/* No hard line breaks: the designed three-line shape only holds at

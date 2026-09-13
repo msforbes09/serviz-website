@@ -273,3 +273,21 @@ describe("v1 mobile menu structure", () => {
     expect(list.contains(cta)).toBe(false);
   });
 });
+
+describe("v1 nav breakpoint", () => {
+  it("keeps the hamburger until the links and button actually fit on one line", () => {
+    render(<SiteNav />);
+
+    // Logo, four links, their gaps and the consultation button need 936px.
+    // Switching to the bar at 821px wrapped "Why SERBIZ" and "News and
+    // events" onto two lines and the button onto three, on any tablet.
+    const bar = screen.getByRole("link", {
+      name: "Book a free consultation",
+    }).parentElement!;
+    expect(bar.className).toMatch(/min-\[940px\]:flex/);
+    expect(toggle().className).toMatch(/min-\[940px\]:hidden/);
+    expect(document.getElementById("v1-menu")!.className).toMatch(
+      /min-\[940px\]:hidden/,
+    );
+  });
+});

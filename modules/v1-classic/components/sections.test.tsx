@@ -70,8 +70,12 @@ describe("Hero on a phone", () => {
       "A workers cooperative in Pasig City, since 2021",
     );
     // The comma goes with the city, so the phone reads "cooperative since".
+    // The city comes back at 900px, where the hero grid widens the text
+    // column. From 768px the hero is already two columns and the column is
+    // too narrow for the full sentence, which wrapped it on a phone held
+    // sideways.
     expect(screen.getByText("in Pasig City,").className).toMatch(
-      /max-md:hidden/,
+      /max-\[900px\]:hidden/,
     );
     expect(screen.getByText(/A workers cooperative/).className).toMatch(
       /text-balance/,

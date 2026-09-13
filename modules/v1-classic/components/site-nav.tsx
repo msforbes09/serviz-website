@@ -143,7 +143,7 @@ export function SiteNav() {
             <BrandLockup tone="ink" priority />
           </a>
 
-          <div className="hidden items-center gap-6 text-sm font-medium min-[821px]:flex">
+          <div className="hidden items-center gap-6 text-sm font-medium min-[940px]:flex">
             {navLinks.map((link) => (
               <a
                 key={link.href}
@@ -170,7 +170,7 @@ export function SiteNav() {
             aria-expanded={open}
             aria-controls="v1-menu"
             aria-label={open ? "Close menu" : "Open menu"}
-            className="relative size-11 min-[821px]:hidden"
+            className="relative size-11 min-[940px]:hidden"
           >
             <span
               className={`bg-v1-ink absolute left-[11px] block h-0.5 w-[22px] rounded-sm transition-transform duration-[250ms] ease-[cubic-bezier(.77,0,.175,1)] ${open ? "top-[21px] rotate-45" : "top-[15px]"}`}
@@ -196,7 +196,7 @@ export function SiteNav() {
         aria-modal={open || undefined}
         aria-label="Menu"
         inert={!open}
-        className={`fixed inset-0 z-40 flex flex-col justify-center gap-4 overscroll-contain bg-[color-mix(in_srgb,var(--color-v1-paper)_90%,transparent)] p-6 backdrop-blur-[40px] transition-opacity duration-[250ms] ease-[cubic-bezier(.23,1,.32,1)] min-[821px]:hidden ${open ? "opacity-100" : "pointer-events-none opacity-0"}`}
+        className={`fixed inset-0 z-40 flex flex-col justify-center gap-4 overscroll-contain bg-[color-mix(in_srgb,var(--color-v1-paper)_90%,transparent)] p-6 backdrop-blur-[40px] transition-opacity duration-[250ms] ease-[cubic-bezier(.23,1,.32,1)] min-[940px]:hidden ${open ? "opacity-100" : "pointer-events-none opacity-0"}`}
       >
         {/* The section links are a list with a hairline between rows; the
             call to action stands apart below it as the one button, in the
