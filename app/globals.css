@@ -218,53 +218,6 @@
   }
 }
 
-/* The v3 hero photograph drifts up a little as the hero scrolls out, so it
-   reads as sitting a layer above the navy rather than printed on it.
-   Scroll-driven, so it costs no JavaScript and does nothing without support.
-   Transform only, on the clipped wrapper — the image inside owns its own
-   transform for the entrance settle and the hover. */
-@media (prefers-reduced-motion: no-preference) {
-  @supports (animation-timeline: view()) {
-    .v3-hero-drift {
-      animation: v3-hero-drift linear both;
-      animation-timeline: view();
-      animation-range: exit 0% exit 100%;
-    }
-  }
-}
-
-@keyframes v3-hero-drift {
-  to {
-    translate: 0 var(--drift, -56px);
-  }
-}
-
-/* The promise card drifts less than the photo behind it, so the two
-   separate as the hero scrolls out. */
-.v3-hero-drift-card {
-  --drift: -20px;
-}
-
-/* Hover: the photo tilts a few degrees toward the pointer. `--tilt-x` and
-   `--tilt-y` come from `HeroTilt`, -1..1. A glare that followed the pointer
-   was tried and dropped: a translucent radial gradient over a dark photo
-   banded into visible grain. Fine
-   pointers only — a phone has no hover and would just get a frozen tilt from
-   its last tap — and never under reduced motion. The tilt lives on the
-   clipped wrapper, which has no other transform; the scroll drift on the same
-   element uses `translate`, so the two compose. */
-@media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .v3-tilt {
-    perspective: 1100px;
-  }
-
-  .v3-tilt-card {
-    transform: rotateX(calc(var(--tilt-y, 0) * -5deg))
-      rotateY(calc(var(--tilt-x, 0) * 6deg));
-    transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-  }
-}
-
 /* v1 hero. Hover: a flat parallax, no tilt — the photo frame follows the
    pointer a few pixels and the caption card goes the other way, so the two
    read as separate layers over the orange block, which holds still.

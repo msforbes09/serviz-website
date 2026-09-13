@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { siteConfig } from "@/lib/site-config";
 import { basePath } from "../lib/content";
-import { HeroTilt } from "@/components/motion/hero-tilt";
 import { AudienceStrip } from "./home-sections";
 import { QuickMessageDialog } from "./quick-message-dialog";
 
@@ -113,24 +112,23 @@ export function HomeHero() {
             settles without fading, the quote card slides in from the left.
             The photo moves at once; only the card is held until the buttons
             have landed, so it is the last thing on the first screen to move. */}
-        <HeroTilt
+        <div
           style={{ "--from-x": "56px" } as React.CSSProperties}
-          className="enter-x v3-tilt relative flex min-h-[340px] items-center justify-center motion-safe:transition-transform motion-safe:duration-700 motion-safe:ease-[cubic-bezier(.23,1,.32,1)]"
+          className="enter-x group relative flex min-h-[340px] items-center justify-center motion-safe:transition-transform motion-safe:duration-700 motion-safe:ease-[cubic-bezier(.23,1,.32,1)]"
         >
-          {/* Column width at the original height, shifted 6% to the right on
-              desktop so its left edge sits where it did before the frame
-              grew — the promise card overhangs it the way it used to. The
-              section clips overflow, so the right edge running past the
-              column is fine. 8% top and bottom stay. Drifts up a little as the hero scrolls out
-              (`.v3-hero-drift`). */}
-          <div className="group v3-hero-drift v3-tilt-card absolute inset-x-0 inset-y-[8%] md:-right-[6%] md:left-[6%] overflow-hidden rounded-[28px] bg-white [clip-path:polygon(25%_0,100%_0,100%_75%,75%_100%,0_100%,0_25%)]">
+          {/* Column width at the original height, and still: the photograph
+              itself does not move on hover. Left edge 6% in, as the original
+              inset put it; the right edge runs 6% past the column only from
+              `xl` up — below that the overflow crowded the rust wedge, so it
+              stops at the column. */}
+          <div className="absolute inset-x-0 inset-y-[8%] overflow-hidden rounded-[28px] bg-white [clip-path:polygon(25%_0,100%_0,100%_75%,75%_100%,0_100%,0_25%)] md:left-[6%] md:right-0 xl:-right-[6%]">
             <Image
-              src="/designs/stock/v3-hero-window-mug.jpg"
-              alt="A dark mug and a notebook on a desk in front of a bright office window"
+              src="/designs/stock/v3-hero-corridor.jpg"
+              alt="A corridor in a modern office, with a deep blue wall and a slatted ceiling"
               fill
               priority
               sizes="(max-width: 900px) 100vw, 560px"
-              className="enter-zoom object-cover motion-safe:group-hover:[transform:scale(1.04)]"
+              className="enter-zoom object-cover"
             />
           </div>
 
@@ -139,16 +137,22 @@ export function HomeHero() {
               thing that outranks the unlayered `.enter-*` rules. */}
           <div
             style={{ transitionDelay: "1.15s" }}
-            className="v3-hero-drift v3-hero-drift-card bg-v3-navy absolute bottom-[2%] left-0 max-w-[280px] rounded-2xl border border-white/10 px-5 py-4 text-white shadow-[0_18px_40px_rgba(0,0,0,.35)] enter-slide"
+            className="enter-slide absolute bottom-[2%] left-0 max-w-[280px]"
           >
-            <p className="text-v3-sky mb-1.5 text-[11px] font-semibold tracking-[0.14em] uppercase">
-              Our promise
-            </p>
-            <p className="font-outfit text-lg leading-tight font-bold">
-              “{siteConfig.motto}”
-            </p>
+            {/* The surface is an inner element so the hover dip has its own
+                transition: the outer one's is the entrance's, delayed 1.15s,
+                and a hover on it would wait that long to move. Dips while
+                the pointer is anywhere over the composition. */}
+            <div className="bg-v3-navy rounded-2xl border border-white/10 px-5 py-4 text-white shadow-[0_18px_40px_rgba(0,0,0,.35)] motion-safe:transition-transform motion-safe:duration-300 motion-safe:ease-[cubic-bezier(.23,1,.32,1)] motion-safe:group-hover:translate-y-2.5">
+              <p className="text-v3-sky mb-1.5 text-[11px] font-semibold tracking-[0.14em] uppercase">
+                Our promise
+              </p>
+              <p className="font-outfit text-lg leading-tight font-bold">
+                “{siteConfig.motto}”
+              </p>
+            </div>
           </div>
-        </HeroTilt>
+        </div>
       </div>
     </section>
   );
