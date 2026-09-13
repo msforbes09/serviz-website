@@ -30,6 +30,7 @@ export function SiteNav() {
   const toggleRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const pendingJump = useRef<HTMLElement | null>(null);
+  const pendingTop = useRef(false);
 
   useEffect(() => {
     if (!open) return;
@@ -82,6 +83,18 @@ export function SiteNav() {
   function handleLogoClick(event: React.MouseEvent<HTMLAnchorElement>) {
     event.preventDefault();
 
+    // From inside the open overlay the logo closes it first and scrolls once
+    // the body lock has lifted — a scroll begun under the lock is thrown away
+    // a frame later, the same trap the section links avoid below.
+    if (open) {
+      pendingTop.current = true;
+      setOpen(false);
+      return;
+    }
+    scrollToTop();
+  }
+
+  function scrollToTop() {
     // No `behavior` given, so this defers to the CSS `scroll-behavior`: smooth
     // normally, instant for a visitor who asked for reduced motion. Passing
     // "smooth" here would animate for them regardless of that preference.
@@ -98,7 +111,12 @@ export function SiteNav() {
   // smooth scroll begun while the body was still locked is dropped when the
   // lock lifts a frame later, which left the menu's links doing nothing.
   useEffect(() => {
-    if (open || !pendingJump.current) return;
+    if (open) return;
+    if (pendingTop.current) {
+      pendingTop.current = false;
+      scrollToTop();
+    }
+    if (!pendingJump.current) return;
     jumpTo(pendingJump.current);
     pendingJump.current = null;
   }, [open]);

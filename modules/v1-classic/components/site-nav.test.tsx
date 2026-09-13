@@ -139,6 +139,19 @@ describe("v1 section links", () => {
 });
 
 describe("v1 mobile menu", () => {
+  it("closes when the logo is pressed, so the page is visible at the top it went to", async () => {
+    const user = userEvent.setup();
+    render(<SiteNav />);
+    const toggle = screen.getByRole("button", { name: /menu/i });
+
+    await user.click(toggle);
+    expect(toggle).toHaveAttribute("aria-expanded", "true");
+
+    await user.click(screen.getByRole("link", { name: "SERBIZ home" }));
+
+    expect(toggle).toHaveAttribute("aria-expanded", "false");
+  });
+
   it("closes on Escape", async () => {
     const user = userEvent.setup();
     render(<SiteNav />);
