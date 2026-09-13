@@ -107,32 +107,40 @@ export function HeaderNav() {
         <span className="bg-v3-navy block h-0.5 w-[18px]" />
       </button>
 
+      {/* Collapses by animating a grid row to 0fr. The row can only reach
+          zero if the child it measures has no padding or border of its own —
+          those stay in the row's minimum, and 17px of the active item's navy
+          showed through under the header on every page. So the clipping child
+          carries nothing, and the padding and top border sit on a wrapper
+          inside it, where the clip hides them. */}
       <div
         id="v3-mobile-menu"
         inert={!menuOpen}
-        className={`border-v3-navy/10 bg-v3-paper absolute inset-x-0 top-full grid border-t transition-[grid-template-rows] duration-200 ease-[cubic-bezier(.23,1,.32,1)] min-[1001px]:hidden ${menuOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
+        className={`bg-v3-paper absolute inset-x-0 top-full grid transition-[grid-template-rows] duration-200 ease-[cubic-bezier(.23,1,.32,1)] min-[1001px]:hidden ${menuOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
       >
-        <div className="flex min-h-0 flex-col gap-1 overflow-hidden px-4 pb-4">
-          {navItems.map((item) => {
-            const active = pathname === item.href;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setMenuOpen(false)}
-                className={`rounded-xl px-4 py-3.5 text-base font-medium ${active ? "bg-v3-navy text-white" : "text-v3-ink"}`}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
-          <a
-            href={`mailto:${siteConfig.contact.email}`}
-            onClick={() => setMenuOpen(false)}
-            className="bg-v3-rust mt-1.5 rounded-xl px-4 py-3.5 text-center text-base font-semibold text-white"
-          >
-            Get a quote
-          </a>
+        <div className="min-h-0 overflow-hidden">
+          <div className="border-v3-navy/10 flex flex-col gap-1 border-t px-4 pb-4">
+            {navItems.map((item) => {
+              const active = pathname === item.href;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setMenuOpen(false)}
+                  className={`rounded-xl px-4 py-3.5 text-base font-medium ${active ? "bg-v3-navy text-white" : "text-v3-ink"}`}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+            <a
+              href={`mailto:${siteConfig.contact.email}`}
+              onClick={() => setMenuOpen(false)}
+              className="bg-v3-rust mt-1.5 rounded-xl px-4 py-3.5 text-center text-base font-semibold text-white"
+            >
+              Get a quote
+            </a>
+          </div>
         </div>
       </div>
     </>

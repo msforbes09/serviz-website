@@ -89,7 +89,12 @@ export function ContactDetails() {
 export function ContactAside() {
   return (
     <div className="grid gap-4">
-      <div className="border-v3-navy/12 aspect-4/3 min-h-[320px] overflow-hidden rounded-3xl border bg-[#eef4fa]">
+      {/* Aspect ratio only, no minimum height. With `aspect-ratio` set, a
+          min-height transfers into a min-width (320px tall means 427px wide),
+          which on a phone made the map 446px in a 375px viewport and let the
+          whole page scroll sideways. At 335px wide the map is 251px tall,
+          which is plenty. */}
+      <div className="border-v3-navy/12 aspect-4/3 overflow-hidden rounded-3xl border bg-[#eef4fa]">
         <iframe
           title="Map to the SERBIZ office"
           src={`https://maps.google.com/maps?q=${encodeURIComponent(siteConfig.office.mapsQuery)}&z=16&output=embed`}

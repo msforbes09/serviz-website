@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { RevealController } from "@/components/motion/reveal-controller";
 import { Contact } from "@/modules/v1-classic/components/contact";
 import { Faq } from "@/modules/v1-classic/components/faq";
 import {
@@ -53,6 +54,9 @@ export default function V1Page() {
         <Contact />
       </main>
       <SiteFooter />
+      {/* A child of the page, not the layout, so its effect runs after this
+          page has hydrated. See reveal-mount.test.ts. */}
+      <RevealController />
     </>
   );
 }

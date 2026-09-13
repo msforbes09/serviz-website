@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { RevealController } from "@/components/motion/reveal-controller";
 import {
   AboutIntro,
   MissionVision,
@@ -16,6 +17,9 @@ export default function V3AboutPage() {
       <AboutIntro />
       <MissionVision />
       <WhyClientsStay />
+      {/* A child of the page, not the layout, so its effect runs after this
+          page has hydrated. See reveal-mount.test.ts. */}
+      <RevealController />
     </>
   );
 }

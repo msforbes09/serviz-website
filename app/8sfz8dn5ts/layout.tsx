@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { RevealController } from "@/components/motion/reveal-controller";
 import { SectionLink } from "@/modules/v1-classic/components/section-link";
 import { outfit, poppins } from "@/modules/v1-classic/lib/fonts";
 
@@ -26,10 +25,6 @@ export default function V1Layout({ children }: LayoutProps<"/8sfz8dn5ts">) {
         Skip to content
       </SectionLink>
       {children}
-      {/* Renders nothing and wraps nothing, so every section stays a Server
-          Component. v1 and v3 mount it; v2 still uses the CSS-only scroll
-          timeline. */}
-      <RevealController />
     </div>
   );
 }

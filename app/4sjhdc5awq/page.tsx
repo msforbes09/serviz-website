@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { RevealController } from "@/components/motion/reveal-controller";
 import { HomeHero } from "@/modules/v3-navy/components/home-hero";
 import {
   AudienceStrip,
@@ -23,6 +24,9 @@ export default function V3HomePage() {
       <WhyUs />
       <Permits />
       <HomeCta />
+      {/* A child of the page, not the layout, so its effect runs after this
+          page has hydrated. See reveal-mount.test.ts. */}
+      <RevealController />
     </>
   );
 }

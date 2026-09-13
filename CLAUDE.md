@@ -95,7 +95,7 @@ Adapted from the egov-api workspace conventions. These bind the way work is done
 - **Minimal change.** Make the smallest change that delivers the ask. No opportunistic refactors, file moves or "while I'm here" cleanups — propose those separately.
 - **Documentation ships with its change.** If a change affects this file, `README.md`, `TODO.md` or a plan, update it in the same commit, not afterwards.
 - **Capture deferred work in `TODO.md`** the moment it is deferred — "later", "enhancement", a follow-up a design implies. Nothing put off gets lost.
-- **Session notes in `.claude/sessions/YYYY-MM-DD.md`.** Read the newest at session start. At the end of a working session write what shipped, what is pending with enough detail to resume cold, and any environment gotcha.
+- **Session notes in `.claude/sessions/YYYY-MM-DD.md`.** Do not read them at session start or on your own initiative; open them only when the user asks. At the end of a working session write what shipped, what is pending with enough detail to resume cold, and any environment gotcha.
 
 ## Engineering principles
 

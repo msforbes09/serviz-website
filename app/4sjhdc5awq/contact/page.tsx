@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { RevealController } from "@/components/motion/reveal-controller";
 import {
   ContactAside,
   ContactDetails,
@@ -30,6 +31,9 @@ export default function V3ContactPage() {
           <ContactAside />
         </div>
       </div>
+      {/* A child of the page, not the layout, so its effect runs after this
+          page has hydrated. See reveal-mount.test.ts. */}
+      <RevealController />
     </section>
   );
 }

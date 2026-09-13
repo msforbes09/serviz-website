@@ -11,7 +11,11 @@ export function ServiceGroups() {
             key={group.num}
             className="reveal grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-start gap-10"
           >
-            <div className="sticky top-24">
+            {/* Sticky only from `md`, where the grid has two columns and the
+                intro can sit beside the list. In the single phone column it
+                pinned under the header and the list scrolled up beneath the
+                photograph. */}
+            <div className="md:sticky md:top-24">
               <p className="bg-v3-mint mb-[18px] inline-flex items-center gap-3 rounded-full py-2 pr-4 pl-2">
                 <span className="bg-v3-navy text-v3-rust font-outfit flex size-8 items-center justify-center rounded-full text-base font-extrabold">
                   {group.num}

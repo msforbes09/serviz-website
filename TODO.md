@@ -523,6 +523,35 @@ services section alone, so there was nothing to trim.
   text column enters from its own side while the list beside it keeps the
   upward stagger. Both sides sliding reads as busy.
 
+- **v3 mobile pass (2026-09-13).** Checked all five pages at 375px, the home
+  page from 320 to 768, and the open menu, after the client sent a phone
+  capture with a navy bar under the header and the page wider than the header.
+
+  - **The navy bar was the closed mobile menu.** The panel collapses by
+    animating a grid row to `0fr`, but the child the row measures carried
+    `pb-4` and the panel a `border-t`, so the closed row was still 17px tall
+    and showed the top of the active "Home" link. The clipping child now
+    carries nothing; padding and border sit on a wrapper inside it. Closed
+    height measures 0.
+  - **The contact page scrolled sideways.** The map box had `aspect-4/3` with
+    `min-h-[320px]`, and an aspect ratio transfers a minimum height into a
+    minimum width: 427px, so at 375 the page was 446 wide and the sticky
+    header sat narrower than the page — the second thing in the capture. The
+    minimum height is gone; at 335 wide the map is 251 tall, at desktop 556 by
+    417.
+  - **The services image covered its list.** Each group's intro column was
+    `sticky top-24` at every width, so in the single phone column it pinned
+    under the header while the list scrolled beneath the photograph. Sticky
+    only from `md`, where the two columns exist.
+  - **Not reproduced: the home page wider than the header.** Across 320 to 768
+    in Chromium the home page never exceeded the viewport. The contact page
+    was the one place that did. If it recurs on the phone, the browser and
+    width are what is needed; an older Safari without `overflow: clip` would
+    let the hero's shapes escape.
+
+  None of the three has a jsdom seam, so they were verified in the browser
+  and not tested.
+
 - **v3's scroll reveals are JavaScript-driven (2026-09-13).** The same
   `RevealController` v1 mounts, mounted once in v3's layout, so every v3
   section stays a Server Component and the CSS-only path is stood down in
@@ -530,15 +559,26 @@ services section alone, so there was nothing to trim.
   v3's `.reveal`, `.reveal-x` and `.reveal-step` call sites needed no change:
   the JavaScript rules read the same classes and the same `--i` / `--from-x`.
 
-  **The one adaptation is for a multi-page layout.** v1 is a single page, so
-  the controller's effect ran once and was done. v3 keeps the layout mounted
-  while the page beneath it is swapped on a client-side navigation, so the new
-  page's elements arrived after the effect had run and would have sat hidden
-  with nothing watching them. The effect now depends on `usePathname()`: the
-  cleanup disarms, the next run sweeps and re-arms, all inside one effect
-  flush, so the in-between state never paints. Tested, and measured across
-  home → about → services in the browser: zero in-view elements left hidden
-  on any of them.
+  **It is mounted in each page, not the layout.** The first cut mounted it in
+  the layout with a `usePathname()` dependency, so it could re-arm when v3
+  swapped the page beneath it. That was wrong for a reason only the console
+  showed: a layout hydrates before a nested page's segment does, so the
+  controller swept the server HTML ahead of hydration and React then reported
+  a `data-revealed` attribute it never rendered — a hydration mismatch on every
+  hard load of the services and news pages. As the page's own last child the
+  effect runs after that page has hydrated, and on a client-side navigation
+  the old page's instance disarms while the new one arms, inside one commit.
+  The pathname dependency went with it. `reveal-mount.test.ts` guards the
+  placement in all six pages and both layouts; it is a guard on source, since
+  jsdom has no hydration to race. Verified: three mismatches in the console
+  before the change, none added by hard loads of services and news after it.
+
+  **Next 16 keeps visited and prefetched pages in the document** as hidden
+  Activity boundaries (`display: none !important`), so `querySelectorAll` on
+  the visible page also finds their `.reveal` elements. Harmless: a hidden
+  element never intersects and never measures as in view, and a hidden
+  page's effects are unmounted, so only the visible page's controller is
+  live. Worth knowing before trusting an element count.
 
 - **v1's scroll reveals are now JavaScript-driven.** `animation-timeline:
   view()` is unsupported in older Safari and Firefox, where the CSS-only reveal
