@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { siteConfig } from "@/lib/site-config";
 import { navLinks } from "../lib/content";
+import { jumpTo, sectionFor } from "./section-link";
 
 const menuLinks = [
   ...navLinks,
@@ -13,20 +14,6 @@ const menuLinks = [
 // "Resources Income Workers Cooperative", read off the legal name rather than
 // typed a second time, so the bar cannot drift from `site-config.ts`.
 const descriptor = siteConfig.legalName.replace(siteConfig.name, "").trim();
-
-/**
- * Two things a fragment jump does that a scripted one has to do by hand: land
- * the section under `scroll-margin-top`, which `scrollIntoView` honours, and
- * move focus there, so the next Tab continues from the section rather than
- * from the link just used. Sections are not focusable on their own, hence the
- * tabindex.
- */
-function jumpTo(target: HTMLElement) {
-  if (!target.hasAttribute("tabindex")) target.tabIndex = -1;
-  target.focus({ preventScroll: true });
-  // No `behavior`, for the same reason as the logo: CSS decides.
-  target.scrollIntoView({ block: "start" });
-}
 
 /**
  * v1's navigation. A client component because the mobile panel is a
@@ -115,23 +102,6 @@ export function SiteNav() {
     jumpTo(pendingJump.current);
     pendingJump.current = null;
   }, [open]);
-
-  /**
-   * Section links scroll from script instead of letting the fragment navigate.
-   * A fragment navigation writes `#faq` into the address bar, and a refresh
-   * then reopens the page part way down, past the hero and its entrance. The
-   * href stays, so a visitor without scripting still gets the jump.
-   *
-   * Returns the section when the link points at one on this page, having
-   * taken over the click. Anything else is left to the browser.
-   */
-  function sectionFor(event: React.MouseEvent<HTMLAnchorElement>) {
-    const target = document.getElementById(
-      event.currentTarget.hash.slice(1),
-    );
-    if (target) event.preventDefault();
-    return target;
-  }
 
   function handleSectionClick(event: React.MouseEvent<HTMLAnchorElement>) {
     const target = sectionFor(event);

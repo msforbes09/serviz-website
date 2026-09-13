@@ -12,6 +12,7 @@ import {
   taglineWords,
 } from "../lib/content";
 import { Icon } from "./icon";
+import { SectionLink } from "./section-link";
 
 // Two even columns left the headline 552px to work in while its own
 // `max-w-[680px]` said it wanted 680px, so 60px type broke into six lines, two
@@ -81,13 +82,13 @@ export function Hero() {
           reports you can read. You get your evenings back.
         </p>
         <div className="mt-8 flex flex-wrap items-center gap-3">
-          <a
+          <SectionLink
             href="#contact"
             style={{ "--i": 3 } as React.CSSProperties}
             className="enter-rise enter-step v1-shine bg-v1-orange hover:bg-v1-forest rounded-lg px-6 py-3 text-base font-semibold text-white transition-[background-color,transform] duration-200 hover:-translate-y-0.5"
           >
             Book a free consultation
-          </a>
+          </SectionLink>
           <a
             href={`tel:${siteConfig.contact.mobileTel}`}
             style={{ "--i": 4 } as React.CSSProperties}
@@ -201,7 +202,7 @@ export function Services() {
             </article>
           ))}
 
-          <a
+          <SectionLink
             href="#contact"
             style={{ "--i": services.length } as React.CSSProperties}
             className="reveal reveal-step bg-v1-forest hover:bg-v1-orange flex min-h-[200px] flex-col justify-between gap-3 rounded-2xl p-6 text-white transition-[background-color,transform] duration-200 hover:-translate-y-1"
@@ -214,7 +215,7 @@ export function Services() {
             <span className="inline-flex items-center gap-2 text-sm font-semibold">
               Start the conversation <ArrowRight aria-hidden className="size-4" />
             </span>
-          </a>
+          </SectionLink>
         </div>
       </div>
     </section>
