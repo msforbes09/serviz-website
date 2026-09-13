@@ -1,8 +1,9 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { officeAddress, siteConfig } from "@/lib/site-config";
 import { certificates } from "../lib/content";
-import { Hero, Permits, Services } from "./sections";
+import { Hero, Permits, Services, SiteFooter } from "./sections";
 import { SiteNav } from "./site-nav";
 
 describe("Permits", () => {
@@ -90,5 +91,24 @@ describe("contact links", () => {
     expect(window.location.hash).toBe("");
 
     target.remove();
+  });
+});
+
+describe("SiteFooter", () => {
+  it("carries the header's lockup — mark, Orbitron wordmark, descriptor — then the address", () => {
+    render(<SiteFooter />);
+    const footer = screen.getByRole("contentinfo");
+
+    const word = within(footer).getByText("SERBIZ");
+    expect(word.className).toMatch(/font-orbitron/);
+
+    // Same lockup as the nav bar so the two cannot drift, with the address
+    // on its own line beneath. The name is not repeated in full.
+    expect(footer).toHaveTextContent(
+      new RegExp(
+        `^${siteConfig.name}Resources Income Workers Cooperative${officeAddress}`,
+      ),
+    );
+    expect(within(footer).queryByText(siteConfig.legalName)).toBeNull();
   });
 });

@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { DocumentPlaceholder } from "@/components/ui/document-placeholder";
-import { siteConfig } from "@/lib/site-config";
+import { officeAddress, siteConfig } from "@/lib/site-config";
 import {
   certificates,
   heroBadges,
@@ -17,6 +17,7 @@ import {
   steps,
   taglineWords,
 } from "../lib/content";
+import { BrandLockup } from "./brand-lockup";
 import { Icon } from "./icon";
 import { SectionLink } from "./section-link";
 
@@ -579,21 +580,13 @@ export function SiteFooter() {
     // invisible. See the focus block in globals.css.
     <footer className="bg-v1-forest text-[#cfe0d4] [--v1-focus-ring:var(--color-v1-paper)]">
       <div className="mx-auto flex max-w-[1200px] flex-wrap justify-between gap-6 px-6 py-12 text-sm leading-5 max-md:justify-center max-md:text-center">
-        {/* The mark sits on the first line of the name, not floating beside a
-            two-line block; on a phone the lockup stacks and centres. */}
-        <div className="flex items-start gap-3 max-md:flex-col max-md:items-center">
-          <Image
-            src="/designs/v1/logo-mark.png"
-            alt=""
-            width={36}
-            height={36}
-            className="size-9 shrink-0 object-contain"
-          />
-          <span>
-            <strong className="block text-white">{siteConfig.legalName}</strong>
-            {siteConfig.office.street}, {siteConfig.office.city}{" "}
-            {siteConfig.office.postalCode}
-          </span>
+        {/* The header's lockup, then the address on its own line; on a
+            phone the block centres. */}
+        <div className="flex flex-col gap-3 max-md:items-center">
+          <div className="flex items-center gap-2.5">
+            <BrandLockup tone="paper" />
+          </div>
+          <p>{officeAddress}</p>
         </div>
         <div className="flex flex-wrap items-center gap-x-6 gap-y-4 max-md:justify-center">
           <a
