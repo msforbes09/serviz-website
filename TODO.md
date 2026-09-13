@@ -435,16 +435,17 @@ Seven items agreed with the client, all shipped on `feat/v3-pass`:
 Second round, same day, also shipped:
 
 - Entrance order on the first screen: kicker, headline, lede, steel bars,
-  audience strip, then both hero buttons together, then the photo and the
-  promise card last. The card's delay is an inline style because the
-  unlayered `.enter-slide` rule would beat any utility.
+  audience strip, then both hero buttons together, then the promise card
+  last. The photo slides at once, as it always did — the client asked for
+  that kept. The card's delay is an inline style because the unlayered
+  `.enter-slide` rule would beat any utility.
 - The mobile menu closes on a tap anywhere outside the panel and its toggle,
   which covers the logo on the home page, where a route change never fires.
 - The hero kicker puts "Pasig City" on its own line on phones, dash dropped.
-- The footer is an explicit grid: brand across the top and the two lists side
-  by side below `md`, with the contact column floored at zero width so the
-  Facebook handle wraps instead of pushing the page sideways; three columns
-  with a wider brand column from `md`.
+- The footer keeps its auto-fit grid (one column on phones, the client
+  preferred it) but the page links are a wrapped row, two or three lines
+  rather than five deep. Contact links wrap anywhere so the Facebook handle
+  never pushes the page sideways.
 - The quick-message modal has a 60% black scrim, a light ring, a deep shadow
   and a rust top bar. `DialogContent` in `components/ui/dialog.tsx` gained an
   `overlayClassName` prop for the scrim; re-add it if the shadcn CLI ever

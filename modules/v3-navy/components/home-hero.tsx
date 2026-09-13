@@ -110,11 +110,11 @@ export function HomeHero() {
             `priority` photograph below, this page's LCP element. Each child
             still animates on its own terms on top of the slide: the photo
             settles without fading, the quote card slides in from the left.
-            Both are held until the buttons have landed, so the promise card
-            is the last thing on the first screen to move. */}
+            The photo moves at once; only the card is held until the buttons
+            have landed, so it is the last thing on the first screen to move. */}
         <div
           style={{ "--from-x": "56px" } as React.CSSProperties}
-          className="enter-x relative flex min-h-[340px] items-center justify-center motion-safe:transition-transform motion-safe:delay-[900ms] motion-safe:duration-700 motion-safe:ease-[cubic-bezier(.23,1,.32,1)]"
+          className="enter-x relative flex min-h-[340px] items-center justify-center motion-safe:transition-transform motion-safe:duration-700 motion-safe:ease-[cubic-bezier(.23,1,.32,1)]"
         >
           <div className="group absolute inset-x-[6%] inset-y-[8%] overflow-hidden rounded-[28px] bg-white shadow-[0_40px_80px_rgba(0,0,0,.35)] [clip-path:polygon(25%_0,100%_0,100%_75%,75%_100%,0_100%,0_25%)]">
             <Image
