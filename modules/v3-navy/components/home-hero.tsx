@@ -55,9 +55,14 @@ export function HomeHero() {
             style={{ "--i": 0 } as React.CSSProperties}
             className="text-v3-sky enter-rise enter-step mb-[18px] text-[13px] font-semibold tracking-[0.18em] uppercase"
           >
-            {/* Two lines on a phone, city on its own; one line with the dash
-                from `md` up. */}
-            <span>Payroll · Accounting · Tax · HR · Software</span>{" "}
+            {/* On a phone the services take two balanced lines and the city a
+                third; one line with the dash from `md` up. Five services no
+                longer fit one phone line, and unbalanced wrapping orphaned
+                "Software" after a dangling dot. Each dot is glued to the word
+                before it so a line never opens with a separator. */}
+            <span className="max-md:block max-md:text-balance">
+              Payroll&nbsp;· Accounting&nbsp;· Tax&nbsp;· HR&nbsp;· Software
+            </span>{" "}
             <span aria-hidden className="max-md:hidden">
               —
             </span>{" "}
