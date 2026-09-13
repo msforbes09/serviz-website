@@ -95,20 +95,27 @@ describe("contact links", () => {
 });
 
 describe("SiteFooter", () => {
-  it("carries the header's lockup — mark, Orbitron wordmark, descriptor — then the address", () => {
+  it("carries the header's lockup — mark, Orbitron wordmark, descriptor — and nothing else of the name", () => {
     render(<SiteFooter />);
     const footer = screen.getByRole("contentinfo");
 
     const word = within(footer).getByText("SERBIZ");
     expect(word.className).toMatch(/font-orbitron/);
 
-    // Same lockup as the nav bar so the two cannot drift, with the address
-    // on its own line beneath. The name is not repeated in full.
+    // Same lockup as the nav bar so the two cannot drift. The address and
+    // the full legal name are not repeated here.
     expect(footer).toHaveTextContent(
-      new RegExp(
-        `^${siteConfig.name}Resources Income Workers Cooperative${officeAddress}`,
-      ),
+      new RegExp(`^${siteConfig.name}Resources Income Workers Cooperative`),
     );
+    expect(within(footer).queryByText(officeAddress)).toBeNull();
     expect(within(footer).queryByText(siteConfig.legalName)).toBeNull();
+  });
+
+  it("keeps the lockup's lines flush left, so it reads as one image even where the footer centres text", () => {
+    render(<SiteFooter />);
+    const column = within(screen.getByRole("contentinfo")).getByText("SERBIZ")
+      .parentElement!;
+
+    expect(column.className).toMatch(/\btext-left\b/);
   });
 });

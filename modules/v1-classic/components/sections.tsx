@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { DocumentPlaceholder } from "@/components/ui/document-placeholder";
-import { officeAddress, siteConfig } from "@/lib/site-config";
+import { siteConfig } from "@/lib/site-config";
 import {
   certificates,
   heroBadges,
@@ -580,13 +580,10 @@ export function SiteFooter() {
     // invisible. See the focus block in globals.css.
     <footer className="bg-v1-forest text-[#cfe0d4] [--v1-focus-ring:var(--color-v1-paper)]">
       <div className="mx-auto flex max-w-[1200px] flex-wrap justify-between gap-6 px-6 py-12 text-sm leading-5 max-md:justify-center max-md:text-center">
-        {/* The header's lockup, then the address on its own line; on a
-            phone the block centres. */}
-        <div className="flex flex-col gap-3 max-md:items-center">
-          <div className="flex items-center gap-2.5">
-            <BrandLockup tone="paper" />
-          </div>
-          <p>{officeAddress}</p>
+        {/* The header's lockup, nothing more; the address lives in the
+            contact section. On a phone the block centres. */}
+        <div className="flex items-center gap-2.5">
+          <BrandLockup tone="paper" />
         </div>
         <div className="flex flex-wrap items-center gap-x-6 gap-y-4 max-md:justify-center">
           <a

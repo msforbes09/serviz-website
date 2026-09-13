@@ -30,7 +30,10 @@ export function BrandLockup({ tone, priority }: BrandLockupProps) {
         priority={priority}
         className="size-10 shrink-0 object-contain"
       />
-      <span className="flex min-w-0 flex-col leading-[1.05]">
+      {/* `text-left` pinned: the footer centres text on phones, and without
+          it the short wordmark floated over the wider descriptor instead of
+          sitting flush with it as it does in the print logo. */}
+      <span className="flex min-w-0 flex-col text-left leading-[1.05]">
         <span
           className={cn(
             "font-orbitron text-[21px] font-black tracking-[0.06em]",
