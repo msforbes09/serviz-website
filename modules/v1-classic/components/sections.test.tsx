@@ -58,6 +58,25 @@ describe("Hero on a phone", () => {
     expect(heading.parentElement?.className).toMatch(/max-md:text-center/);
     expect(book.className).toMatch(/max-md:w-full/);
   });
+
+  it("drops the city from the badge, so the pill holds one line", () => {
+    render(<Hero />);
+
+    // The full sentence wrapped "2021" onto a line of its own at phone width.
+    // Without the city it fits; if a narrower phone still wraps it, balanced
+    // wrapping splits the sentence evenly instead of orphaning the year.
+    const badge = screen.getByText(/A workers cooperative/).closest("p")!;
+    expect(badge).toHaveTextContent(
+      "A workers cooperative in Pasig City, since 2021",
+    );
+    // The comma goes with the city, so the phone reads "cooperative since".
+    expect(screen.getByText("in Pasig City,").className).toMatch(
+      /max-md:hidden/,
+    );
+    expect(screen.getByText(/A workers cooperative/).className).toMatch(
+      /text-balance/,
+    );
+  });
 });
 
 describe("contact links", () => {
