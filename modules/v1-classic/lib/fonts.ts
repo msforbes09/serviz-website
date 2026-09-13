@@ -1,10 +1,12 @@
-import { Outfit, Poppins } from "next/font/google";
+import { Michroma, Poppins } from "next/font/google";
 
-// One weight, for the name in the nav bar only: the same setting as v3's bar.
-export const outfit = Outfit({
+// One weight (its only one), for the SERBIZ wordmark in the nav bar. Michroma
+// is the closest Google face to the print logo's wide, squared, futuristic
+// sans; Orbitron and Audiowide were the other two shown to the user.
+export const michroma = Michroma({
   subsets: ["latin"],
-  weight: ["800"],
-  variable: "--font-outfit-src",
+  weight: ["400"],
+  variable: "--font-michroma-src",
   display: "swap",
 });
 

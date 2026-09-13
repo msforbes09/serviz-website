@@ -523,6 +523,34 @@ services section alone, so there was nothing to trim.
   text column enters from its own side while the list beside it keeps the
   upward stagger. Both sides sliding reads as busy.
 
+- **v1 enhancements (2026-09-13).** Five asks after the v3 round, same
+  branch.
+
+  - **Hero top space.** Padding was 64px over 96px and, on a tall window, the
+    floor's slack pooled above the badge. Now 32px over 64px with the content
+    still centred, so the slack splits: at 1280×1100 it measures 196px above
+    the badge and 228px below the badge list. At 768 tall the content is
+    taller than the floor, so nothing changes there.
+  - **Centred on phones.** Below `md` the hero text block and every
+    section's eyebrow, heading and intro are centred; cards, lists, the FAQ
+    and the contact rows stay left, since centred body text beside an icon
+    reads badly (the address row showed this and was reverted to left).
+  - **Full-width buttons on phones.** The hero's primary button and the
+    contact form's submit stretch to the column; the phone link centres
+    beneath. The services grid's green card is already full width in the
+    single column.
+  - **Logo closes the menu.** From inside the open overlay the logo used to
+    scroll to the top and leave the menu covering the page. It now closes the
+    menu first and scrolls once the body lock lifts, the way section links
+    already defer. Test red first.
+  - **Wordmark in Michroma.** The print logo is a wide, squared, futuristic
+    sans. Michroma, Orbitron and Audiowide were shown side by side; Michroma
+    is the closest and replaces Outfit for the SERBIZ word only. 19px at its
+    single weight, tracking 0.08em, so the lockup keeps the width the 22px
+    Outfit setting had. Outfit is no longer loaded by v1; v3 still uses it.
+    **Awaiting the user's eye on the real header** — swap back to Orbitron or
+    Audiowide is a one-line change in `modules/v1-classic/lib/fonts.ts`.
+
 - **v3 motion, first screen, services mirror and skeletons (2026-09-13).**
   Four asks from the user after comparing v3 with v1.
 

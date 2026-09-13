@@ -201,6 +201,7 @@
   --font-poppins: var(--font-poppins-src), Poppins, system-ui, sans-serif;
   --font-sora: var(--font-sora-src), Sora, system-ui, sans-serif;
   --font-outfit: var(--font-outfit-src), Outfit, system-ui, sans-serif;
+  --font-michroma: var(--font-michroma-src), Michroma, system-ui, sans-serif;
 }
 
 /* Anchor jumps glide instead of teleporting, so it stays obvious which way the
