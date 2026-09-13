@@ -2,22 +2,51 @@ import Image from "next/image";
 import Link from "next/link";
 import { siteConfig } from "@/lib/site-config";
 import { basePath } from "../lib/content";
+import { AudienceStrip } from "./home-sections";
+
+/**
+ * The first screen: hero plus the "We work with" strip, together at least the
+ * viewport less the header, so the services grid waits below the fold at any
+ * window height. The hero takes the slack and centres its content; the strip
+ * sits pinned at the bottom. `svh` is the small viewport, so a phone with its
+ * browser chrome showing never overshoots. A floor, not a height — on a phone
+ * the two already stack past one screen and simply scroll.
+ */
+export function HomeOpening() {
+  return (
+    <div
+      data-testid="home-opening"
+      className="flex min-h-[calc(100svh-var(--v3-nav-height))] flex-col"
+    >
+      <HomeHero />
+      <AudienceStrip />
+    </div>
+  );
+}
 
 export function HomeHero() {
   return (
-    <section className="bg-v3-navy relative overflow-clip text-white [--v3-focus-ring:var(--color-v3-paper)]">
+    <section className="bg-v3-navy relative flex flex-1 items-center overflow-clip text-white [--v3-focus-ring:var(--color-v3-paper)]">
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <div className="bg-v3-navy-deep absolute top-[-10%] right-[-8%] h-[120%] w-[60%] opacity-90 [clip-path:polygon(28%_0,100%_0,100%_100%,0_100%)]" />
-        <div className="bg-v3-rust absolute top-0 right-0 h-full w-[34%] opacity-95 [clip-path:polygon(70%_0,100%_0,100%_100%,40%_100%)]" />
+        {/* The wedge sweeps in from the right edge. Transform only, and its
+            own transition: `.enter-x` supplies just the start position. */}
+        <div
+          style={{ "--from-x": "40%" } as React.CSSProperties}
+          className="bg-v3-rust enter-x absolute top-0 right-0 h-full w-[34%] opacity-95 [clip-path:polygon(70%_0,100%_0,100%_100%,40%_100%)] motion-safe:transition-transform motion-safe:duration-1000 motion-safe:ease-[cubic-bezier(.23,1,.32,1)]"
+        />
         <div className="absolute top-[22px] left-5 flex gap-2.5">
-          <span className="bg-v3-steel block h-3 w-[34px] -skew-x-[35deg]" />
-          <span className="bg-v3-steel block h-3 w-[34px] -skew-x-[35deg]" />
-          <span className="bg-v3-steel block h-3 w-[34px] -skew-x-[35deg]" />
-          <span className="bg-v3-steel block h-3 w-[34px] -skew-x-[35deg]" />
+          {[0, 1, 2, 3].map((n) => (
+            <span
+              key={n}
+              style={{ "--i": 5 + n } as React.CSSProperties}
+              className="bg-v3-steel enter-rise enter-step block h-3 w-[34px] -skew-x-[35deg]"
+            />
+          ))}
         </div>
       </div>
 
-      <div className="relative mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-10 px-5 pt-18 pb-20">
+      <div className="relative mx-auto grid w-full max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-10 px-5 pt-18 pb-20">
         <div>
           <p
             style={{ "--i": 0 } as React.CSSProperties}
@@ -38,30 +67,34 @@ export function HomeHero() {
             Payroll, accounting, tax, HR and IT — handled for small businesses
             in the Philippines.
           </p>
-          <div
-            style={{ "--i": 3 } as React.CSSProperties}
-            className="enter-rise enter-step flex flex-wrap gap-3"
-          >
+          <div className="flex flex-wrap gap-3">
             <a
               href={`mailto:${siteConfig.contact.email}?subject=Consultation%20request`}
-              className="bg-v3-rust hover:bg-v3-rust-bright rounded-full px-[26px] py-4 text-base font-semibold text-white transition-[transform,background-color] duration-200 ease-[cubic-bezier(.23,1,.32,1)] hover:-translate-y-0.5 active:scale-[.97]"
+              style={{ "--i": 3 } as React.CSSProperties}
+              className="enter-rise enter-step bg-v3-rust hover:bg-v3-rust-bright rounded-full px-[26px] py-4 text-base font-semibold text-white transition-[transform,background-color] duration-200 ease-[cubic-bezier(.23,1,.32,1)] hover:-translate-y-0.5 active:scale-[.97]"
             >
               Book a free consultation
             </a>
             <Link
               href={`${basePath}/services`}
-              className="rounded-full border-[1.5px] border-white/50 px-[26px] py-[15px] text-base font-semibold text-white transition-[background-color,border-color,transform] duration-200 ease-[cubic-bezier(.23,1,.32,1)] hover:border-white hover:bg-white/10 active:scale-[.97]"
+              style={{ "--i": 4 } as React.CSSProperties}
+              className="enter-rise enter-step rounded-full border-[1.5px] border-white/50 px-[26px] py-[15px] text-base font-semibold text-white transition-[background-color,border-color,transform] duration-200 ease-[cubic-bezier(.23,1,.32,1)] hover:border-white hover:bg-white/10 active:scale-[.97]"
             >
               See our services
             </Link>
           </div>
         </div>
 
-        {/* No entrance on this wrapper. It used to carry `enter-rise`, which fades
-            everything inside it — including the `priority` photograph below, which
-            is this page's LCP element. Each child now animates on its own terms:
-            the photo scales without fading, the quote card slides, the logo drifts. */}
-        <div className="relative flex min-h-[340px] items-center justify-center">
+        {/* The composition slides in from the right as one piece, like v1's,
+            transform only. No fade on this wrapper: it used to carry
+            `enter-rise`, which faded everything inside it — including the
+            `priority` photograph below, this page's LCP element. Each child
+            still animates on its own terms on top of the slide: the photo
+            settles without fading, the quote card slides in from the left. */}
+        <div
+          style={{ "--from-x": "56px" } as React.CSSProperties}
+          className="enter-x relative flex min-h-[340px] items-center justify-center motion-safe:transition-transform motion-safe:duration-700 motion-safe:ease-[cubic-bezier(.23,1,.32,1)]"
+        >
           <div className="group absolute inset-x-[6%] inset-y-[8%] overflow-hidden rounded-[28px] bg-white shadow-[0_40px_80px_rgba(0,0,0,.35)] [clip-path:polygon(25%_0,100%_0,100%_75%,75%_100%,0_100%,0_25%)]">
             <Image
               src="/designs/stock/v3-hero-corridor.jpg"

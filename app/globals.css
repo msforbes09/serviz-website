@@ -268,7 +268,9 @@
   [data-reveal-ready] .reveal {
     animation: none;
     opacity: 0;
-    transform: translateY(32px);
+    /* `--from-y` lets a variant ask for a longer rise: v3 sets 44px on its
+       root, v1 keeps the 32px measured off e.gov.ph. */
+    transform: translateY(var(--from-y, 32px));
     transition:
       opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1),
       transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
@@ -288,6 +290,22 @@
      from `--from-x` at the call site, so one class serves either side. */
   [data-reveal-ready] .reveal-x {
     transform: translateX(var(--from-x, 48px));
+  }
+
+  /* Down from above, for a heading or eyebrow that sits over a stepped grid:
+     the title drops as the cards rise, so the two read as meeting rather than
+     as one more upward block. Shorter than the rise on purpose — a heading
+     is one line and 24px is already a visible move. */
+  [data-reveal-ready] .reveal-down {
+    transform: translateY(-24px);
+  }
+
+  /* Growing into place, for a banner or a card that fills its column: a
+     wide block rising 44px reads as the page lurching, where a settle from
+     0.94 reads as the block arriving. Longer, so the scale is felt. */
+  [data-reveal-ready] .reveal-scale {
+    transform: scale(0.94);
+    transition-duration: 0.8s;
   }
 
   /* A photograph settling, transform only: it starts a touch too large and
@@ -333,6 +351,40 @@
     .reveal-x {
       animation-name: reveal-slide;
     }
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal-down {
+      animation-name: reveal-drop;
+    }
+
+    .reveal-scale {
+      animation-name: reveal-grow;
+    }
+  }
+}
+
+@keyframes reveal-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes reveal-grow {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: none;
   }
 }
 
@@ -490,6 +542,22 @@
      dark container holding something focusable restates it. */
   .v3-root {
     --v3-focus-ring: var(--color-v3-navy);
+    /* The header is set to exactly this, border included, and the home
+       opening's floor is the viewport minus it. 24px of padding around a 42px
+       button; below the desktop nav breakpoint the 44px menu toggle is the
+       tallest child. Measured, not derived. */
+    --v3-nav-height: 67px;
+    /* v3's reveals travel further and stagger wider than v1's: a longer rise
+       and a 90ms gap, where v1 keeps 32px and 60ms. Read by `.reveal` and
+       `.reveal-step` through inheritance, so no call site restates them. */
+    --from-y: 44px;
+    --reveal-gap: 90ms;
+  }
+
+  @media (max-width: 1000px) {
+    .v3-root {
+      --v3-nav-height: 69px;
+    }
   }
 
   .v3-root :focus-visible {

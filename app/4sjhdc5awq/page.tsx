@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { RevealController } from "@/components/motion/reveal-controller";
-import { HomeHero } from "@/modules/v3-navy/components/home-hero";
+import { HomeOpening } from "@/modules/v3-navy/components/home-hero";
 import {
-  AudienceStrip,
   HomeCta,
   Permits,
   ServicesGrid,
@@ -18,8 +17,7 @@ export const metadata: Metadata = {
 export default function V3HomePage() {
   return (
     <>
-      <HomeHero />
-      <AudienceStrip />
+      <HomeOpening />
       <ServicesGrid />
       <WhyUs />
       <Permits />

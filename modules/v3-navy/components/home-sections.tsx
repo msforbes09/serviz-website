@@ -7,7 +7,7 @@ import {
   basePath,
   permits,
   reasons,
-  serviceCards,
+  serviceSections,
   toneClass,
 } from "../lib/content";
 
@@ -15,11 +15,18 @@ export function AudienceStrip() {
   return (
     <section className="bg-white">
       <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-center gap-x-8 gap-y-3 px-5 py-7">
-        <h2 className="text-v3-slate text-[13px] font-semibold tracking-[0.14em] uppercase">
+        <h2
+          style={{ "--i": 9 } as React.CSSProperties}
+          className="text-v3-slate enter-rise enter-step text-[13px] font-semibold tracking-[0.14em] uppercase"
+        >
           We work with
         </h2>
         {audiences.map((audience, index) => (
-          <span key={audience} className="flex items-center gap-x-8">
+          <span
+            key={audience}
+            style={{ "--i": 10 + index } as React.CSSProperties}
+            className="enter-rise enter-step flex items-center gap-x-8"
+          >
             <span className="font-outfit text-v3-navy text-lg font-bold">
               {audience}
             </span>
@@ -37,7 +44,7 @@ export function ServicesGrid() {
   return (
     <section className="bg-v3-paper">
       <div className="mx-auto max-w-[1200px] px-5 py-20">
-        <div className="reveal mb-11 flex flex-wrap items-end justify-between gap-5">
+        <div className="reveal reveal-down mb-11 flex flex-wrap items-end justify-between gap-5">
           <div className="max-w-[620px]">
             <p className="text-v3-rust mb-3 text-[13px] font-semibold tracking-[0.18em] uppercase">
               What we do
@@ -55,10 +62,10 @@ export function ServicesGrid() {
         </div>
 
         <ul className="grid list-none grid-cols-[repeat(auto-fit,minmax(270px,1fr))] gap-4">
-          {serviceCards.map((service, index) => (
+          {serviceSections.map((service, index) => (
             <li key={service.num}>
               <Link
-                href={`${basePath}/services`}
+                href={`${basePath}/services#${service.id}`}
                 style={{ "--i": index } as React.CSSProperties}
                 className={`reveal reveal-step border-v3-navy/10 relative flex h-full flex-col gap-3.5 overflow-hidden rounded-[20px] border px-6 pt-[26px] pb-7 transition-[transform,box-shadow] duration-[220ms] ease-[cubic-bezier(.23,1,.32,1)] hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(15,42,68,.12)] ${toneClass[service.tone]}`}
               >
@@ -137,7 +144,7 @@ export function Permits() {
   return (
     <section className="bg-white">
       <div className="mx-auto max-w-[1200px] px-5 py-20">
-        <div className="reveal mx-auto mb-10 max-w-[640px] text-center">
+        <div className="reveal reveal-down mx-auto mb-10 max-w-[640px] text-center">
           <p className="text-v3-rust mb-3 text-[13px] font-semibold tracking-[0.18em] uppercase">
             Registered &amp; compliant
           </p>
@@ -189,7 +196,7 @@ export function HomeCta() {
   return (
     <section className="bg-v3-paper">
       <div className="mx-auto max-w-[1200px] px-5 pt-10 pb-22">
-        <div className="reveal bg-v3-rust relative grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] items-center gap-7 overflow-hidden rounded-[28px] p-[clamp(36px,5vw,64px)] text-white">
+        <div className="reveal reveal-scale bg-v3-rust relative grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] items-center gap-7 overflow-hidden rounded-[28px] p-[clamp(36px,5vw,64px)] text-white">
           <div
             aria-hidden
             className="bg-v3-navy absolute top-[-30%] right-[-5%] h-[160%] w-[45%] opacity-95 [clip-path:polygon(35%_0,100%_0,100%_100%,0_100%)]"

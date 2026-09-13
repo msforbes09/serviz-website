@@ -63,22 +63,30 @@ export const audiences = [
   "Cooperatives",
 ] as const;
 
-export type ServiceGroup = {
-  num: string;
-  kicker: string;
-  title: string;
-  image: string;
-  alt: string;
-  items: { n: string; title: string; body: string }[];
+/**
+ * The services page walks the home grid: one section per card, same number,
+ * same title, same order. `details` adds what each section says below its
+ * heading — a detail list for the two the flyers itemise, a one-line body
+ * for the rest — and `serviceSections` zips the two, so the page cannot drift
+ * from the grid. `content.test.ts` pins the mirror. The tax line used to sit
+ * as item four of Accounting; it is card 03 on the home page, so it gets its
+ * own section here.
+ */
+export type ServiceSection = ServiceCard & {
+  /** Anchor the matching home card links to. */
+  id: string;
+  body?: string;
+  image?: { src: string; alt: string };
+  items?: { n: string; title: string; body: string }[];
 };
 
-export const serviceGroups: ServiceGroup[] = [
-  {
-    num: "1",
-    kicker: "Payroll & Benefits",
-    title: "Payroll and Benefits",
-    image: "/designs/stock/v3-payroll-planner.jpg",
-    alt: "A blank monthly planner on a desk beside a laptop",
+const details: Record<string, Omit<ServiceSection, keyof ServiceCard>> = {
+  "01": {
+    id: "payroll",
+    image: {
+      src: "/designs/stock/v3-payroll-planner.jpg",
+      alt: "A blank monthly planner on a desk beside a laptop",
+    },
     items: [
       { n: "1", title: "Timekeeping & Attendance", body: "Accurate hours, monitored and reported." },
       { n: "2", title: "Payroll Processing", body: "Correct pay, released on time — every cut-off." },
@@ -86,27 +94,29 @@ export const serviceGroups: ServiceGroup[] = [
       { n: "4", title: "Employee Web Portal", body: "Payslips, leaves and records online." },
     ],
   },
-  {
-    num: "2",
-    kicker: "Accounting",
-    title: "Accounting",
-    image: "/designs/stock/accounting-reports.jpg",
-    alt: "Financial charts on a laptop screen",
+  "02": {
+    id: "accounting",
+    image: {
+      src: "/designs/stock/accounting-reports.jpg",
+      alt: "Financial charts on a laptop screen",
+    },
     items: [
       { n: "1", title: "Bookkeeping", body: "Books of accounts and daily transactions." },
       { n: "2", title: "Accounts Receivable", body: "Billed and collected on time." },
       { n: "3", title: "Accounts Payable", body: "Classified, computed and reported." },
-      { n: "4", title: "Tax Compliance", body: "Every BIR report filed and paid on schedule." },
     ],
   },
-];
+  "03": { id: "tax", body: "Every BIR report filed and paid on schedule." },
+  "04": { id: "hr", body: "Recruitment papers, records and benefits admin." },
+  "05": { id: "registration", body: "Paperwork and agency liaison, done right." },
+  "06": { id: "it", body: "Systems, cloud and data security for small teams." },
+  "07": { id: "packages", body: "Mix and match to fit your business." },
+};
 
-export const otherServices: { title: string; body: string; tone: Tone; isNew?: boolean }[] = [
-  { title: "HR Support", body: "Recruitment papers, records and benefits admin.", tone: "light" },
-  { title: "Business Registration", body: "Paperwork and agency liaison, done right.", tone: "light" },
-  { title: "IT Consultant", body: "Systems, cloud and data security for small teams.", tone: "dark", isNew: true },
-  { title: "Customized Packages", body: "Mix and match to fit your business.", tone: "mint" },
-];
+export const serviceSections: ServiceSection[] = serviceCards.map((card) => ({
+  ...card,
+  ...details[card.num],
+}));
 
 /**
  * `image: null` means the scan has not been supplied yet and the card renders a

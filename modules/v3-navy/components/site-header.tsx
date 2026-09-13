@@ -8,8 +8,8 @@ import { HeaderNav } from "./header-nav";
 // slides a pill behind it, is a client leaf.
 export function SiteHeader() {
   return (
-    <header className="border-v3-navy/10 sticky top-0 z-50 border-b bg-[color-mix(in_srgb,var(--color-v3-paper)_92%,transparent)] backdrop-blur-[10px]">
-      <div className="mx-auto flex max-w-[1200px] items-center justify-between gap-4 px-5 py-3">
+    <header className="border-v3-navy/10 sticky top-0 z-50 h-(--v3-nav-height) border-b bg-[color-mix(in_srgb,var(--color-v3-paper)_92%,transparent)] backdrop-blur-[10px]">
+      <div className="mx-auto flex max-w-[1200px] h-full items-center justify-between gap-4 px-5">
         <Link href={basePath} className="flex min-w-0 items-center gap-2.5">
           <Image
             src="/designs/v3/logo-mark.png"

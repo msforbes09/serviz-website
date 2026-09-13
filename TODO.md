@@ -523,6 +523,46 @@ services section alone, so there was nothing to trim.
   text column enters from its own side while the list beside it keeps the
   upward stagger. Both sides sliding reads as busy.
 
+- **v3 motion, first screen, services mirror and skeletons (2026-09-13).**
+  Four asks from the user after comparing v3 with v1.
+
+  - **Entrance, emphasised with variety.** The hero now cascades nine steps
+    (eyebrow, headline, lede, each button on its own, four steel dashes) and
+    the audience strip follows as steps 9–13, so the first screen arrives in
+    reading order. The photo composition slides in from the right like v1's
+    on top of its settle, and the rust wedge sweeps in from the edge —
+    transform only, so the LCP photograph is never faded. The four page
+    banners step kicker, title and lede instead of fading as one block, and
+    their rust corner sweeps in the same way. Two scroll-reveal variants were
+    added next to `.reveal` and `.reveal-x`: `.reveal-down` (a heading drops
+    24px as the cards under it rise) and `.reveal-scale` (a banner or card
+    settles from 0.94). Both carry the scroll-timeline and observer paths and
+    sit inside the same guards. `.v3-root` sets `--from-y: 44px` and
+    `--reveal-gap: 90ms`, so every v3 reveal travels further and staggers
+    wider than v1's 32px and 60ms without any call site restating it.
+  - **Full first screen.** `HomeOpening` wraps the hero and the "We work with"
+    strip in a column with a floor of `100svh` less `--v3-nav-height`, hero
+    content centred, strip pinned at the bottom. The header is now set to the
+    token — 67px on desktop, 69px below the nav breakpoint where the menu
+    toggle is the tallest child — and `home-hero.test.tsx` pins both sides to
+    it. Measured: opening bottom lands exactly on the viewport at 1024×768.
+  - **Services page mirrors the home grid.** Seven anchored sections in the
+    home order and numbering, derived from `serviceCards` through one
+    `serviceSections` list so the two cannot drift (`content.test.ts`). Tax
+    Compliance is card 03, so it is now section 03 and no longer item four of
+    Accounting. Every home card links to its section, which lands 16px under
+    the sticky header. No copy was written: the four body-only sections reuse
+    the old "other services" lines. `serviceGroups` and `otherServices` are
+    gone.
+  - **Loading skeletons.** v3's 60vh navy slab, which the user saw on load and
+    read as a broken page, is now shaped like the hero on the same height
+    floor: rust wedge, faint bars where the kicker, headline, lede and
+    buttons sit, a photo block, and a white band where the strip goes. v1's
+    got the same treatment on its paper ground. `loading.test.tsx` covers
+    both. Note the slab is long-lived only in `next dev`, where a route
+    compiles on demand while the fallback shows; in production the pages are
+    prerendered and it appears only during a client-side navigation.
+
 - **v3 mobile pass (2026-09-13).** Checked all five pages at 375px, the home
   page from 320 to 768, and the open menu, after the client sent a phone
   capture with a navy bar under the header and the page wider than the header.
