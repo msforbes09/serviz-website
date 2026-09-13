@@ -65,6 +65,22 @@ describe("HomeHero entrance", () => {
     // The dash only makes sense on the single desktop line.
     expect(screen.getByText("—").className).toMatch(/max-md:hidden/);
   });
+
+  it("balances the services list across its own lines on phones", () => {
+    render(<HomeOpening />);
+
+    // Five services no longer fit one phone line. Balanced wrapping splits
+    // the list evenly instead of orphaning the last word after a dangling dot,
+    // and the span goes block so the balance is measured on that line alone.
+    const services = screen.getByText(/Payroll · Accounting · Tax · HR · Software/);
+    expect(services.className).toMatch(/max-md:block/);
+    expect(services.className).toMatch(/max-md:text-balance/);
+    // Each dot is glued to the word before it, so a line can end with a
+    // separator but never start with one.
+    expect(services.textContent).toBe(
+      "Payroll\u00a0· Accounting\u00a0· Tax\u00a0· HR\u00a0· Software",
+    );
+  });
 });
 
 describe("v3 on a phone", () => {
