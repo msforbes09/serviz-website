@@ -33,3 +33,8 @@ page content and the visual theme are pending design. Brand source material is
 in `references/Images/`.
 
 Architecture and conventions for this repo are documented in `CLAUDE.md`.
+
+## Docs
+
+- `docs/website-proposal.md` — pitch and pricing for presenting the site to the
+  client, with a PDF twin next to it. Internal reference, not client copy.
