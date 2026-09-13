@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { RevealController } from "@/components/motion/reveal-controller";
 import { SiteFooter } from "@/modules/v3-navy/components/site-footer";
 import { SiteHeader } from "@/modules/v3-navy/components/site-header";
 import { previewSocialMetadata } from "@/modules/previews/lib/preview-metadata";
@@ -41,6 +42,11 @@ export default function V3Layout({ children }: LayoutProps<"/4sjhdc5awq">) {
         {children}
       </main>
       <SiteFooter />
+      {/* Renders nothing and wraps nothing, so every section stays a Server
+          Component. It re-arms on each pathname change, which is what a
+          five-page layout needs: the page beneath it is swapped while this
+          stays mounted. */}
+      <RevealController />
     </div>
   );
 }

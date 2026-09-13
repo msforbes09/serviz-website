@@ -1,12 +1,18 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
 /**
  * Drives the scroll entrance for `.reveal` elements.
  *
  * Mounted once per layout. It renders nothing and wraps nothing, so every
- * section it animates stays a Server Component.
+ * section it animates stays a Server Component. It re-runs on every pathname
+ * change: a multi-page layout keeps it mounted while the page beneath it is
+ * swapped, and the new page's elements arrive after the first run. Without
+ * this they would sit hidden with nothing watching them. The cleanup disarms
+ * and the next run sweeps and re-arms, all inside one effect flush, so the
+ * page never paints the in-between state.
  *
  * The whole design is one rule: **nothing is hidden until this is running and
  * able to show it again.** The stylesheet contains no resting `opacity: 0` for
@@ -26,6 +32,8 @@ import { useEffect } from "react";
  * entrance. An observer works everywhere.
  */
 export function RevealController() {
+  const pathname = usePathname();
+
   useEffect(() => {
     // Both are reasons to leave the page exactly as the server sent it.
     if (typeof IntersectionObserver === "undefined") return;
@@ -107,7 +115,7 @@ export function RevealController() {
       // anything not yet revealed at opacity 0.
       delete document.documentElement.dataset.revealReady;
     };
-  }, []);
+  }, [pathname]);
 
   return null;
 }

@@ -27,8 +27,8 @@ export default function V1Layout({ children }: LayoutProps<"/8sfz8dn5ts">) {
       </SectionLink>
       {children}
       {/* Renders nothing and wraps nothing, so every section stays a Server
-          Component. Mounted on v1 only for now; v2 and v3 still use the
-          CSS-only scroll timeline. */}
+          Component. v1 and v3 mount it; v2 still uses the CSS-only scroll
+          timeline. */}
       <RevealController />
     </div>
   );

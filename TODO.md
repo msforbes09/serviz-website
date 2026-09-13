@@ -523,6 +523,23 @@ services section alone, so there was nothing to trim.
   text column enters from its own side while the list beside it keeps the
   upward stagger. Both sides sliding reads as busy.
 
+- **v3's scroll reveals are JavaScript-driven (2026-09-13).** The same
+  `RevealController` v1 mounts, mounted once in v3's layout, so every v3
+  section stays a Server Component and the CSS-only path is stood down in
+  favour of the observer, which runs in browsers without scroll timelines.
+  v3's `.reveal`, `.reveal-x` and `.reveal-step` call sites needed no change:
+  the JavaScript rules read the same classes and the same `--i` / `--from-x`.
+
+  **The one adaptation is for a multi-page layout.** v1 is a single page, so
+  the controller's effect ran once and was done. v3 keeps the layout mounted
+  while the page beneath it is swapped on a client-side navigation, so the new
+  page's elements arrived after the effect had run and would have sat hidden
+  with nothing watching them. The effect now depends on `usePathname()`: the
+  cleanup disarms, the next run sweeps and re-arms, all inside one effect
+  flush, so the in-between state never paints. Tested, and measured across
+  home → about → services in the browser: zero in-view elements left hidden
+  on any of them.
+
 - **v1's scroll reveals are now JavaScript-driven.** `animation-timeline:
   view()` is unsupported in older Safari and Firefox, where the CSS-only reveal
   does nothing at all — correct, but it means many visitors saw no entrance,
@@ -544,8 +561,9 @@ services section alone, so there was nothing to trim.
   viewport regardless of the observer, and runs before arming, on
   `visibilitychange`, and once on a 1.2s timeout.
 
-  **v2 and v3 still use the CSS-only path.** Move them over the same way when
-  their turn comes; the controller is variant-neutral and only needs mounting.
+  **v2 still uses the CSS-only path.** Move it over the same way when its turn
+  comes; the controller is variant-neutral and only needs mounting. v3 was
+  moved on 2026-09-13, see the v3 pass above.
 
 
 - **v1 entrance variants, and the tagline moved onto a clock.** Four changes,

@@ -2,6 +2,11 @@ import { render } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { RevealController } from "./reveal-controller";
 
+// A layout with several pages under it keeps the controller mounted across
+// client-side navigations, so it has to re-arm on the pathname.
+const nav = vi.hoisted(() => ({ pathname: "/" }));
+vi.mock("next/navigation", () => ({ usePathname: () => nav.pathname }));
+
 type Cb = (entries: { target: Element; isIntersecting: boolean }[]) => void;
 
 function stubObserver() {
@@ -37,6 +42,7 @@ function mountTargets(count: number) {
 }
 
 afterEach(() => {
+  nav.pathname = "/";
   vi.unstubAllGlobals();
   document.body.innerHTML = "";
   delete document.documentElement.dataset.revealReady;
@@ -149,5 +155,27 @@ describe("RevealController", () => {
     view.unmount();
 
     expect(document.documentElement.dataset.revealReady).toBeUndefined();
+  });
+
+  it("re-arms after a client-side navigation, so the next page's content is observed", () => {
+    // v3 is five pages under one layout. The controller mounts once and stays
+    // mounted while the page beneath it changes, so the new page's `.reveal`
+    // elements arrive after the effect ran. Left alone they would sit hidden
+    // with nothing watching them — exactly the state this component exists
+    // to make impossible.
+    const { observed } = stubObserver();
+    stubMatchMedia(false);
+    mountTargets(1);
+    const view = render(<RevealController />);
+
+    document.body.innerHTML = "";
+    const next = mountTargets(1);
+    const el = next.firstElementChild as HTMLElement;
+    vi.spyOn(el, "getBoundingClientRect").mockReturnValue({ top: 5000, bottom: 5400 } as DOMRect);
+    nav.pathname = "/about";
+    view.rerender(<RevealController />);
+
+    expect(observed).toContain(el);
+    expect(document.documentElement.dataset.revealReady).toBe("");
   });
 });
