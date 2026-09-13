@@ -22,19 +22,34 @@ describe("HomeOpening", () => {
 });
 
 describe("HomeHero entrance", () => {
-  it("steps the two buttons separately rather than as one block", () => {
+  const step = (el: HTMLElement | null) => Number(el?.style.getPropertyValue("--i"));
+
+  it("enters the audience strip before the buttons, and the promise card last", () => {
     render(<HomeOpening />);
 
+    const strip = screen.getByRole("heading", { name: /we work with/i })
+      .parentElement as HTMLElement;
     // The consultation button opens the quick-message dialog, so it is a
     // button, and its entrance lives on a wrapper: the `.enter-*` transition
     // shorthand would otherwise replace the button's own hover transition.
     const book = screen.getByRole("button", { name: /book a free consultation/i })
       .parentElement as HTMLElement;
     const see = screen.getByRole("link", { name: /see our services/i });
+    const card = screen.getByText(/our promise/i).parentElement as HTMLElement;
 
-    expect(book.className).toMatch(/enter-step/);
-    expect(see.className).toMatch(/enter-step/);
-    expect(book.style.getPropertyValue("--i")).not.toBe(see.style.getPropertyValue("--i"));
+    expect(step(strip)).toBeLessThan(step(book));
+    expect(step(see)).toBe(step(book));
+    // The card's delay is inline, in seconds; the buttons' step is 100ms each.
+    expect(parseFloat(card.style.transitionDelay)).toBeGreaterThan(step(book) * 0.1);
+  });
+
+  it("puts the city on its own line on phones", () => {
+    render(<HomeOpening />);
+
+    const city = screen.getByText("Pasig City");
+    expect(city.className).toMatch(/max-md:block/);
+    // The dash only makes sense on the single desktop line.
+    expect(screen.getByText("—").className).toMatch(/max-md:hidden/);
   });
 });
 

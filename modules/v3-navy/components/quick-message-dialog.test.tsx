@@ -55,4 +55,19 @@ describe("QuickMessageDialog", () => {
     const subject = new URL(window.location.href).searchParams.get("subject");
     expect(subject).toBe("Quote request from Ana Reyes");
   });
+
+  it("darkens the page behind it, so the navy card stands off a navy hero", async () => {
+    const user = userEvent.setup();
+    render(
+      <QuickMessageDialog subject="Quote request" className="cta">
+        Get a quote
+      </QuickMessageDialog>,
+    );
+
+    await user.click(screen.getByRole("button", { name: "Get a quote" }));
+    await screen.findByRole("dialog");
+
+    const overlay = document.querySelector('[data-slot="dialog-overlay"]');
+    expect(overlay?.className).toMatch(/bg-black\/60/);
+  });
 });

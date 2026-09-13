@@ -34,6 +34,7 @@ export function HeaderNav() {
   const menuOpen = openedOn === pathname;
   const setMenuOpen = (open: boolean) => setOpenedOn(open ? pathname : null);
   const toggleRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
 
   /**
    * The panel is a dropdown under the header, not a full-screen overlay, so it
@@ -50,8 +51,26 @@ export function HeaderNav() {
       toggleRef.current?.focus();
     }
 
+    // A tap anywhere outside the panel and its toggle dismisses it — the
+    // logo, the hero behind, anything. Route changes already close it, but
+    // the logo on the home page goes to the same route, so the panel stayed.
+    function handlePointerDown(event: PointerEvent) {
+      const target = event.target as Node;
+      if (
+        panelRef.current?.contains(target) ||
+        toggleRef.current?.contains(target)
+      ) {
+        return;
+      }
+      setOpenedOn(null);
+    }
+
     document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
+    document.addEventListener("pointerdown", handlePointerDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("pointerdown", handlePointerDown);
+    };
   }, [menuOpen]);
 
   // Apple-style spring rather than a duration curve. The bounce is what reads
@@ -122,6 +141,7 @@ export function HeaderNav() {
           inside it, where the clip hides them. */}
       <div
         id="v3-mobile-menu"
+        ref={panelRef}
         inert={!menuOpen}
         className={`bg-v3-paper absolute inset-x-0 top-full grid transition-[grid-template-rows] duration-200 ease-[cubic-bezier(.23,1,.32,1)] min-[1001px]:hidden ${menuOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
       >

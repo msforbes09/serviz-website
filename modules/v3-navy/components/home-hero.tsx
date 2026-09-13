@@ -42,7 +42,7 @@ export function HomeHero() {
           {[0, 1, 2, 3].map((n) => (
             <span
               key={n}
-              style={{ "--i": 5 + n } as React.CSSProperties}
+              style={{ "--i": 3 + n } as React.CSSProperties}
               className="bg-v3-steel enter-rise enter-step block h-3 w-[34px] -skew-x-[35deg]"
             />
           ))}
@@ -55,7 +55,13 @@ export function HomeHero() {
             style={{ "--i": 0 } as React.CSSProperties}
             className="text-v3-sky enter-rise enter-step mb-[18px] text-[13px] font-semibold tracking-[0.18em] uppercase"
           >
-            Payroll · Accounting · Tax · HR · IT — Pasig City
+            {/* Two lines on a phone, city on its own; one line with the dash
+                from `md` up. */}
+            <span>Payroll · Accounting · Tax · HR · IT</span>{" "}
+            <span aria-hidden className="max-md:hidden">
+              —
+            </span>{" "}
+            <span className="max-md:block">Pasig City</span>
           </p>
           <h1
             style={{ "--i": 1 } as React.CSSProperties}
@@ -70,12 +76,15 @@ export function HomeHero() {
             Payroll, accounting, tax, HR and IT — handled for small businesses
             in the Philippines.
           </p>
+          {/* The calls to action are the last beat of the text column: after
+              the kicker, headline and lede (0–2), the steel bars (3–6) and
+              the audience strip below the hero (7). */}
           <div className="flex flex-wrap gap-3 max-md:flex-col max-md:items-stretch">
             {/* The entrance wrapper is a span around the trigger rather than
                 on it: the `.enter-*` transition shorthand would replace the
                 button's own hover transition. */}
             <span
-              style={{ "--i": 3 } as React.CSSProperties}
+              style={{ "--i": 8 } as React.CSSProperties}
               className="enter-rise enter-step flex max-md:w-full"
             >
               <QuickMessageDialog
@@ -87,7 +96,7 @@ export function HomeHero() {
             </span>
             <Link
               href={`${basePath}/services`}
-              style={{ "--i": 4 } as React.CSSProperties}
+              style={{ "--i": 8 } as React.CSSProperties}
               className="enter-rise enter-step rounded-full border-[1.5px] border-white/50 px-[26px] py-[15px] text-center text-base font-semibold text-white max-md:w-full transition-[background-color,border-color,transform] duration-200 ease-[cubic-bezier(.23,1,.32,1)] hover:border-white hover:bg-white/10 active:scale-[.97]"
             >
               See our services
@@ -100,10 +109,12 @@ export function HomeHero() {
             `enter-rise`, which faded everything inside it — including the
             `priority` photograph below, this page's LCP element. Each child
             still animates on its own terms on top of the slide: the photo
-            settles without fading, the quote card slides in from the left. */}
+            settles without fading, the quote card slides in from the left.
+            Both are held until the buttons have landed, so the promise card
+            is the last thing on the first screen to move. */}
         <div
           style={{ "--from-x": "56px" } as React.CSSProperties}
-          className="enter-x relative flex min-h-[340px] items-center justify-center motion-safe:transition-transform motion-safe:duration-700 motion-safe:ease-[cubic-bezier(.23,1,.32,1)]"
+          className="enter-x relative flex min-h-[340px] items-center justify-center motion-safe:transition-transform motion-safe:delay-[900ms] motion-safe:duration-700 motion-safe:ease-[cubic-bezier(.23,1,.32,1)]"
         >
           <div className="group absolute inset-x-[6%] inset-y-[8%] overflow-hidden rounded-[28px] bg-white shadow-[0_40px_80px_rgba(0,0,0,.35)] [clip-path:polygon(25%_0,100%_0,100%_75%,75%_100%,0_100%,0_25%)]">
             <Image
@@ -116,7 +127,13 @@ export function HomeHero() {
             />
           </div>
 
-          <div className="bg-v3-navy absolute bottom-[2%] left-0 max-w-[280px] rounded-2xl border border-white/10 px-5 py-4 text-white shadow-[0_18px_40px_rgba(0,0,0,.35)] enter-slide">
+          {/* Inline delay rather than `.enter-slide`'s 0.6s: it has to follow
+              the buttons at step 8 (0.8s), and an inline style is the only
+              thing that outranks the unlayered `.enter-*` rules. */}
+          <div
+            style={{ transitionDelay: "1.15s" }}
+            className="bg-v3-navy absolute bottom-[2%] left-0 max-w-[280px] rounded-2xl border border-white/10 px-5 py-4 text-white shadow-[0_18px_40px_rgba(0,0,0,.35)] enter-slide"
+          >
             <p className="text-v3-sky mb-1.5 text-[11px] font-semibold tracking-[0.14em] uppercase">
               Our promise
             </p>

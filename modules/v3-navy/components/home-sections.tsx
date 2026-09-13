@@ -13,15 +13,17 @@ import {
 import { QuickMessageDialog } from "./quick-message-dialog";
 
 /**
- * Enters as one piece after the hero's stagger, not item by item: the strip is
- * a single statement, and staggering four short words read as a list being
- * typed out. On phones it stacks, label above and one audience per line.
+ * Enters as one piece, not item by item: the strip is a single statement, and
+ * staggering four short words read as a list being typed out. Step 7 puts it
+ * after the hero's text and bars and before the hero's buttons, which are the
+ * first screen's last beat. On phones it stacks, label above and one audience
+ * per line.
  */
 export function AudienceStrip() {
   return (
     <section className="bg-white">
       <div
-        style={{ "--i": 9 } as React.CSSProperties}
+        style={{ "--i": 7 } as React.CSSProperties}
         className="enter-rise enter-step mx-auto flex max-w-[1200px] flex-col items-center gap-x-10 gap-y-3 px-5 py-7 text-center md:flex-row md:flex-wrap md:justify-center"
       >
         <h2 className="text-v3-slate text-[13px] font-semibold tracking-[0.14em] uppercase">

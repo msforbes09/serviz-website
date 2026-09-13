@@ -40,12 +40,17 @@ export function QuickMessageDialog({
       <DialogTrigger className={className} onClick={onClick}>
         {children}
       </DialogTrigger>
-      {/* The form is its own navy card, so the popup carries no surface of its
-          own — no ring, no padding — and the close button sits on the card. */}
+      {/* The form is its own navy card, so the popup carries no padding of its
+          own and the close button sits on the card. What it does carry is
+          presence: a navy card over a blurred navy hero receded into it, so
+          the scrim is dark, the card has a light ring and a deep shadow, and a
+          rust bar runs along its top. */}
       <DialogContent
         showCloseButton={false}
-        className="v3-root font-poppins bg-transparent p-0 text-white ring-0 sm:max-w-md"
+        overlayClassName="bg-black/60"
+        className="v3-root font-poppins overflow-hidden rounded-3xl bg-transparent p-0 text-white shadow-[0_30px_80px_rgba(0,0,0,.55)] ring-1 ring-white/15 sm:max-w-md"
       >
+        <span aria-hidden className="bg-v3-rust absolute inset-x-0 top-0 z-10 h-1.5" />
         <DialogClose
           aria-label="Close"
           className="hover:bg-white/15 absolute top-4 right-4 z-10 grid size-9 cursor-pointer place-items-center rounded-full text-white/80 transition-colors hover:text-white [--v3-focus-ring:var(--color-v3-paper)]"

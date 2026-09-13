@@ -18,8 +18,14 @@ export function SiteFooter() {
         aria-hidden
         className="absolute inset-x-0 top-0 h-1.5 bg-[linear-gradient(90deg,var(--color-v3-rust)_0_40%,var(--color-v3-sky)_40%_55%,var(--color-v3-navy)_55%_100%)]"
       />
-      <div className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-9 px-5 pt-14 pb-8">
-        <div>
+      {/* An explicit grid rather than auto-fit: below `md` the brand spans the
+          row and the two short lists sit side by side beneath it, where
+          auto-fit collapsed everything into one long column. The page list
+          takes only its own width and the contact column the rest, floored
+          at zero so a long address cannot push the grid past the viewport.
+          From `md` the brand column gets more room than the lists. */}
+      <div className="mx-auto grid max-w-[1200px] grid-cols-[auto_minmax(0,1fr)] gap-9 px-5 pt-14 pb-8 md:grid-cols-[1.4fr_1fr_1fr]">
+        <div className="max-md:col-span-2">
           {/* Mark plus text, not the wordmark PNG: that file spelled out an
               "(SRI)" the cooperative no longer uses, and type can be set in
               the same face as the header. */}
@@ -67,7 +73,7 @@ export function SiteFooter() {
           <h2 className="text-v3-sky mb-3.5 text-xs font-semibold tracking-[0.14em] uppercase">
             Contact
           </h2>
-          <div className="grid gap-2 text-[15px] leading-normal">
+          <div className="grid gap-2 text-[15px] leading-normal [overflow-wrap:anywhere]">
             <a
               href={`mailto:${siteConfig.contact.email}`}
               className="hover:text-v3-rust text-white"

@@ -56,4 +56,16 @@ describe("v3 mobile menu", () => {
 
     expect(toggle()).toHaveFocus();
   });
+
+  it("closes on a tap outside the panel, so the logo or the page behind dismisses it", async () => {
+    const user = userEvent.setup();
+    render(<HeaderNav />);
+
+    await user.click(toggle());
+    expect(toggle()).toHaveAttribute("aria-expanded", "true");
+
+    await user.click(document.body);
+
+    expect(toggle()).toHaveAttribute("aria-expanded", "false");
+  });
 });
