@@ -10,31 +10,30 @@ import {
   serviceSections,
   toneClass,
 } from "../lib/content";
+import { QuickMessageDialog } from "./quick-message-dialog";
 
+/**
+ * Enters as one piece after the hero's stagger, not item by item: the strip is
+ * a single statement, and staggering four short words read as a list being
+ * typed out. On phones it stacks, label above and one audience per line.
+ */
 export function AudienceStrip() {
   return (
     <section className="bg-white">
-      <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-center gap-x-8 gap-y-3 px-5 py-7">
-        <h2
-          style={{ "--i": 9 } as React.CSSProperties}
-          className="text-v3-slate enter-rise enter-step text-[13px] font-semibold tracking-[0.14em] uppercase"
-        >
+      <div
+        style={{ "--i": 9 } as React.CSSProperties}
+        className="enter-rise enter-step mx-auto flex max-w-[1200px] flex-col items-center gap-x-10 gap-y-3 px-5 py-7 text-center md:flex-row md:flex-wrap md:justify-center"
+      >
+        <h2 className="text-v3-slate text-[13px] font-semibold tracking-[0.14em] uppercase">
           We work with
         </h2>
-        {audiences.map((audience, index) => (
-          <span
-            key={audience}
-            style={{ "--i": 10 + index } as React.CSSProperties}
-            className="enter-rise enter-step flex items-center gap-x-8"
-          >
-            <span className="font-outfit text-v3-navy text-lg font-bold">
+        <ul className="flex list-none flex-col items-center gap-x-10 gap-y-2 md:flex-row md:flex-wrap md:justify-center">
+          {audiences.map((audience) => (
+            <li key={audience} className="font-outfit text-v3-navy text-lg font-bold">
               {audience}
-            </span>
-            {index < audiences.length - 1 && (
-              <span aria-hidden className="bg-v3-rust size-1.5 rounded-full" />
-            )}
-          </span>
-        ))}
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );
@@ -97,8 +96,10 @@ export function ServicesGrid() {
 export function WhyUs() {
   return (
     <section className="bg-v3-navy relative overflow-clip text-white [--v3-focus-ring:var(--color-v3-paper)]">
+      {/* The rust wedge is desktop-only: in the single phone column it sat
+          under the reasons list and read as a stain across the cards. */}
       <div aria-hidden className="pointer-events-none absolute inset-0">
-        <div className="bg-v3-rust absolute bottom-[-20%] left-[-6%] h-[70%] w-[45%] opacity-90 [clip-path:polygon(0_30%,60%_0,100%_100%,0_100%)]" />
+        <div className="bg-v3-rust absolute bottom-[-20%] left-[-6%] hidden h-[70%] w-[45%] opacity-90 [clip-path:polygon(0_30%,60%_0,100%_100%,0_100%)] md:block" />
         <div className="bg-v3-navy-deep absolute bottom-[-10%] left-[-6%] h-[50%] w-[40%] [clip-path:polygon(0_40%,55%_0,100%_100%,0_100%)]" />
       </div>
 
@@ -210,12 +211,12 @@ export function HomeCta() {
             </p>
           </div>
           <div className="relative flex flex-col items-start gap-3 max-md:items-stretch max-md:text-center">
-            <a
-              href={`mailto:${siteConfig.contact.email}`}
-              className="text-v3-navy rounded-full bg-white px-[26px] py-4 text-base font-bold transition-transform duration-200 hover:-translate-y-0.5 max-md:w-full"
+            <QuickMessageDialog
+              subject="Consultation request"
+              className="text-v3-navy cursor-pointer rounded-full border-0 bg-white px-[26px] py-4 text-base font-bold transition-transform duration-200 hover:-translate-y-0.5 max-md:w-full"
             >
-              {siteConfig.contact.email}
-            </a>
+              Send us a message
+            </QuickMessageDialog>
             <a
               href={`tel:${siteConfig.contact.mobileTel}`}
               className="rounded-full border-[1.5px] border-white/50 bg-white/15 px-[26px] py-[15px] text-base font-semibold text-white transition-colors hover:bg-white/30 max-md:w-full"

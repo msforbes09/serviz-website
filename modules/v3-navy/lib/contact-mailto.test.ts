@@ -35,3 +35,13 @@ describe("buildContactMailto", () => {
     expect(new URL(url).searchParams.get("body")).toContain("a&b?c=d");
   });
 });
+
+describe("buildContactMailto with a preset subject", () => {
+  it("uses the trigger's subject and still names the sender", () => {
+    const subject = new URL(
+      buildContactMailto({ ...base, subject: "Consultation request" }),
+    ).searchParams.get("subject");
+
+    expect(subject).toBe("Consultation request from Jose Cruz");
+  });
+});

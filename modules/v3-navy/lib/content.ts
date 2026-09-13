@@ -106,8 +106,36 @@ const details: Record<string, Omit<ServiceSection, keyof ServiceCard>> = {
       { n: "3", title: "Accounts Payable", body: "Classified, computed and reported." },
     ],
   },
-  "03": { id: "tax", body: "Every BIR report filed and paid on schedule." },
-  "04": { id: "hr", body: "Recruitment papers, records and benefits admin." },
+  // The tax and HR items are split from the flyers' one-paragraph descriptions
+  // rather than transcribed from a list: the print material does not itemise
+  // either. Queued for sign-off in `TODO.md`.
+  "03": {
+    id: "tax",
+    body: "Every BIR report filed and paid on schedule.",
+    image: {
+      src: "/designs/stock/news-paperwork.jpg",
+      alt: "Hands signing a printed form with a pen",
+    },
+    items: [
+      { n: "1", title: "Reportorial Requirements", body: "Accurate reports, prepared for every filing period." },
+      { n: "2", title: "BIR Periodic Filings", body: "Monthly, quarterly and annual returns filed on time." },
+      { n: "3", title: "Payment on Schedule", body: "Taxes due are paid before the deadline, not after." },
+      { n: "4", title: "Online or Onsite", body: "Filed through eBIR or at the revenue office, whichever your case needs." },
+    ],
+  },
+  "04": {
+    id: "hr",
+    body: "Recruitment papers, records and benefits admin.",
+    image: {
+      src: "/designs/stock/hero-workspace.jpg",
+      alt: "Two empty desks with monitors beside a tall plant",
+    },
+    items: [
+      { n: "1", title: "Recruitment Documentation", body: "Offer letters, contracts and onboarding papers prepared." },
+      { n: "2", title: "Employee Records", body: "201 files kept complete and current." },
+      { n: "3", title: "Benefits Administration", body: "Enrolment, updates and claims handled for your staff." },
+    ],
+  },
   "05": { id: "registration", body: "Paperwork and agency liaison, done right." },
   "06": { id: "it", body: "Systems, cloud and data security for small teams." },
   "07": { id: "packages", body: "Mix and match to fit your business." },
@@ -117,6 +145,16 @@ export const serviceSections: ServiceSection[] = serviceCards.map((card) => ({
   ...card,
   ...details[card.num],
 }));
+
+/**
+ * The services page is two tiers. The first four services — the ones the
+ * flyers describe at length — get a full section each with an image and a
+ * list. The last three sit in the compact "Other services offered" grid, the
+ * way the print material presents them. Both are slices of `serviceSections`,
+ * so the order and anchors stay the home grid's.
+ */
+export const featuredServices = serviceSections.filter((s) => s.items);
+export const otherServices = serviceSections.filter((s) => !s.items);
 
 /**
  * `image: null` means the scan has not been supplied yet and the card renders a

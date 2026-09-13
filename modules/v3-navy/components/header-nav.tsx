@@ -4,8 +4,8 @@ import { motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { siteConfig } from "@/lib/site-config";
 import { navItems } from "../lib/content";
+import { QuickMessageDialog } from "./quick-message-dialog";
 
 /**
  * Desktop navigation with a pill that moves to whichever route is active, plus
@@ -92,12 +92,12 @@ export function HeaderNav() {
             </Link>
           );
         })}
-        <a
-          href={`mailto:${siteConfig.contact.email}`}
-          className="bg-v3-rust hover:bg-v3-rust-bright ml-2.5 rounded-full px-5 py-[11px] text-sm font-semibold whitespace-nowrap text-white transition-[transform,background-color] duration-200 ease-[cubic-bezier(.23,1,.32,1)] hover:-translate-y-px active:scale-[.97]"
+        <QuickMessageDialog
+          subject="Quote request"
+          className="bg-v3-rust hover:bg-v3-rust-bright ml-2.5 cursor-pointer rounded-full border-0 px-5 py-[11px] text-sm font-semibold whitespace-nowrap text-white transition-[transform,background-color] duration-200 ease-[cubic-bezier(.23,1,.32,1)] hover:-translate-y-px active:scale-[.97]"
         >
           Get a quote
-        </a>
+        </QuickMessageDialog>
       </nav>
 
       <button
@@ -140,13 +140,13 @@ export function HeaderNav() {
                 </Link>
               );
             })}
-            <a
-              href={`mailto:${siteConfig.contact.email}`}
+            <QuickMessageDialog
+              subject="Quote request"
               onClick={() => setMenuOpen(false)}
-              className="bg-v3-rust mt-1.5 rounded-xl px-4 py-3.5 text-center text-base font-semibold text-white"
+              className="bg-v3-rust mt-1.5 cursor-pointer rounded-xl border-0 px-4 py-3.5 text-center text-base font-semibold text-white"
             >
               Get a quote
-            </a>
+            </QuickMessageDialog>
           </div>
         </div>
       </div>

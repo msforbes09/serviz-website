@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { RevealController } from "@/components/motion/reveal-controller";
 import { PageHero } from "@/modules/v3-navy/components/page-hero";
 import {
+  OtherServices,
   ServiceSections,
   ServicesCta,
 } from "@/modules/v3-navy/components/services-sections";
@@ -20,6 +21,7 @@ export default function V3ServicesPage() {
         lede="Pick one service or combine several into a package."
       />
       <ServiceSections />
+      <OtherServices />
       <ServicesCta />
       {/* A child of the page, not the layout, so its effect runs after this
           page has hydrated. See reveal-mount.test.ts. */}

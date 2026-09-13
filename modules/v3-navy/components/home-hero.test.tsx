@@ -25,7 +25,11 @@ describe("HomeHero entrance", () => {
   it("steps the two buttons separately rather than as one block", () => {
     render(<HomeOpening />);
 
-    const book = screen.getByRole("link", { name: /book a free consultation/i });
+    // The consultation button opens the quick-message dialog, so it is a
+    // button, and its entrance lives on a wrapper: the `.enter-*` transition
+    // shorthand would otherwise replace the button's own hover transition.
+    const book = screen.getByRole("button", { name: /book a free consultation/i })
+      .parentElement as HTMLElement;
     const see = screen.getByRole("link", { name: /see our services/i });
 
     expect(book.className).toMatch(/enter-step/);
@@ -37,9 +41,10 @@ describe("HomeHero entrance", () => {
 describe("v3 on a phone", () => {
   it("stretches the hero buttons to the full width and centres the text", () => {
     render(<HomeOpening />);
-    const book = screen.getByRole("link", { name: /book a free consultation/i });
+    const book = screen.getByRole("button", { name: /book a free consultation/i });
     const see = screen.getByRole("link", { name: /see our services/i });
-    expect(book.className).toMatch(/max-md:w-full/);
+    expect(book.className).toMatch(/w-full/);
+    expect(book.parentElement?.className).toMatch(/max-md:w-full/);
     expect(see.className).toMatch(/max-md:w-full/);
     expect(screen.getByRole("heading", { level: 1 }).parentElement?.className).toMatch(/max-md:text-center/);
   });

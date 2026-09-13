@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { serviceCards, serviceSections } from "./content";
+import { featuredServices, otherServices, serviceCards, serviceSections } from "./content";
 
 /**
  * The services page is a walk through the home page's grid: the same seven
@@ -32,5 +32,31 @@ describe("serviceSections", () => {
     expect(serviceSections[1].items?.length).toBe(3);
     expect(serviceSections[0].image?.src).toBeTruthy();
     expect(serviceSections[1].image?.src).toBeTruthy();
+  });
+
+  it("expounds tax and HR with an image and three to four items, like payroll and accounting", () => {
+    for (const num of ["03", "04"]) {
+      const section = serviceSections.find((s) => s.num === num);
+      expect(section?.image?.src).toBeTruthy();
+      expect(section?.items?.length).toBeGreaterThanOrEqual(3);
+      expect(section?.items?.length).toBeLessThanOrEqual(4);
+    }
+  });
+});
+
+/**
+ * The services page has two tiers: the first four services get a full section
+ * each, the remaining three sit in the compact "Other services offered" grid.
+ * Together they cover every home card exactly once.
+ */
+describe("featuredServices and otherServices", () => {
+  it("split the seven cards into four expounded sections and three compact cards", () => {
+    expect(featuredServices.map((s) => s.num)).toEqual(["01", "02", "03", "04"]);
+    expect(otherServices.map((s) => s.num)).toEqual(["05", "06", "07"]);
+  });
+
+  it("give every featured section a list, and every other card a one-line body", () => {
+    for (const s of featuredServices) expect(s.items?.length).toBeGreaterThan(0);
+    for (const s of otherServices) expect(s.body).toBeTruthy();
   });
 });

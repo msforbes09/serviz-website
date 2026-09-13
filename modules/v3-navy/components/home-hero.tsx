@@ -3,6 +3,7 @@ import Link from "next/link";
 import { siteConfig } from "@/lib/site-config";
 import { basePath } from "../lib/content";
 import { AudienceStrip } from "./home-sections";
+import { QuickMessageDialog } from "./quick-message-dialog";
 
 /**
  * The first screen: hero plus the "We work with" strip, together at least the
@@ -30,10 +31,12 @@ export function HomeHero() {
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <div className="bg-v3-navy-deep absolute top-[-10%] right-[-8%] h-[120%] w-[60%] opacity-90 [clip-path:polygon(28%_0,100%_0,100%_100%,0_100%)]" />
         {/* The wedge sweeps in from the right edge. Transform only, and its
-            own transition: `.enter-x` supplies just the start position. */}
+            own transition: `.enter-x` supplies just the start position.
+            Desktop only: in the single phone column it ran under the buttons
+            and the photograph. */}
         <div
           style={{ "--from-x": "40%" } as React.CSSProperties}
-          className="bg-v3-rust enter-x absolute top-0 right-0 h-full w-[34%] opacity-95 [clip-path:polygon(70%_0,100%_0,100%_100%,40%_100%)] motion-safe:transition-transform motion-safe:duration-1000 motion-safe:ease-[cubic-bezier(.23,1,.32,1)]"
+          className="bg-v3-rust enter-x absolute top-0 right-0 hidden h-full w-[34%] opacity-95 [clip-path:polygon(70%_0,100%_0,100%_100%,40%_100%)] motion-safe:transition-transform motion-safe:duration-1000 motion-safe:ease-[cubic-bezier(.23,1,.32,1)] md:block"
         />
         <div className="absolute top-[22px] left-5 flex gap-2.5">
           {[0, 1, 2, 3].map((n) => (
@@ -68,13 +71,20 @@ export function HomeHero() {
             in the Philippines.
           </p>
           <div className="flex flex-wrap gap-3 max-md:flex-col max-md:items-stretch">
-            <a
-              href={`mailto:${siteConfig.contact.email}?subject=Consultation%20request`}
+            {/* The entrance wrapper is a span around the trigger rather than
+                on it: the `.enter-*` transition shorthand would replace the
+                button's own hover transition. */}
+            <span
               style={{ "--i": 3 } as React.CSSProperties}
-              className="enter-rise enter-step bg-v3-rust hover:bg-v3-rust-bright rounded-full px-[26px] py-4 text-center text-base font-semibold text-white max-md:w-full transition-[transform,background-color] duration-200 ease-[cubic-bezier(.23,1,.32,1)] hover:-translate-y-0.5 active:scale-[.97]"
+              className="enter-rise enter-step flex max-md:w-full"
             >
-              Book a free consultation
-            </a>
+              <QuickMessageDialog
+                subject="Consultation request"
+                className="bg-v3-rust hover:bg-v3-rust-bright w-full cursor-pointer rounded-full border-0 px-[26px] py-4 text-center text-base font-semibold text-white transition-[transform,background-color] duration-200 ease-[cubic-bezier(.23,1,.32,1)] hover:-translate-y-0.5 active:scale-[.97]"
+              >
+                Book a free consultation
+              </QuickMessageDialog>
+            </span>
             <Link
               href={`${basePath}/services`}
               style={{ "--i": 4 } as React.CSSProperties}

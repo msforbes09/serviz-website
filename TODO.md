@@ -119,6 +119,13 @@ each one approved before any of this is public.
   signatures. Confirm the client wants them public.
 - **Stock photography.** Every photograph is an Unsplash placeholder showing
   people who do not work at SERBIZ. Replace with real photos before launch.
+- **Tax Compliance and HR Support item lists (v3, 2026-09-13).** The flyers
+  describe each in one paragraph; the services page now shows them as
+  numbered items like Payroll and Accounting, so the paragraphs were split
+  into four tax items and three HR items in `modules/v3-navy/lib/content.ts`.
+  The wording is derived, not transcribed — "Reportorial Requirements",
+  "Online or Onsite", "Employee Records (201 files)" and the rest — and the
+  cooperative should confirm each line describes something it actually does.
 - **v1 skip link removed (2026-09-13)** at the client's request, after seeing
   it appear on keyboard focus. Keyboard visitors now tab through the whole nav
   to reach content, which an accessibility audit will flag. Restore it if that
@@ -142,7 +149,9 @@ done and are kept here with what shipped; two remain.
   copy, built entirely from `site-config`, and its test fails if an internal
   variant name ever leaks back in.
 
-  **v2 and v3 still have none.** Copy the same three files across when their
+  **v3 has its card** (`app/4sjhdc5awq/opengraph-image.tsx`, navy with a rust
+  edge, plus `openGraph` and `twitter` on its layout), checked rendering on
+  2026-09-13. **v2 still has none.** Copy the same three files across when its
   turn comes; `preview-metadata.ts` is already shared and variant-neutral, so
   only the `opengraph-image.tsx` palette changes. The preview pages stay
   `noindex` either way — Open Graph governs unfurling, not indexing.
@@ -395,6 +404,56 @@ minimal fix deliberately did not take.
   — and those are the only concrete, differentiating content on the page. The
   titles alone are generic. A second accordion would also have swapped a
   repetitive grid for a repetitive stack.
+
+## The v3 enhancement round (2026-09-13)
+
+Seven items agreed with the client, all shipped on `feat/v3-pass`:
+
+- The "We work with" strip enters as one piece after the hero, stacks one
+  audience per line on phones, and has no dot separators at any width.
+- The rust wedges in the hero and the Why SERBIZ band are desktop-only. On a
+  phone they ran under the buttons and the reasons list.
+- Every "email us" call to action — hero, header (desktop and mobile menu),
+  services "Ask us", home banner — opens a quick-message modal
+  (`modules/v3-navy/components/quick-message-dialog.tsx`, on the shadcn
+  `dialog` primitive) instead of a bare `mailto:`. The modal reuses the contact
+  page's form and presets the subject to the button pressed: "Consultation
+  request", "Quote request", "Service inquiry". Links that display the address
+  itself (contact rows, footer) stay plain `mailto:`. Still a mail-client
+  hand-off: the Queued contact-form entry below is unchanged.
+- Tax and HR get a full section each, image plus items (sign-off entry above).
+- Services 05–07 return to the compact "Other services offered" grid. Each card
+  carries its anchor, so the home grid's links still land.
+- The v3 Open Graph card was verified rather than added — it already existed.
+- A reload starts at the top so the entrance animations play:
+  `lib/start-reload-at-top.ts`, injected from the root layout with
+  `next/script` `beforeInteractive`. **Do not move it into a segment layout as
+  a bare `<script>`**: that made the router fall back to a full document load
+  on every client navigation into v3, which lost the hash landing on the
+  services page. Site-wide by construction, so v1 and v2 get it too.
+
+Suggested in the same round and **deferred**, in rough order of value:
+
+- **A call option in the hero.** The hero offers email only; Filipino SMEs
+  often prefer a call or Viber. A "Call us" secondary button, and a Viber link
+  if the cooperative has one, likely converts better than a second email path.
+- **Real permit scans.** The permits flyer in `references/Images/` shows the
+  BIR certificate, the CDA certificate and the Mayor's permit. Cropping those
+  would replace the three "scan to follow" placeholders. Low resolution, but
+  real.
+- **The news page carries invented content.** Reduce it to the Facebook link
+  and a "follow us for filing reminders" note until real posts arrive.
+- **Registration badges in the hero**, as v1 has: CDA, BIR, Pasig permit. All
+  three are flyer facts.
+- **A "how it works" strip** after the services grid. Copy needs the
+  cooperative.
+- **Phone number in the mobile menu** as a tap-to-call line.
+- **Soften the unverified promises** ("reply within one working day", "first
+  consultation is free") or mark them visibly until confirmed.
+- **A jump list on the services page**, one pill per service; the anchors
+  already exist.
+- **Contrast check** on rust-button labels once the palette is final, plus
+  focus rings inside the new modal.
 
 ## The v3 pass (2026-09-12)
 
