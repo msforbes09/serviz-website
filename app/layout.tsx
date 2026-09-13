@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
@@ -30,8 +31,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
+    // `data-scroll-behavior`: the document scrolls smoothly (globals.css), which
+    // suits a fragment jump within a page and not a route change, where the
+    // router's jump to the top would animate over the new page's entrance.
+    // Next 16 no longer overrides `scroll-behavior` during navigation unless
+    // told to here; with it, route changes land instantly and anchors glide.
     <html
       lang="en"
+      data-scroll-behavior="smooth"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
@@ -43,6 +50,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </Script>
         {children}
         <Toaster />
+        {/* Vercel Web Analytics: visitors and page views, no cookies. Only
+            reports on Vercel deployments; a no-op in local development. */}
+        <Analytics />
       </body>
     </html>
   );

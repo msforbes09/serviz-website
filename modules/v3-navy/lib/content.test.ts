@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { featuredServices, otherServices, serviceCards, serviceSections } from "./content";
+import {
+  featuredServices,
+  otherServices,
+  serviceCards,
+  serviceSections,
+} from "./content";
 
 /**
  * The services page is a walk through the home page's grid: the same seven
@@ -23,7 +28,9 @@ describe("serviceSections", () => {
   it("keeps tax compliance as its own section rather than an accounting item", () => {
     const accounting = serviceSections.find((s) => s.num === "02");
     const tax = serviceSections.find((s) => s.num === "03");
-    expect(accounting?.items?.map((i) => i.title)).not.toContain("Tax Compliance");
+    expect(accounting?.items?.map((i) => i.title)).not.toContain(
+      "Tax Compliance",
+    );
     expect(tax?.body).toMatch(/BIR/);
   });
 
@@ -51,12 +58,34 @@ describe("serviceSections", () => {
  */
 describe("featuredServices and otherServices", () => {
   it("split the seven cards into four expounded sections and three compact cards", () => {
-    expect(featuredServices.map((s) => s.num)).toEqual(["01", "02", "03", "04"]);
+    expect(featuredServices.map((s) => s.num)).toEqual([
+      "01",
+      "02",
+      "03",
+      "04",
+    ]);
     expect(otherServices.map((s) => s.num)).toEqual(["05", "06", "07"]);
   });
 
   it("give every featured section a list, and every other card a one-line body", () => {
-    for (const s of featuredServices) expect(s.items?.length).toBeGreaterThan(0);
+    for (const s of featuredServices)
+      expect(s.items?.length).toBeGreaterThan(0);
     for (const s of otherServices) expect(s.body).toBeTruthy();
+  });
+});
+
+describe("web and software development", () => {
+  // Card 06 was "IT Consultant", invented by the design. It is now the
+  // service the user proposes to deliver with the cooperative as its
+  // development partner; the copy names the partnership but not the
+  // partner, pending the cooperative's agreement (see TODO.md).
+  it("replaces the IT consultant card and credits a development partner", () => {
+    const card = serviceCards.find((c) => c.num === "06");
+    expect(card?.title).toBe("Web & Software Development");
+    expect(card?.isNew).toBe(true);
+
+    const section = serviceSections.find((s) => s.num === "06");
+    expect(section?.id).toBe("web");
+    expect(section?.body).toMatch(/development partner/);
   });
 });

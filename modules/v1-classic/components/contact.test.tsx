@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
+import { officeAddress, officeMapsUrl } from "@/lib/site-config";
 import { Contact } from "./contact";
 
 const submit = () =>
@@ -87,5 +88,17 @@ describe("v1 consultation form", () => {
     await user.type(screen.getByLabelText(/your name/i), "A");
 
     expect(screen.getByLabelText(/your name/i)).not.toHaveAttribute("aria-invalid", "true");
+  });
+});
+
+describe("v1 contact details", () => {
+  it("links the office address to Google Maps in a new tab", () => {
+    render(<Contact />);
+
+    const link = screen.getByRole("link", { name: new RegExp(officeAddress) });
+
+    expect(link).toHaveAttribute("href", officeMapsUrl);
+    expect(link).toHaveAttribute("target", "_blank");
+    expect(link).toHaveAttribute("rel", "noopener");
   });
 });

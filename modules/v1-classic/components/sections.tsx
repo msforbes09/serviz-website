@@ -6,6 +6,7 @@ import {
   Phone,
 } from "lucide-react";
 import Image from "next/image";
+import { HeroTilt } from "@/components/motion/hero-tilt";
 import { DocumentPlaceholder } from "@/components/ui/document-placeholder";
 import { siteConfig } from "@/lib/site-config";
 import {
@@ -122,39 +123,44 @@ export function Hero() {
       </div>
 
       {/* A `group`, so the photo and the caption card respond to a hover
-          anywhere over the composition rather than each on its own. Everything
+          anywhere over the composition rather than each on its own. The
+          orange block behind them holds still; it used to shift with them
+          and the user asked for that to go. Everything
           that moves is behind `motion-safe:`, and Tailwind already wraps every
           `hover:` utility in a hover media query, so a touch device gets the
           still image with no extra gating. Nothing is hidden behind the hover,
           so there is no keyboard equivalent to owe. */}
-      <div
+      <HeroTilt
         style={{ "--from-x": "56px" } as React.CSSProperties}
-        className="enter-x group relative motion-safe:transition-transform motion-safe:duration-700 motion-safe:ease-[cubic-bezier(.23,1,.32,1)]"
+        className="enter-x v1-parallax group relative motion-safe:transition-transform motion-safe:duration-700 motion-safe:ease-[cubic-bezier(.23,1,.32,1)]"
       >
         <div
           aria-hidden
-          className="bg-v1-orange absolute -right-3 -bottom-3 left-6 top-6 rounded-3xl motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:translate-x-1 motion-safe:group-hover:translate-y-1"
+          className="bg-v1-orange absolute -right-3 -bottom-3 left-6 top-6 rounded-3xl"
         />
         {/* The clip lives here and not on the parent: the parent also holds the
             orange block and a caption that deliberately overhangs the bottom
             edge, and both would be cut off. */}
-        <div className="border-v1-line relative block aspect-[5/4] w-full overflow-hidden rounded-3xl border">
+        {/* The frame follows the pointer a few pixels (`.v1-parallax-photo`)
+            and the photo inside zooms slowly as the hero scrolls out
+            (`.v1-hero-zoom`); the caption card below moves the other way. */}
+        <div className="border-v1-line v1-parallax-photo relative block aspect-[5/4] w-full overflow-hidden rounded-3xl border">
           <Image
             src="/designs/stock/hero-workspace.jpg"
             alt="A quiet office room with a long white desk, monitors, a tall plant and a wooden ceiling"
             width={940}
             height={752}
             priority
-            className="block size-full object-cover motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-[1.04]"
+            className="v1-hero-zoom block size-full object-cover motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-[1.04]"
           />
         </div>
-        <p className="bg-v1-forest absolute bottom-[-4px] left-4 max-w-[260px] rounded-xl p-4 text-sm leading-5 text-white motion-safe:transition-[transform,box-shadow] motion-safe:duration-300 motion-safe:group-hover:-translate-y-1 motion-safe:group-hover:shadow-[0_18px_40px_rgba(11,74,36,.32)]">
+        <p className="v1-parallax-card bg-v1-forest absolute bottom-[-4px] left-4 max-w-[260px] rounded-xl p-4 text-sm leading-5 text-white motion-safe:transition-[transform,box-shadow] motion-safe:duration-300 motion-safe:group-hover:-translate-y-1 motion-safe:group-hover:shadow-[0_18px_40px_rgba(11,74,36,.32)]">
           <strong className="block text-xl leading-7">
             7 services, one team
           </strong>
-          Payroll to IT consulting, priced for small teams.
+          Payroll to web development, priced for small teams.
         </p>
-      </div>
+      </HeroTilt>
     </section>
   );
 }

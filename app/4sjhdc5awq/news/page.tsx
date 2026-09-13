@@ -8,7 +8,7 @@ import {
 import { PageHero } from "@/modules/v3-navy/components/page-hero";
 
 export const metadata: Metadata = {
-  title: "v3 — News & Events",
+  title: "News & Events",
   description: "Layout preview: the v3 news and events page.",
 };
 

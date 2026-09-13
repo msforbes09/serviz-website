@@ -146,7 +146,7 @@ export function HeaderNav() {
         className={`bg-v3-paper absolute inset-x-0 top-full grid transition-[grid-template-rows] duration-200 ease-[cubic-bezier(.23,1,.32,1)] min-[1001px]:hidden ${menuOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
       >
         <div className="min-h-0 overflow-hidden">
-          <div className="border-v3-navy/10 flex flex-col gap-1 border-t px-4 pb-4">
+          <div className="border-v3-navy/10 flex flex-col gap-1 border-t px-4 py-4">
             {navItems.map((item) => {
               const active = pathname === item.href;
               return (

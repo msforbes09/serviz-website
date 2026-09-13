@@ -3,7 +3,7 @@
 import { Mail, MapPin, Phone } from "lucide-react";
 import { useId, useRef, useState } from "react";
 import { flushSync } from "react-dom";
-import { officeAddress, siteConfig } from "@/lib/site-config";
+import { officeAddress, officeMapsUrl, siteConfig } from "@/lib/site-config";
 import {
   buildConsultationMailto,
   type ConsultationField,
@@ -128,9 +128,18 @@ export function Contact() {
               {siteConfig.contact.email}
             </a>
           </li>
-          <li className="flex items-start gap-3">
-            <MapPin aria-hidden className="text-v1-forest size-6 shrink-0" />
-            <span>{officeAddress}</span>
+          <li>
+            {/* Opens Google Maps in a new tab, so the form the visitor may be
+                halfway through is still there when they come back. */}
+            <a
+              href={officeMapsUrl}
+              target="_blank"
+              rel="noopener"
+              className="text-v1-ink flex items-start gap-3"
+            >
+              <MapPin aria-hidden className="text-v1-forest size-6 shrink-0" />
+              <span>{officeAddress}</span>
+            </a>
           </li>
         </ul>
       </div>

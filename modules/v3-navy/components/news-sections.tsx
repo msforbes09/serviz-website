@@ -45,7 +45,7 @@ export function UpcomingEvents() {
   return (
     <div className="sticky top-24 grid gap-5">
       <h2 className="reveal reveal-down font-outfit text-v3-navy m-0 text-[28px] font-extrabold max-md:text-center">
-        Upcoming
+        Ongoing
       </h2>
       {events.map((event, index) => (
         <div

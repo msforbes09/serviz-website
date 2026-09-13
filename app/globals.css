@@ -148,7 +148,9 @@
      FAQ mint. Heading text needs 3:1, and every heading now closes with an
      accent phrase in this colour. Clears it on all three v1 backgrounds while
      staying the same orange to the eye. Still short of the 4.5:1 that the
-     eyebrow labels and the white-on-orange button label need; see TODO.md. */
+     eyebrow labels and the white-on-orange button label need: #b64f14 would
+     clear it and was tried on 2026-09-13, and the user preferred this one.
+     See TODO.md. */
   --color-v1-orange: #e36419;
   --color-v1-ink: #14211a;
   --color-v1-muted: #5c6b60;
@@ -191,7 +193,6 @@
   --color-v3-paper: #f7f9fb;
   --color-v3-on-dark: #d6e2ee;
   --color-v3-on-dark-muted: #b5c6d6;
-
 }
 
 /* Variant typefaces, loaded per layout with next/font. `inline` matters: the
@@ -214,6 +215,43 @@
 @media (prefers-reduced-motion: no-preference) {
   html {
     scroll-behavior: smooth;
+  }
+}
+
+/* v1 hero. Hover: a flat parallax, no tilt — the photo frame follows the
+   pointer a few pixels and the caption card goes the other way, so the two
+   read as separate layers over the orange block, which holds still.
+   `--tilt-x`/`--tilt-y` come from `HeroTilt`, -1..1. `translate` rather than
+   `transform`: both elements already carry a Tailwind transform for their
+   hover, and the two properties compose. Fine pointers only, never under
+   reduced motion. */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .v1-parallax-photo {
+    translate: calc(var(--tilt-x, 0) * -8px) calc(var(--tilt-y, 0) * -6px);
+    transition: translate 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .v1-parallax-card {
+    translate: calc(var(--tilt-x, 0) * 6px) calc(var(--tilt-y, 0) * 5px);
+    transition: translate 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+}
+
+/* Scroll: the photo zooms in slowly as the hero leaves, on `scale` so it
+   composes with the hover transform. Scroll-driven, no JavaScript. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .v1-hero-zoom {
+      animation: v1-hero-zoom linear both;
+      animation-timeline: view();
+      animation-range: exit 0% exit 100%;
+    }
+  }
+}
+
+@keyframes v1-hero-zoom {
+  to {
+    scale: 1.08;
   }
 }
 
@@ -431,7 +469,11 @@
 
 @keyframes v1-nav-lift {
   to {
-    background-color: color-mix(in srgb, var(--color-v1-paper) 98%, transparent);
+    background-color: color-mix(
+      in srgb,
+      var(--color-v1-paper) 98%,
+      transparent
+    );
     box-shadow: 0 10px 30px -12px rgb(11 74 36 / 0.22);
   }
 }

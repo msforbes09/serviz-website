@@ -247,3 +247,29 @@ describe("v1 mobile menu", () => {
     expect(document.body).not.toHaveStyle({ overflow: "hidden" });
   });
 });
+
+describe("v1 mobile menu structure", () => {
+  // The overlay used to be five identical text lines, with the call to action
+  // wrapping onto two. The section links are a list; the call to action sits
+  // apart from it, still a real fragment link to the form.
+  it("keeps the section links in a list and the call to action outside it", async () => {
+    const user = userEvent.setup();
+    render(<SiteNav />);
+
+    await user.click(toggle());
+
+    const menu = document.getElementById("v1-menu") as HTMLElement;
+    const list = within(menu).getByRole("list");
+    const listLinks = within(list).getAllByRole("link");
+    expect(listLinks.map((link) => link.textContent)).toEqual([
+      "Services",
+      "Why SERBIZ",
+      "News and events",
+      "FAQ",
+    ]);
+
+    const cta = within(menu).getByRole("link", { name: "Book a consultation" });
+    expect(cta).toHaveAttribute("href", "#contact");
+    expect(list.contains(cta)).toBe(false);
+  });
+});
