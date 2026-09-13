@@ -1,6 +1,6 @@
 # SERBIZ Website
 
-Marketing site for **SERBIZ Resources Income Workers Cooperative (SRI)**, a payroll
+Marketing site for **SERBIZ Resources Income Workers Cooperative**, a payroll
 and accounting outsourcing cooperative serving sole proprietors, one person
 corporations and SMEs in the Philippines.
 

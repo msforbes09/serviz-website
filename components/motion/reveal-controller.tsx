@@ -5,8 +5,15 @@ import { useEffect } from "react";
 /**
  * Drives the scroll entrance for `.reveal` elements.
  *
- * Mounted once per layout. It renders nothing and wraps nothing, so every
- * section it animates stays a Server Component.
+ * Mounted once per page, as the page's own child — never in a layout. It
+ * renders nothing and wraps nothing, so every section it animates stays a
+ * Server Component. Page-level for two reasons: a layout hydrates before a
+ * nested page's segment does, so a controller there swept the server HTML
+ * ahead of hydration and React then reported an attribute it never rendered;
+ * and on a client-side navigation the old page's instance unmounts and
+ * disarms while the new page's mounts and re-arms, all inside one commit, so
+ * the in-between state never paints. `reveal-mount.test.ts` guards the
+ * placement.
  *
  * The whole design is one rule: **nothing is hidden until this is running and
  * able to show it again.** The stylesheet contains no resting `opacity: 0` for

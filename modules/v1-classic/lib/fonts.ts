@@ -1,10 +1,13 @@
-import { Outfit, Poppins } from "next/font/google";
+import { Orbitron, Poppins } from "next/font/google";
 
-// One weight, for the name in the nav bar only: the same setting as v3's bar.
-export const outfit = Outfit({
+// One weight, for the SERBIZ wordmark only. The print logo is a heavy, wide,
+// squared sans; Orbitron's black weight is the nearest Google face with real
+// mass. Michroma matched the shape better but ships one light weight and read
+// thin beside the mark.
+export const orbitron = Orbitron({
   subsets: ["latin"],
-  weight: ["800"],
-  variable: "--font-outfit-src",
+  weight: ["900"],
+  variable: "--font-orbitron-src",
   display: "swap",
 });
 

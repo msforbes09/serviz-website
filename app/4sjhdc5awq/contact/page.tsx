@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { RevealController } from "@/components/motion/reveal-controller";
 import {
   ContactAside,
   ContactDetails,
@@ -12,10 +13,27 @@ export const metadata: Metadata = {
 export default function V3ContactPage() {
   return (
     <section className="bg-white">
-      <div className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-start gap-12 px-5 pt-18 pb-22 enter-rise">
-        <ContactDetails />
-        <ContactAside />
+      {/* The two columns arrive in sequence rather than as one block. This page
+          is short enough to sit above the fold, so a scroll reveal would never
+          fire here — a load entrance is the right tool, the same one the heroes
+          use. */}
+      <div className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-start gap-12 px-5 pt-18 pb-22">
+        <div
+          style={{ "--i": 0 } as React.CSSProperties}
+          className="enter-rise enter-step"
+        >
+          <ContactDetails />
+        </div>
+        <div
+          style={{ "--i": 1 } as React.CSSProperties}
+          className="enter-rise enter-step"
+        >
+          <ContactAside />
+        </div>
       </div>
+      {/* A child of the page, not the layout, so its effect runs after this
+          page has hydrated. See reveal-mount.test.ts. */}
+      <RevealController />
     </section>
   );
 }

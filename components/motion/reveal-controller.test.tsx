@@ -18,11 +18,18 @@ function stubObserver() {
     disconnect() {}
   }
   vi.stubGlobal("IntersectionObserver", IO);
-  return { observed, fire: (el: Element) => cb([{ target: el, isIntersecting: true }]) };
+  return {
+    observed,
+    fire: (el: Element) => cb([{ target: el, isIntersecting: true }]),
+  };
 }
 
 function stubMatchMedia(reduced: boolean) {
-  vi.stubGlobal("matchMedia", () => ({ matches: reduced, addEventListener() {}, removeEventListener() {} }));
+  vi.stubGlobal("matchMedia", () => ({
+    matches: reduced,
+    addEventListener() {},
+    removeEventListener() {},
+  }));
 }
 
 function mountTargets(count: number) {
@@ -105,13 +112,19 @@ describe("RevealController", () => {
     const host = mountTargets(1);
     const el = host.firstElementChild as HTMLElement;
     // Off screen at mount, so the initial pass skips it...
-    vi.spyOn(el, "getBoundingClientRect").mockReturnValue({ top: 5000, bottom: 5400 } as DOMRect);
+    vi.spyOn(el, "getBoundingClientRect").mockReturnValue({
+      top: 5000,
+      bottom: 5400,
+    } as DOMRect);
 
     render(<RevealController />);
     expect(el.dataset.revealed).toBeUndefined();
 
     // ...then it scrolls into view and the observer stays silent.
-    vi.mocked(el.getBoundingClientRect).mockReturnValue({ top: 100, bottom: 400 } as DOMRect);
+    vi.mocked(el.getBoundingClientRect).mockReturnValue({
+      top: 100,
+      bottom: 400,
+    } as DOMRect);
     document.dispatchEvent(new Event("visibilitychange"));
 
     expect(el.dataset.revealed).toBe("");
@@ -126,11 +139,17 @@ describe("RevealController", () => {
     stubMatchMedia(false);
     const host = mountTargets(1);
     const el = host.firstElementChild as HTMLElement;
-    vi.spyOn(el, "getBoundingClientRect").mockReturnValue({ top: 5000, bottom: 5400 } as DOMRect);
+    vi.spyOn(el, "getBoundingClientRect").mockReturnValue({
+      top: 5000,
+      bottom: 5400,
+    } as DOMRect);
     render(<RevealController />);
     expect(el.dataset.revealed).toBeUndefined();
 
-    vi.mocked(el.getBoundingClientRect).mockReturnValue({ top: 100, bottom: 400 } as DOMRect);
+    vi.mocked(el.getBoundingClientRect).mockReturnValue({
+      top: 100,
+      bottom: 400,
+    } as DOMRect);
     window.dispatchEvent(new Event("scroll"));
     vi.advanceTimersByTime(200);
 

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { HomeHero } from "@/modules/v3-navy/components/home-hero";
+import { RevealController } from "@/components/motion/reveal-controller";
+import { HomeOpening } from "@/modules/v3-navy/components/home-hero";
 import {
-  AudienceStrip,
   HomeCta,
   Permits,
   ServicesGrid,
@@ -17,12 +17,14 @@ export const metadata: Metadata = {
 export default function V3HomePage() {
   return (
     <>
-      <HomeHero />
-      <AudienceStrip />
+      <HomeOpening />
       <ServicesGrid />
       <WhyUs />
       <Permits />
       <HomeCta />
+      {/* A child of the page, not the layout, so its effect runs after this
+          page has hydrated. See reveal-mount.test.ts. */}
+      <RevealController />
     </>
   );
 }

@@ -4,31 +4,40 @@ import { reasons } from "../lib/content";
 
 export function AboutIntro() {
   return (
-    <section className="relative overflow-hidden bg-white">
+    <section className="relative overflow-clip bg-white">
       <div
         aria-hidden
         className="absolute inset-x-0 top-0 h-2 bg-[linear-gradient(90deg,var(--color-v3-navy)_0_60%,var(--color-v3-rust)_60%_100%)]"
       />
-      <div className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-12 px-5 pt-18 pb-10 enter-rise">
-        <div>
-          <p className="text-v3-rust mb-3 text-[13px] font-semibold tracking-[0.18em] uppercase">
+      <div className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-12 px-5 pt-18 pb-10">
+        <div className="max-md:text-center">
+          <p
+            style={{ "--i": 0 } as React.CSSProperties}
+            className="text-v3-rust enter-rise enter-step mb-3 text-[13px] font-semibold tracking-[0.18em] uppercase">
             About SERBIZ
           </p>
-          <h1 className="font-outfit text-v3-navy mb-5 text-[clamp(34px,5vw,58px)] leading-[1.02] font-extrabold tracking-[-0.02em] text-pretty">
+          <h1
+            style={{ "--i": 1 } as React.CSSProperties}
+            className="font-outfit enter-rise enter-step text-v3-navy mb-5 text-[clamp(34px,5vw,58px)] leading-[1.02] font-extrabold tracking-[-0.02em] text-pretty">
             Run by people who have done this work for decades.
           </h1>
-          <p className="text-v3-slate-deep text-lg leading-relaxed text-pretty">
+          <p
+            style={{ "--i": 2 } as React.CSSProperties}
+            className="text-v3-slate-deep enter-rise enter-step text-lg leading-relaxed text-pretty">
             A member-owned cooperative in Kapitolyo, Pasig — experienced women
             in payroll, accounting and HR giving small businesses big-company
             back-office support.
           </p>
         </div>
 
-        <div className="relative min-h-[320px]">
+        <div
+          style={{ "--from-x": "56px" } as React.CSSProperties}
+          className="enter-x relative min-h-[320px] motion-safe:transition-transform motion-safe:duration-700 motion-safe:ease-[cubic-bezier(.23,1,.32,1)]"
+        >
           <div className="bg-v3-navy absolute inset-0 overflow-hidden rounded-[28px] [clip-path:polygon(0_0,80%_0,100%_20%,100%_100%,20%_100%,0_80%)]">
             <Image
-              src="/designs/stock/team-meeting.jpg"
-              alt="Colleagues talking in a meeting room"
+              src="/designs/stock/v3-about-workspace.jpg"
+              alt="An open plan office of empty desks under linear ceiling lights"
               fill
               sizes="(max-width: 900px) 100vw, 560px"
               className="object-cover"
@@ -50,7 +59,9 @@ export function MissionVision() {
   return (
     <section className="bg-v3-paper">
       <div className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-5 px-5 py-15">
-        <article className="reveal bg-v3-navy relative overflow-hidden rounded-3xl p-[clamp(28px,4vw,44px)] text-white">
+        <article
+          style={{ "--i": 0 } as React.CSSProperties}
+          className="reveal reveal-scale reveal-step bg-v3-navy relative overflow-hidden rounded-3xl p-[clamp(28px,4vw,44px)] text-white">
           <div
             aria-hidden
             className="bg-v3-rust absolute top-[-30px] right-[-30px] size-35 opacity-90 [clip-path:polygon(50%_0,100%_50%,50%_100%,0_50%)]"
@@ -63,7 +74,9 @@ export function MissionVision() {
           </p>
         </article>
 
-        <article className="reveal border-v3-navy/12 text-v3-navy relative overflow-hidden rounded-3xl border bg-white p-[clamp(28px,4vw,44px)]">
+        <article
+          style={{ "--i": 1 } as React.CSSProperties}
+          className="reveal reveal-scale reveal-step border-v3-navy/12 text-v3-navy relative overflow-hidden rounded-3xl border bg-white p-[clamp(28px,4vw,44px)]">
           <div
             aria-hidden
             className="bg-v3-mint absolute top-[-30px] right-[-30px] size-35 [clip-path:polygon(50%_0,100%_50%,50%_100%,0_50%)]"
@@ -84,7 +97,10 @@ export function WhyClientsStay() {
   return (
     <section className="bg-white">
       <div className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-10 px-5 pt-15 pb-22">
-        <div className="reveal">
+        <div
+          style={{ "--from-x": "-48px" } as React.CSSProperties}
+          className="reveal reveal-x max-md:text-center"
+        >
           <p className="text-v3-rust mb-3 text-[13px] font-semibold tracking-[0.18em] uppercase">
             Why clients stay
           </p>
@@ -94,10 +110,11 @@ export function WhyClientsStay() {
         </div>
 
         <ul className="grid list-none gap-3">
-          {reasons.map((reason) => (
+          {reasons.map((reason, index) => (
             <li
               key={reason.n}
-              className="reveal border-v3-navy/10 bg-v3-paper flex items-center gap-4 rounded-2xl border px-5 py-4"
+              style={{ "--i": index } as React.CSSProperties}
+              className="reveal reveal-step border-v3-navy/10 bg-v3-paper flex items-center gap-4 rounded-2xl border px-5 py-4"
             >
               <span className="bg-v3-navy text-v3-rust font-outfit grid size-9 shrink-0 place-items-center rounded-[10px] text-[15px] font-extrabold">
                 {reason.n}

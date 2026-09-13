@@ -176,7 +176,11 @@
   --color-v3-navy: #0f2a44;
   --color-v3-navy-deep: #0b2137;
   --color-v3-navy-darkest: #081a2c;
-  --color-v3-rust: #c9502c;
+  /* Darkened from #c9502c, which measured 4.26:1 on the v3 paper. Ten eyebrow
+     labels use it at 12-15px, where small text needs 4.5:1. This clears it at
+     4.56 and is all but indistinguishable from the original; it also lifts the
+     white-on-rust button label from exactly 4.5 to 4.81. */
+  --color-v3-rust: #c14d2a;
   --color-v3-rust-bright: #de5e3a;
   --color-v3-sky: #8cc8e8;
   --color-v3-mint: #cfe6f5;
@@ -197,6 +201,7 @@
   --font-poppins: var(--font-poppins-src), Poppins, system-ui, sans-serif;
   --font-sora: var(--font-sora-src), Sora, system-ui, sans-serif;
   --font-outfit: var(--font-outfit-src), Outfit, system-ui, sans-serif;
+  --font-orbitron: var(--font-orbitron-src), Orbitron, system-ui, sans-serif;
 }
 
 /* Anchor jumps glide instead of teleporting, so it stays obvious which way the
@@ -228,7 +233,17 @@
 @keyframes reveal-rise {
   from {
     opacity: 0;
-    transform: translateY(18px);
+    /* 32px, measured off e.gov.ph, which the client pointed at as the feel to
+       match. 18px was too short to read as an entrance once the element was
+       already sliding up the viewport.
+
+       The distance is the only thing borrowed. Their reveal is Framer Motion
+       writing inline `opacity: 0` on 53 elements and waiting on an observer;
+       scrolled through in a browser, seven of those were measured sitting
+       inside the viewport still at zero, with a blank band on screen where the
+       content should have been. This one is a scroll-driven CSS timeline that
+       costs no JavaScript and whose resting state is visible. */
+    transform: translateY(32px);
   }
   to {
     opacity: 1;
@@ -254,7 +269,9 @@
   [data-reveal-ready] .reveal {
     animation: none;
     opacity: 0;
-    transform: translateY(32px);
+    /* `--from-y` lets a variant ask for a longer rise: v3 sets 44px on its
+       root, v1 keeps the 32px measured off e.gov.ph. */
+    transform: translateY(var(--from-y, 32px));
     transition:
       opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1),
       transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
@@ -274,6 +291,22 @@
      from `--from-x` at the call site, so one class serves either side. */
   [data-reveal-ready] .reveal-x {
     transform: translateX(var(--from-x, 48px));
+  }
+
+  /* Down from above, for a heading or eyebrow that sits over a stepped grid:
+     the title drops as the cards rise, so the two read as meeting rather than
+     as one more upward block. Shorter than the rise on purpose — a heading
+     is one line and 24px is already a visible move. */
+  [data-reveal-ready] .reveal-down {
+    transform: translateY(-24px);
+  }
+
+  /* Growing into place, for a banner or a card that fills its column: a
+     wide block rising 44px reads as the page lurching, where a settle from
+     0.94 reads as the block arriving. Longer, so the scale is felt. */
+  [data-reveal-ready] .reveal-scale {
+    transform: scale(0.94);
+    transition-duration: 0.8s;
   }
 
   /* A photograph settling, transform only: it starts a touch too large and
@@ -299,6 +332,71 @@
 
   [data-reveal-ready] .tagline[data-revealed] > span {
     color: var(--color-v1-forest);
+  }
+}
+
+/* Some blocks come in from the side rather than from below. Borrowed from
+   e.gov.ph, which mixes `translateX(48px)` and `translateY(-20px)` into an
+   otherwise upward set — the variety is what stops a long page reading as one
+   repeated gesture.
+
+   Used sparingly and only where it reinforces the layout: in a two-column
+   block the text column enters from its own side while the list beside it
+   keeps the upward stagger. Both sides sliding reads as busy.
+
+   Direction comes from `--from-x` at the call site, so one class serves either
+   side. Same guards and the same timeline as `.reveal`; only the path differs,
+   and the resting state is still the visible one. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal-x {
+      animation-name: reveal-slide;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal-down {
+      animation-name: reveal-drop;
+    }
+
+    .reveal-scale {
+      animation-name: reveal-grow;
+    }
+  }
+}
+
+@keyframes reveal-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes reveal-grow {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes reveal-slide {
+  from {
+    opacity: 0;
+    transform: translateX(var(--from-x, 48px));
+  }
+  to {
+    opacity: 1;
+    transform: none;
   }
 }
 
@@ -438,6 +536,36 @@
    element. Forest on forest is a ring nobody can see, so any dark container
    with something focusable inside it must restate `--v1-focus-ring`. */
 @layer components {
+  /* v3 had no focus styling at all: every ring was the browser default, on a
+     variant built around large navy panels. Same shape as v1's rule and the
+     same reason for the variable — `outline-offset` draws the ring on whatever
+     sits behind the element, so a navy ring on a navy panel is invisible. Any
+     dark container holding something focusable restates it. */
+  .v3-root {
+    --v3-focus-ring: var(--color-v3-navy);
+    /* The header is set to exactly this, border included, and the home
+       opening's floor is the viewport minus it. 24px of padding around a 42px
+       button; below the desktop nav breakpoint the 44px menu toggle is the
+       tallest child. Measured, not derived. */
+    --v3-nav-height: 67px;
+    /* v3's reveals travel further and stagger wider than v1's: a longer rise
+       and a 90ms gap, where v1 keeps 32px and 60ms. Read by `.reveal` and
+       `.reveal-step` through inheritance, so no call site restates them. */
+    --from-y: 44px;
+    --reveal-gap: 90ms;
+  }
+
+  @media (max-width: 1000px) {
+    .v3-root {
+      --v3-nav-height: 69px;
+    }
+  }
+
+  .v3-root :focus-visible {
+    outline: 2px solid var(--v3-focus-ring);
+    outline-offset: 2px;
+  }
+
   .v1-root {
     --v1-focus-ring: var(--color-v1-forest);
     /* The bar is set to exactly this, border included, and the hero's floor is
@@ -512,11 +640,39 @@
     transition-delay: calc(var(--i, 0) * 100ms);
   }
 
+  /* Transform only, deliberately no opacity. This is for a hero photograph,
+     which is the LCP element on its page: fading it from zero pushes the LCP
+     timestamp out by the length of the transition, because the browser cannot
+     record the element as painted until it is visible. A scale settle costs
+     nothing, since transform never blocks paint.
+
+     Longer than the text entrances at 0.8s — a photograph easing to rest reads
+     as settling, where the same move at 0.5s reads as a jolt. */
+  .enter-zoom {
+    transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  /* The hover override lives here, not as a Tailwind `duration-*` class on the
+     element. These `.enter-*` rules are unlayered, so the shorthand above beats
+     any layered utility whatever its specificity — a `duration-[260ms]` utility
+     compiles fine and then loses silently.
+
+     0.8s is right for a photograph easing to rest on load, and wrong for a
+     pointer: at that length the image is still moving well after the pointer
+     has left, which reads as lag rather than weight. */
+  .group:hover .enter-zoom {
+    transition-duration: 0.26s;
+  }
+
   .enter-slide {
     transition-delay: 0.6s;
   }
 
   @starting-style {
+    .enter-zoom {
+      transform: scale(1.06);
+    }
+
     /* A hero photograph sliding in. Transform only, deliberately no opacity:
        that image is its page's LCP element, and fading it from zero pushes the
        LCP timestamp out by the length of the transition. A slide costs nothing,
@@ -541,16 +697,6 @@
       opacity: 0;
       transform: translateX(-30px);
     }
-  }
-}
-
-@keyframes v3-drift {
-  0%,
-  100% {
-    transform: translateY(0) rotate(-3deg);
-  }
-  50% {
-    transform: translateY(-14px) rotate(3deg);
   }
 }
 

@@ -119,6 +119,18 @@ each one approved before any of this is public.
   signatures. Confirm the client wants them public.
 - **Stock photography.** Every photograph is an Unsplash placeholder showing
   people who do not work at SERBIZ. Replace with real photos before launch.
+- **Tax Compliance and HR Support item lists (v3, 2026-09-13).** The flyers
+  describe each in one paragraph; the services page now shows them as
+  numbered items like Payroll and Accounting, so the paragraphs were split
+  into four tax items and three HR items in `modules/v3-navy/lib/content.ts`.
+  The wording is derived, not transcribed — "Reportorial Requirements",
+  "Online or Onsite", "Employee Records (201 files)" and the rest — and the
+  cooperative should confirm each line describes something it actually does.
+- **v1 skip link removed (2026-09-13)** at the client's request, after seeing
+  it appear on keyboard focus. Keyboard visitors now tab through the whole nav
+  to reach content, which an accessibility audit will flag. Restore it if that
+  matters at launch: it was a `SectionLink` to `#main` in
+  `app/8sfz8dn5ts/layout.tsx`, `sr-only` until focused.
 
 ## Found in the v1 review (2026-09-12)
 
@@ -137,7 +149,9 @@ done and are kept here with what shipped; two remain.
   copy, built entirely from `site-config`, and its test fails if an internal
   variant name ever leaks back in.
 
-  **v2 and v3 still have none.** Copy the same three files across when their
+  **v3 has its card** (`app/4sjhdc5awq/opengraph-image.tsx`, navy with a rust
+  edge, plus `openGraph` and `twitter` on its layout), checked rendering on
+  2026-09-13. **v2 still has none.** Copy the same three files across when its
   turn comes; `preview-metadata.ts` is already shared and variant-neutral, so
   only the `opengraph-image.tsx` palette changes. The preview pages stay
   `noindex` either way — Open Graph governs unfurling, not indexing.
@@ -391,6 +405,359 @@ minimal fix deliberately did not take.
   titles alone are generic. A second accordion would also have swapped a
   repetitive grid for a repetitive stack.
 
+## The v3 enhancement round (2026-09-13)
+
+Seven items agreed with the client, all shipped on `feat/v3-pass`:
+
+- The "We work with" strip enters as one piece after the hero, stacks one
+  audience per line on phones, and has no dot separators at any width.
+- The rust wedges in the hero and the Why SERBIZ band are desktop-only. On a
+  phone they ran under the buttons and the reasons list.
+- Every "email us" call to action — hero, header (desktop and mobile menu),
+  services "Ask us", home banner — opens a quick-message modal
+  (`modules/v3-navy/components/quick-message-dialog.tsx`, on the shadcn
+  `dialog` primitive) instead of a bare `mailto:`. The modal reuses the contact
+  page's form and presets the subject to the button pressed: "Consultation
+  request", "Quote request", "Service inquiry". Links that display the address
+  itself (contact rows, footer) stay plain `mailto:`. Still a mail-client
+  hand-off: the Queued contact-form entry below is unchanged.
+- Tax and HR get a full section each, image plus items (sign-off entry above).
+- Services 05–07 return to the compact "Other services offered" grid. Each card
+  carries its anchor, so the home grid's links still land.
+- The v3 Open Graph card was verified rather than added — it already existed.
+- A reload starts at the top so the entrance animations play:
+  `lib/start-reload-at-top.ts`, injected from the root layout with
+  `next/script` `beforeInteractive`. **Do not move it into a segment layout as
+  a bare `<script>`**: that made the router fall back to a full document load
+  on every client navigation into v3, which lost the hash landing on the
+  services page. Site-wide by construction, so v1 and v2 get it too.
+
+Second round, same day, also shipped:
+
+- Entrance order on the first screen: kicker, headline, lede, steel bars,
+  audience strip, then both hero buttons together, then the promise card
+  last. The photo slides at once, as it always did — the client asked for
+  that kept. The card's delay is an inline style because the unlayered
+  `.enter-slide` rule would beat any utility.
+- The mobile menu closes on a tap anywhere outside the panel and its toggle,
+  which covers the logo on the home page, where a route change never fires.
+- The hero kicker puts "Pasig City" on its own line on phones, dash dropped.
+- The footer keeps its auto-fit grid (one column on phones, the client
+  preferred it) but the page links are a wrapped row, two or three lines
+  rather than five deep. Contact links wrap anywhere so the Facebook handle
+  never pushes the page sideways.
+- The quick-message modal has a 60% black scrim, a light ring, a deep shadow
+  and a rust top bar. `DialogContent` in `components/ui/dialog.tsx` gained an
+  `overlayClassName` prop for the scrim; re-add it if the shadcn CLI ever
+  overwrites the file.
+
+Suggested in the same round and **deferred**, in rough order of value:
+
+- **A call option in the hero.** The hero offers email only; Filipino SMEs
+  often prefer a call or Viber. A "Call us" secondary button, and a Viber link
+  if the cooperative has one, likely converts better than a second email path.
+- **Real permit scans.** The permits flyer in `references/Images/` shows the
+  BIR certificate, the CDA certificate and the Mayor's permit. Cropping those
+  would replace the three "scan to follow" placeholders. Low resolution, but
+  real.
+- **The news page carries invented content.** Reduce it to the Facebook link
+  and a "follow us for filing reminders" note until real posts arrive.
+- **Registration badges in the hero**, as v1 has: CDA, BIR, Pasig permit. All
+  three are flyer facts.
+- **A "how it works" strip** after the services grid. Copy needs the
+  cooperative.
+- **Phone number in the mobile menu** as a tap-to-call line.
+- **Soften the unverified promises** ("reply within one working day", "first
+  consultation is free") or mark them visibly until confirmed.
+- **A jump list on the services page**, one pill per service; the anchors
+  already exist.
+- **Contrast check** on rust-button labels once the palette is final, plus
+  focus rings inside the new modal.
+
+## The v3 pass (2026-09-12)
+
+Checked v3 against the seven defects the v1 playbook says to look for, rather
+than assuming. **Three did not exist here**: no fixed-column grids, no hard
+`<br>` in a heading, no gradient-clipped text. The scroll-margin arithmetic is
+moot because v3 is multi-page with no in-page anchors, and mission, vision and
+motto are already on the about page, so v3 needs no equivalent of v1's mission
+band. Its body copy is 117 words across the whole variant against 109 in v1's
+services section alone, so there was nothing to trim.
+
+**Fixed:**
+
+- **Navigation pill.** The glass treatment is gone — the gradient, the inset
+  highlights and the outer glow — leaving a solid navy pill. The animation is
+  now a Motion shared-layout element: one `motion.span` with a `layoutId` that
+  is the same on every item, so Motion animates between the boxes. That deleted
+  the manual measurement entirely: pixel offsets in state, a resize listener, a
+  re-measure once web fonts settled, and a transition on `width`, which triggers
+  layout every frame. The spring is `{ duration: 0.45, bounce: 0.22 }` and
+  carries velocity through an interruption. First use of `motion` in the repo,
+  which was already a declared dependency.
+- **Mobile menu** now closes on Escape and returns focus to the toggle. It is a
+  dropdown panel, not a full-screen overlay, so it owes no focus trap, scroll
+  lock or `aria-modal` — that is v1's contract, not this one. Two tests, red
+  first.
+- **Skip link and `<main id>`**, which v3 had neither of.
+- **Focus ring.** v3 had *zero* `focus-visible` declarations; every ring was the
+  browser default on a variant built around navy panels. `.v3-root` now scopes
+  one, with `--v3-focus-ring` restated on the hero, the navy section, the footer
+  and the contact form. Measures 13.87 on navy and 16.66 on the darkest panel.
+- **Open Graph.** One card on the layout, inherited by all five routes. Every v3
+  page title starts with "v3 — ", so without this a shared link would announce
+  the layout as a numbered attempt. Navy ground with the wordmark on a white
+  chip, matching the lockup the footer already uses.
+- **`--color-v3-rust` darkened** from `#c9502c` to `#c14d2a`. Ten eyebrow labels
+  use it at 12–15px where 4.5:1 is required and it measured 4.26. Now 4.56, and
+  the white-on-rust button label goes from exactly 4.5 to 4.81.
+- **Staggers.** Seven card grids gained `reveal-step` with an index, and the
+  hero text column was split so the eyebrow, headline, lede and buttons arrive
+  in reading order instead of as one block.
+
+- **Imagery.** The four v3 photographs containing people were replaced with
+  people-free ones, which retires the sign-off objection about images of people
+  who do not work at the cooperative for the whole variant. v1 and v3 are now
+  both people-free; **v2 has not been checked.**
+
+  | Slot | Was | Now |
+  | --- | --- | --- |
+  | Home hero | `hero-office.jpg`, four people in a startup office | `v3-hero-corridor.jpg`, a corridor whose navy wall is near the v3 token |
+  | About | `team-meeting.jpg`, a single portrait | `v3-about-workspace.jpg`, an open plan office of empty desks |
+  | News, year-end payroll | `news-paperwork.jpg`, hands signing | `v3-news-ledgers.jpg`, budget sheets and a pen |
+  | News, weekly reminders | `news-handshake.jpg`, a handshake | `v3-news-desk.jpg`, stacked ledgers on a sunlit desk |
+
+  The about slot had a second fault worth recording: its alt text read
+  "Colleagues talking in a meeting room" while the file was a single portrait by
+  a window. The alt described a scene that was not in the picture.
+
+  Rejected candidates and why: two architectural options were clearly CGI
+  renders; one filing shot carried Japanese signage, the same region mismatch as
+  the Swahili shop sign rejected for v1; one desk shot ran six colours and fought
+  v3's navy-and-rust discipline.
+
+- **Hero photograph now settles rather than fading.** `.enter-zoom` scales it
+  from 1.06 with **no opacity**, because it is `priority` and therefore the LCP
+  element: fading from zero pushes the LCP timestamp out by the length of the
+  transition. Its wrapper used to carry `.enter-rise`, which faded the whole
+  subtree including the photograph — the same fault v1 was built to avoid. Each
+  child now animates on its own terms.
+
+**Checked and deliberately not changed:**
+
+- **The contact form.** An earlier read of this called it unvalidated. That was
+  wrong: it uses native `required` on name and message with no `noValidate`, so
+  the browser blocks submit, focuses the first invalid field and announces the
+  message. Replacing that with custom handling would be a regression.
+- **Spacing.** v1's worst finding was a card gutter narrower than the cards' own
+  padding. v3's is the reverse — 20px gutters against 16px padding — and its
+  section rhythm varies only 80 to 88. Nothing worth changing.
+- **Two-tone headlines and the icon ramp.** v1 design devices. Copying them
+  makes the three previews converge, which defeats showing the client three
+  distinct presentations.
+
+- **A gooey metaball nav pill** was built and rejected. It produced the two-lobe
+  liquid shape the client asked about, but only reads as liquid between adjacent
+  items — posed at the widest jump the blobs never bridge — and it costs back the
+  measurement the `layoutId` version deleted. Closed as PR #10.
+
+- **Services payroll image replaced.** `payroll-desk.jpg` showed a **United
+  States IRS withholding form** — wrong jurisdiction for a Philippine
+  cooperative. v3 now points at `v3-payroll-planner.jpg`, a blank monthly
+  planner, which suits a group whose promise is "paid on time, every cut-off"
+  and dates itself to nothing. Two calendar candidates were rejected for
+  exactly that reason: one read "Aug 2022", the other "JUIN 2016" — a legible
+  stale date on a live page is a credibility problem, and the second was in
+  French besides. The declared `width`/`height` were also corrected from 920×690
+  to the file's real 1120×840.
+
+  **`payroll-desk.jpg` is still referenced by v2**, which has had no pass at
+  all, so the US form is still live there.
+
+- **The v3 hero lost its floating logo mark** at the user's request, which
+  orphaned the `v3-drift` keyframes; those were removed with it. The photograph
+  now also zooms to 1.04 on hover, sharing the single `transform` transition the
+  entrance already uses. Written as an arbitrary `[transform:scale(1.04)]`
+  rather than Tailwind's `scale-*`, because v4's scale utilities set the
+  separate `scale` property, which the entrance does not transition — two
+  properties would have needed two transitions.
+
+
+- **`overflow: hidden` silently breaks a `view()` scroll timeline.** It
+  establishes a scroll container, so `animation-timeline: view()` on anything
+  inside resolves against a box that never scrolls — the animation sits at a
+  fixed progress and the element is simply always in its end state. Measured on
+  v3's home page: of 18 reveals below the fold, **4 were already fully visible**,
+  and all four shared one ancestor, the navy section with `overflow-hidden`. The
+  healthy ones had no clipped ancestor at all.
+
+  `overflow: clip` clips identically and does **not** create a scroll container,
+  so it is the fix. v3's four clipping sections now use it and the count is 0.
+
+  **v1 and v2 had it too**, and it was measured rather than assumed: v1 had 1
+  dead reveal of 31 below the fold, v2 had 4 of 22. Both are fixed in a separate
+  pull request, [#11](https://github.com/msforbes09/serviz-website/pull/11),
+  kept apart from the v3 work because v1 is already merged and client-facing.
+
+- **A side-entrance variant now exists.** `.reveal-x` swaps the keyframes for a
+  horizontal path, with direction from `--from-x` at the call site, borrowed
+  from e.gov.ph's mix of `translateX(48px)` and `translateY(-20px)` among
+  otherwise upward reveals. Used on two v3 two-column blocks only, where the
+  text column enters from its own side while the list beside it keeps the
+  upward stagger. Both sides sliding reads as busy.
+
+- **Bolder wordmark, "SRI" removed, v1 round ported to v3 (2026-09-13).**
+
+  - **Orbitron 900** replaces Michroma for the SERBIZ word on the v1 and v3
+    headers and the v3 footer. Michroma matched the print logo's shape but
+    ships one light weight and read thin beside the mark; Orbitron's black
+    weight is the nearest Google face with the print logo's mass. Zen Dots,
+    Bruno Ace SC and synthesised bolds were on the sheet and rejected. 21px,
+    tracking 0.06em. v3 keeps Outfit for headings.
+  - **"SRI" is gone** at the user's request. `siteConfig.shortName` is
+    removed, with its five call sites (v1 footer, v2 footer and Why SERBIZ,
+    v3 footer copyright, the placeholder home). The two logo PNGs that spell
+    it out — `public/designs/v1/logo-full.png` and
+    `public/designs/v3/logo-wordmark.png` — are no longer referenced: the v3
+    footer and both Open Graph cards now set mark plus text. The files stay
+    in the tree for the record; delete them if the client confirms the
+    abbreviation is retired for good. README and CLAUDE.md updated.
+  - **v1 footer alignment.** The mark sat vertically centred beside a
+    two-line name; it now sits on the first line, and on phones the lockup
+    stacks and centres with the links row.
+  - **v3 port of the v1 round.** Hero padding 40px over 56px; hero, page
+    banners, section intros, CTA banner, about, services, news headings and
+    contact details centred below `md` with lists and cards left; hero
+    buttons, CTA banner buttons, the services "Ask us" and the contact submit
+    full width on phones. The mobile menu now derives its open state from the
+    route it was opened on, so any navigation — the header logo included —
+    closes it without an effect setting state.
+
+- **v1 enhancements (2026-09-13).** Five asks after the v3 round, same
+  branch.
+
+  - **Hero top space.** Padding was 64px over 96px and, on a tall window, the
+    floor's slack pooled above the badge. Now 32px over 64px with the content
+    still centred, so the slack splits: at 1280×1100 it measures 196px above
+    the badge and 228px below the badge list. At 768 tall the content is
+    taller than the floor, so nothing changes there.
+  - **Centred on phones.** Below `md` the hero text block and every
+    section's eyebrow, heading and intro are centred; cards, lists, the FAQ
+    and the contact rows stay left, since centred body text beside an icon
+    reads badly (the address row showed this and was reverted to left).
+  - **Full-width buttons on phones.** The hero's primary button and the
+    contact form's submit stretch to the column; the phone link centres
+    beneath. The services grid's green card is already full width in the
+    single column.
+  - **Logo closes the menu.** From inside the open overlay the logo used to
+    scroll to the top and leave the menu covering the page. It now closes the
+    menu first and scrolls once the body lock lifts, the way section links
+    already defer. Test red first.
+  - **Wordmark in Michroma.** The print logo is a wide, squared, futuristic
+    sans. Michroma, Orbitron and Audiowide were shown side by side; Michroma
+    is the closest and replaces Outfit for the SERBIZ word only. 19px at its
+    single weight, tracking 0.08em, so the lockup keeps the width the 22px
+    Outfit setting had. Outfit is no longer loaded by v1; v3 still uses it.
+    **Awaiting the user's eye on the real header** — swap back to Orbitron or
+    Audiowide is a one-line change in `modules/v1-classic/lib/fonts.ts`.
+
+- **v3 motion, first screen, services mirror and skeletons (2026-09-13).**
+  Four asks from the user after comparing v3 with v1.
+
+  - **Entrance, emphasised with variety.** The hero now cascades nine steps
+    (eyebrow, headline, lede, each button on its own, four steel dashes) and
+    the audience strip follows as steps 9–13, so the first screen arrives in
+    reading order. The photo composition slides in from the right like v1's
+    on top of its settle, and the rust wedge sweeps in from the edge —
+    transform only, so the LCP photograph is never faded. The four page
+    banners step kicker, title and lede instead of fading as one block, and
+    their rust corner sweeps in the same way. Two scroll-reveal variants were
+    added next to `.reveal` and `.reveal-x`: `.reveal-down` (a heading drops
+    24px as the cards under it rise) and `.reveal-scale` (a banner or card
+    settles from 0.94). Both carry the scroll-timeline and observer paths and
+    sit inside the same guards. `.v3-root` sets `--from-y: 44px` and
+    `--reveal-gap: 90ms`, so every v3 reveal travels further and staggers
+    wider than v1's 32px and 60ms without any call site restating it.
+  - **Full first screen.** `HomeOpening` wraps the hero and the "We work with"
+    strip in a column with a floor of `100svh` less `--v3-nav-height`, hero
+    content centred, strip pinned at the bottom. The header is now set to the
+    token — 67px on desktop, 69px below the nav breakpoint where the menu
+    toggle is the tallest child — and `home-hero.test.tsx` pins both sides to
+    it. Measured: opening bottom lands exactly on the viewport at 1024×768.
+  - **Services page mirrors the home grid.** Seven anchored sections in the
+    home order and numbering, derived from `serviceCards` through one
+    `serviceSections` list so the two cannot drift (`content.test.ts`). Tax
+    Compliance is card 03, so it is now section 03 and no longer item four of
+    Accounting. Every home card links to its section, which lands 16px under
+    the sticky header. No copy was written: the four body-only sections reuse
+    the old "other services" lines. `serviceGroups` and `otherServices` are
+    gone.
+  - **Loading skeletons.** v3's 60vh navy slab, which the user saw on load and
+    read as a broken page, is now shaped like the hero on the same height
+    floor: rust wedge, faint bars where the kicker, headline, lede and
+    buttons sit, a photo block, and a white band where the strip goes. v1's
+    got the same treatment on its paper ground. `loading.test.tsx` covers
+    both. Note the slab is long-lived only in `next dev`, where a route
+    compiles on demand while the fallback shows; in production the pages are
+    prerendered and it appears only during a client-side navigation.
+
+- **v3 mobile pass (2026-09-13).** Checked all five pages at 375px, the home
+  page from 320 to 768, and the open menu, after the client sent a phone
+  capture with a navy bar under the header and the page wider than the header.
+
+  - **The navy bar was the closed mobile menu.** The panel collapses by
+    animating a grid row to `0fr`, but the child the row measures carried
+    `pb-4` and the panel a `border-t`, so the closed row was still 17px tall
+    and showed the top of the active "Home" link. The clipping child now
+    carries nothing; padding and border sit on a wrapper inside it. Closed
+    height measures 0.
+  - **The contact page scrolled sideways.** The map box had `aspect-4/3` with
+    `min-h-[320px]`, and an aspect ratio transfers a minimum height into a
+    minimum width: 427px, so at 375 the page was 446 wide and the sticky
+    header sat narrower than the page — the second thing in the capture. The
+    minimum height is gone; at 335 wide the map is 251 tall, at desktop 556 by
+    417.
+  - **The services image covered its list.** Each group's intro column was
+    `sticky top-24` at every width, so in the single phone column it pinned
+    under the header while the list scrolled beneath the photograph. Sticky
+    only from `md`, where the two columns exist.
+  - **Not reproduced: the home page wider than the header.** Across 320 to 768
+    in Chromium the home page never exceeded the viewport. The contact page
+    was the one place that did. If it recurs on the phone, the browser and
+    width are what is needed; an older Safari without `overflow: clip` would
+    let the hero's shapes escape.
+
+  None of the three has a jsdom seam, so they were verified in the browser
+  and not tested.
+
+- **v3's scroll reveals are JavaScript-driven (2026-09-13).** The same
+  `RevealController` v1 mounts, mounted once in v3's layout, so every v3
+  section stays a Server Component and the CSS-only path is stood down in
+  favour of the observer, which runs in browsers without scroll timelines.
+  v3's `.reveal`, `.reveal-x` and `.reveal-step` call sites needed no change:
+  the JavaScript rules read the same classes and the same `--i` / `--from-x`.
+
+  **It is mounted in each page, not the layout.** The first cut mounted it in
+  the layout with a `usePathname()` dependency, so it could re-arm when v3
+  swapped the page beneath it. That was wrong for a reason only the console
+  showed: a layout hydrates before a nested page's segment does, so the
+  controller swept the server HTML ahead of hydration and React then reported
+  a `data-revealed` attribute it never rendered — a hydration mismatch on every
+  hard load of the services and news pages. As the page's own last child the
+  effect runs after that page has hydrated, and on a client-side navigation
+  the old page's instance disarms while the new one arms, inside one commit.
+  The pathname dependency went with it. `reveal-mount.test.ts` guards the
+  placement in all six pages and both layouts; it is a guard on source, since
+  jsdom has no hydration to race. Verified: three mismatches in the console
+  before the change, none added by hard loads of services and news after it.
+
+  **Next 16 keeps visited and prefetched pages in the document** as hidden
+  Activity boundaries (`display: none !important`), so `querySelectorAll` on
+  the visible page also finds their `.reveal` elements. Harmless: a hidden
+  element never intersects and never measures as in view, and a hidden
+  page's effects are unmounted, so only the visible page's controller is
+  live. Worth knowing before trusting an element count.
+
 - **v1's scroll reveals are now JavaScript-driven.** `animation-timeline:
   view()` is unsupported in older Safari and Firefox, where the CSS-only reveal
   does nothing at all — correct, but it means many visitors saw no entrance,
@@ -412,8 +779,9 @@ minimal fix deliberately did not take.
   viewport regardless of the observer, and runs before arming, on
   `visibilitychange`, and once on a 1.2s timeout.
 
-  **v2 and v3 still use the CSS-only path.** Move them over the same way when
-  their turn comes; the controller is variant-neutral and only needs mounting.
+  **v2 still uses the CSS-only path.** Move it over the same way when its turn
+  comes; the controller is variant-neutral and only needs mounting. v3 was
+  moved on 2026-09-13, see the v3 pass above.
 
 
 - **v1 entrance variants, and the tagline moved onto a clock.** Four changes,
@@ -511,6 +879,39 @@ minimal fix deliberately did not take.
 
 
 ## Housekeeping
+
+- **e.gov.ph's scroll reveal was re-examined at the client's request, and
+  rejected again — this time with measurements.** Their page holds 53 elements
+  at `opacity: 0` via inline styles written by Framer Motion, waiting on an
+  observer. Scrolled through in a browser, **seven of those were sitting inside
+  the viewport still at zero**, with a blank band on screen where the content
+  should have been. (Caveat: programmatic scrolling may not trigger their
+  observer the way a human scroll would. But content in the viewport held
+  invisible by inline styles is the risk itself, and it is the same failure that
+  left our own hero blank in a background tab.)
+
+  What was borrowed is the travel distance only: `reveal-rise` goes from 18px to
+  **32px**, measured off their `translateY(32px)`. 18px was too short to read as
+  an entrance once an element was already sliding up the viewport.
+
+  **This changes all three variants**, since `.reveal` is the shared system —
+  21 uses in v1, 12 in v2, 24 in v3. That is deliberate: two travel distances
+  would be a fork of a system that exists to be one thing.
+
+- **The `.enter-*` rules in `globals.css` are unlayered**, so their `transition`
+  shorthand beats any Tailwind utility whatever its specificity — layered rules
+  lose to unlayered ones. A `duration-[260ms]` class on the element compiles
+  fine and then loses silently. Overrides for those rules belong beside them in
+  `globals.css`, not as utilities at the call site. This has now bitten twice in
+  opposite directions: once clobbering a tuned hover transition on v1's hero
+  caption, once failing to override one on v3's hero photograph.
+
+- **`lint`, `typecheck` and `test` do not parse CSS.** A stray brace in
+  `app/globals.css` passed all three and only surfaced as a blank page, because
+  ESLint reads JS/TS, `tsc` reads types, and Vitest never imports the
+  stylesheet. `npm run build` is the only command in the project that parses it.
+  Run the build, not just the baseline, after editing `globals.css`.
+
 
 - **Tests run inside the Vercel build.** `prebuild` chains lint and the test
   suite ahead of `next build`, so a test-environment quirk fails a deployment

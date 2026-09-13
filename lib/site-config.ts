@@ -10,7 +10,6 @@
 export const siteConfig = {
   name: "SERBIZ",
   legalName: "SERBIZ Resources Income Workers Cooperative",
-  shortName: "SRI",
   tagline: "Payroll and accounting outsourcing for growing Philippine businesses",
   description:
     "SERBIZ Resources Income Workers Cooperative is a payroll and accounting outsourced cooperative serving Sole Proprietors, One Person Corporations and Small and Medium Enterprises.",

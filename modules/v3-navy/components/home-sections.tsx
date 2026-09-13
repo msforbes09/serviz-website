@@ -7,27 +7,35 @@ import {
   basePath,
   permits,
   reasons,
-  serviceCards,
+  serviceSections,
   toneClass,
 } from "../lib/content";
+import { QuickMessageDialog } from "./quick-message-dialog";
 
+/**
+ * Enters as one piece, not item by item: the strip is a single statement, and
+ * staggering four short words read as a list being typed out. Step 7 puts it
+ * after the hero's text and bars and before the hero's buttons, which are the
+ * first screen's last beat. On phones it stacks, label above and one audience
+ * per line.
+ */
 export function AudienceStrip() {
   return (
     <section className="bg-white">
-      <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-center gap-x-8 gap-y-3 px-5 py-7">
+      <div
+        style={{ "--i": 7 } as React.CSSProperties}
+        className="enter-rise enter-step mx-auto flex max-w-[1200px] flex-col items-center gap-x-10 gap-y-3 px-5 py-7 text-center md:flex-row md:flex-wrap md:justify-center"
+      >
         <h2 className="text-v3-slate text-[13px] font-semibold tracking-[0.14em] uppercase">
           We work with
         </h2>
-        {audiences.map((audience, index) => (
-          <span key={audience} className="flex items-center gap-x-8">
-            <span className="font-outfit text-v3-navy text-lg font-bold">
+        <ul className="flex list-none flex-col items-center gap-x-10 gap-y-2 md:flex-row md:flex-wrap md:justify-center">
+          {audiences.map((audience) => (
+            <li key={audience} className="font-outfit text-v3-navy text-lg font-bold">
               {audience}
-            </span>
-            {index < audiences.length - 1 && (
-              <span aria-hidden className="bg-v3-rust size-1.5 rounded-full" />
-            )}
-          </span>
-        ))}
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );
@@ -37,7 +45,7 @@ export function ServicesGrid() {
   return (
     <section className="bg-v3-paper">
       <div className="mx-auto max-w-[1200px] px-5 py-20">
-        <div className="reveal mb-11 flex flex-wrap items-end justify-between gap-5">
+        <div className="reveal reveal-down mb-11 flex flex-wrap items-end justify-between gap-5 max-md:justify-center max-md:text-center">
           <div className="max-w-[620px]">
             <p className="text-v3-rust mb-3 text-[13px] font-semibold tracking-[0.18em] uppercase">
               What we do
@@ -55,11 +63,12 @@ export function ServicesGrid() {
         </div>
 
         <ul className="grid list-none grid-cols-[repeat(auto-fit,minmax(270px,1fr))] gap-4">
-          {serviceCards.map((service) => (
+          {serviceSections.map((service, index) => (
             <li key={service.num}>
               <Link
-                href={`${basePath}/services`}
-                className={`reveal border-v3-navy/10 relative flex h-full flex-col gap-3.5 overflow-hidden rounded-[20px] border px-6 pt-[26px] pb-7 transition-[transform,box-shadow] duration-[220ms] ease-[cubic-bezier(.23,1,.32,1)] hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(15,42,68,.12)] ${toneClass[service.tone]}`}
+                href={`${basePath}/services#${service.id}`}
+                style={{ "--i": index } as React.CSSProperties}
+                className={`reveal reveal-step border-v3-navy/10 relative flex h-full flex-col gap-3.5 overflow-hidden rounded-[20px] border px-6 pt-[26px] pb-7 transition-[transform,box-shadow] duration-[220ms] ease-[cubic-bezier(.23,1,.32,1)] hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(15,42,68,.12)] ${toneClass[service.tone]}`}
               >
                 <span className="flex items-center justify-between">
                   <span className="font-outfit text-v3-rust text-[34px] leading-none font-extrabold">
@@ -88,14 +97,19 @@ export function ServicesGrid() {
 
 export function WhyUs() {
   return (
-    <section className="bg-v3-navy relative overflow-hidden text-white">
+    <section className="bg-v3-navy relative overflow-clip text-white [--v3-focus-ring:var(--color-v3-paper)]">
+      {/* The rust wedge is desktop-only: in the single phone column it sat
+          under the reasons list and read as a stain across the cards. */}
       <div aria-hidden className="pointer-events-none absolute inset-0">
-        <div className="bg-v3-rust absolute bottom-[-20%] left-[-6%] h-[70%] w-[45%] opacity-90 [clip-path:polygon(0_30%,60%_0,100%_100%,0_100%)]" />
+        <div className="bg-v3-rust absolute bottom-[-20%] left-[-6%] hidden h-[70%] w-[45%] opacity-90 [clip-path:polygon(0_30%,60%_0,100%_100%,0_100%)] md:block" />
         <div className="bg-v3-navy-deep absolute bottom-[-10%] left-[-6%] h-[50%] w-[40%] [clip-path:polygon(0_40%,55%_0,100%_100%,0_100%)]" />
       </div>
 
       <div className="relative mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-start gap-12 px-5 py-22">
-        <div className="reveal">
+        <div
+          style={{ "--from-x": "-48px" } as React.CSSProperties}
+          className="reveal reveal-x max-md:text-center"
+        >
           <p className="text-v3-sky mb-3 text-[13px] font-semibold tracking-[0.18em] uppercase">
             Why SERBIZ
           </p>
@@ -109,10 +123,11 @@ export function WhyUs() {
         </div>
 
         <ul className="grid list-none gap-3.5">
-          {reasons.map((reason) => (
+          {reasons.map((reason, index) => (
             <li
               key={reason.n}
-              className="reveal flex items-center gap-[18px] rounded-[18px] border border-white/10 bg-white/5 px-5 py-4 backdrop-blur-[6px]"
+              style={{ "--i": index } as React.CSSProperties}
+              className="reveal reveal-step flex items-center gap-[18px] rounded-[18px] border border-white/10 bg-white/5 px-5 py-4 backdrop-blur-[6px]"
             >
               <span className="bg-v3-rust font-outfit grid size-11 shrink-0 place-items-center rounded-xl text-lg font-extrabold">
                 {reason.n}
@@ -132,7 +147,7 @@ export function Permits() {
   return (
     <section className="bg-white">
       <div className="mx-auto max-w-[1200px] px-5 py-20">
-        <div className="reveal mx-auto mb-10 max-w-[640px] text-center">
+        <div className="reveal reveal-down mx-auto mb-10 max-w-[640px] text-center">
           <p className="text-v3-rust mb-3 text-[13px] font-semibold tracking-[0.18em] uppercase">
             Registered &amp; compliant
           </p>
@@ -145,10 +160,11 @@ export function Permits() {
         </div>
 
         <div className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-5">
-          {permits.map((permit) => (
+          {permits.map((permit, index) => (
             <figure
               key={permit.title}
-              className="reveal border-v3-navy/10 bg-v3-paper m-0 flex flex-col gap-3.5 rounded-[20px] border p-4 transition-[transform,box-shadow] duration-[220ms] ease-[cubic-bezier(.23,1,.32,1)] hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(15,42,68,.12)]"
+              style={{ "--i": index } as React.CSSProperties}
+              className="reveal reveal-step border-v3-navy/10 bg-v3-paper m-0 flex flex-col gap-3.5 rounded-[20px] border p-4 transition-[transform,box-shadow] duration-[220ms] ease-[cubic-bezier(.23,1,.32,1)] hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(15,42,68,.12)]"
             >
               {permit.image ? (
                 <Image
@@ -183,29 +199,29 @@ export function HomeCta() {
   return (
     <section className="bg-v3-paper">
       <div className="mx-auto max-w-[1200px] px-5 pt-10 pb-22">
-        <div className="reveal bg-v3-rust relative grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] items-center gap-7 overflow-hidden rounded-[28px] p-[clamp(36px,5vw,64px)] text-white">
+        <div className="reveal reveal-scale bg-v3-rust relative grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] items-center gap-7 overflow-hidden rounded-[28px] p-[clamp(36px,5vw,64px)] text-white">
           <div
             aria-hidden
             className="bg-v3-navy absolute top-[-30%] right-[-5%] h-[160%] w-[45%] opacity-95 [clip-path:polygon(35%_0,100%_0,100%_100%,0_100%)]"
           />
-          <div className="relative">
+          <div className="relative max-md:text-center">
             <h2 className="font-outfit mb-3 text-[clamp(28px,3.8vw,44px)] leading-[1.05] font-extrabold tracking-[-0.02em] text-pretty">
               Ready to stop worrying about the small stuff?
             </h2>
-            <p className="max-w-[420px] text-base leading-relaxed text-[#fbe3da]">
+            <p className="max-w-[420px] text-base leading-relaxed text-[#fbe3da] max-md:mx-auto">
               First consultation is free.
             </p>
           </div>
-          <div className="relative flex flex-col items-start gap-3">
-            <a
-              href={`mailto:${siteConfig.contact.email}`}
-              className="text-v3-navy rounded-full bg-white px-[26px] py-4 text-base font-bold transition-transform duration-200 hover:-translate-y-0.5"
+          <div className="relative flex flex-col items-start gap-3 max-md:items-stretch max-md:text-center">
+            <QuickMessageDialog
+              subject="Consultation request"
+              className="text-v3-navy cursor-pointer rounded-full border-0 bg-white px-[26px] py-4 text-base font-bold transition-transform duration-200 hover:-translate-y-0.5 max-md:w-full"
             >
-              {siteConfig.contact.email}
-            </a>
+              Send us a message
+            </QuickMessageDialog>
             <a
               href={`tel:${siteConfig.contact.mobileTel}`}
-              className="rounded-full border-[1.5px] border-white/50 bg-white/15 px-[26px] py-[15px] text-base font-semibold text-white transition-colors hover:bg-white/30"
+              className="rounded-full border-[1.5px] border-white/50 bg-white/15 px-[26px] py-[15px] text-base font-semibold text-white transition-colors hover:bg-white/30 max-md:w-full"
             >
               {siteConfig.contact.phones.mobile}
             </a>

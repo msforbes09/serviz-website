@@ -63,22 +63,30 @@ export const audiences = [
   "Cooperatives",
 ] as const;
 
-export type ServiceGroup = {
-  num: string;
-  kicker: string;
-  title: string;
-  image: string;
-  alt: string;
-  items: { n: string; title: string; body: string }[];
+/**
+ * The services page walks the home grid: one section per card, same number,
+ * same title, same order. `details` adds what each section says below its
+ * heading — a detail list for the two the flyers itemise, a one-line body
+ * for the rest — and `serviceSections` zips the two, so the page cannot drift
+ * from the grid. `content.test.ts` pins the mirror. The tax line used to sit
+ * as item four of Accounting; it is card 03 on the home page, so it gets its
+ * own section here.
+ */
+export type ServiceSection = ServiceCard & {
+  /** Anchor the matching home card links to. */
+  id: string;
+  body?: string;
+  image?: { src: string; alt: string };
+  items?: { n: string; title: string; body: string }[];
 };
 
-export const serviceGroups: ServiceGroup[] = [
-  {
-    num: "1",
-    kicker: "Payroll & Benefits",
-    title: "Payroll and Benefits",
-    image: "/designs/stock/payroll-desk.jpg",
-    alt: "Paperwork and a calculator on a desk",
+const details: Record<string, Omit<ServiceSection, keyof ServiceCard>> = {
+  "01": {
+    id: "payroll",
+    image: {
+      src: "/designs/stock/v3-payroll-planner.jpg",
+      alt: "A blank monthly planner on a desk beside a laptop",
+    },
     items: [
       { n: "1", title: "Timekeeping & Attendance", body: "Accurate hours, monitored and reported." },
       { n: "2", title: "Payroll Processing", body: "Correct pay, released on time — every cut-off." },
@@ -86,27 +94,67 @@ export const serviceGroups: ServiceGroup[] = [
       { n: "4", title: "Employee Web Portal", body: "Payslips, leaves and records online." },
     ],
   },
-  {
-    num: "2",
-    kicker: "Accounting",
-    title: "Accounting",
-    image: "/designs/stock/accounting-reports.jpg",
-    alt: "Financial charts on a laptop screen",
+  "02": {
+    id: "accounting",
+    image: {
+      src: "/designs/stock/accounting-reports.jpg",
+      alt: "Financial charts on a laptop screen",
+    },
     items: [
       { n: "1", title: "Bookkeeping", body: "Books of accounts and daily transactions." },
       { n: "2", title: "Accounts Receivable", body: "Billed and collected on time." },
       { n: "3", title: "Accounts Payable", body: "Classified, computed and reported." },
-      { n: "4", title: "Tax Compliance", body: "Every BIR report filed and paid on schedule." },
     ],
   },
-];
+  // The tax and HR items are split from the flyers' one-paragraph descriptions
+  // rather than transcribed from a list: the print material does not itemise
+  // either. Queued for sign-off in `TODO.md`.
+  "03": {
+    id: "tax",
+    body: "Every BIR report filed and paid on schedule.",
+    image: {
+      src: "/designs/stock/news-paperwork.jpg",
+      alt: "Hands signing a printed form with a pen",
+    },
+    items: [
+      { n: "1", title: "Reportorial Requirements", body: "Accurate reports, prepared for every filing period." },
+      { n: "2", title: "BIR Periodic Filings", body: "Monthly, quarterly and annual returns filed on time." },
+      { n: "3", title: "Payment on Schedule", body: "Taxes due are paid before the deadline, not after." },
+      { n: "4", title: "Online or Onsite", body: "Filed through eBIR or at the revenue office, whichever your case needs." },
+    ],
+  },
+  "04": {
+    id: "hr",
+    body: "Recruitment papers, records and benefits admin.",
+    image: {
+      src: "/designs/stock/hero-workspace.jpg",
+      alt: "Two empty desks with monitors beside a tall plant",
+    },
+    items: [
+      { n: "1", title: "Recruitment Documentation", body: "Offer letters, contracts and onboarding papers prepared." },
+      { n: "2", title: "Employee Records", body: "201 files kept complete and current." },
+      { n: "3", title: "Benefits Administration", body: "Enrolment, updates and claims handled for your staff." },
+    ],
+  },
+  "05": { id: "registration", body: "Paperwork and agency liaison, done right." },
+  "06": { id: "it", body: "Systems, cloud and data security for small teams." },
+  "07": { id: "packages", body: "Mix and match to fit your business." },
+};
 
-export const otherServices: { title: string; body: string; tone: Tone; isNew?: boolean }[] = [
-  { title: "HR Support", body: "Recruitment papers, records and benefits admin.", tone: "light" },
-  { title: "Business Registration", body: "Paperwork and agency liaison, done right.", tone: "light" },
-  { title: "IT Consultant", body: "Systems, cloud and data security for small teams.", tone: "dark", isNew: true },
-  { title: "Customized Packages", body: "Mix and match to fit your business.", tone: "mint" },
-];
+export const serviceSections: ServiceSection[] = serviceCards.map((card) => ({
+  ...card,
+  ...details[card.num],
+}));
+
+/**
+ * The services page is two tiers. The first four services — the ones the
+ * flyers describe at length — get a full section each with an image and a
+ * list. The last three sit in the compact "Other services offered" grid, the
+ * way the print material presents them. Both are slices of `serviceSections`,
+ * so the order and anchors stay the home grid's.
+ */
+export const featuredServices = serviceSections.filter((s) => s.items);
+export const otherServices = serviceSections.filter((s) => !s.items);
 
 /**
  * `image: null` means the scan has not been supplied yet and the card renders a
@@ -147,16 +195,16 @@ export const news = [
     date: "Year-end season",
     title: "Get ahead of year-end payroll and BIR annualization",
     body: "13th-month pay, annualized tax and alphalist — start early.",
-    image: "/designs/stock/news-paperwork.jpg",
-    alt: "A person signing documents",
+    image: "/designs/stock/v3-news-ledgers.jpg",
+    alt: "Budget sheets and a pen laid out on a desk",
   },
   {
     tag: "Community",
     date: "Ongoing",
     title: "Weekly reminders on Facebook",
     body: "Filing dates and agency advisories, posted every week.",
-    image: "/designs/stock/news-handshake.jpg",
-    alt: "Two people shaking hands across a desk",
+    image: "/designs/stock/v3-news-desk.jpg",
+    alt: "Stacked ledgers and a calculator on a sunlit desk",
   },
 ] as const;
 

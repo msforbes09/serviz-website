@@ -1,8 +1,9 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { officeAddress, siteConfig } from "@/lib/site-config";
 import { certificates } from "../lib/content";
-import { Hero, Permits, Services } from "./sections";
+import { Hero, Permits, Services, SiteFooter } from "./sections";
 import { SiteNav } from "./site-nav";
 
 describe("Permits", () => {
@@ -47,6 +48,18 @@ describe("Hero", () => {
   });
 });
 
+describe("Hero on a phone", () => {
+  it("centres its text and stretches the primary button to the full width", () => {
+    render(<Hero />);
+
+    const heading = screen.getByRole("heading", { level: 1 });
+    const book = screen.getByRole("link", { name: "Book a free consultation" });
+
+    expect(heading.parentElement?.className).toMatch(/max-md:text-center/);
+    expect(book.className).toMatch(/max-md:w-full/);
+  });
+});
+
 describe("contact links", () => {
   const originalScrollIntoView = Element.prototype.scrollIntoView;
 
@@ -78,5 +91,31 @@ describe("contact links", () => {
     expect(window.location.hash).toBe("");
 
     target.remove();
+  });
+});
+
+describe("SiteFooter", () => {
+  it("carries the header's lockup — mark, Orbitron wordmark, descriptor — and nothing else of the name", () => {
+    render(<SiteFooter />);
+    const footer = screen.getByRole("contentinfo");
+
+    const word = within(footer).getByText("SERBIZ");
+    expect(word.className).toMatch(/font-orbitron/);
+
+    // Same lockup as the nav bar so the two cannot drift. The address and
+    // the full legal name are not repeated here.
+    expect(footer).toHaveTextContent(
+      new RegExp(`^${siteConfig.name}Resources Income Workers Cooperative`),
+    );
+    expect(within(footer).queryByText(officeAddress)).toBeNull();
+    expect(within(footer).queryByText(siteConfig.legalName)).toBeNull();
+  });
+
+  it("keeps the lockup's lines flush left, so it reads as one image even where the footer centres text", () => {
+    render(<SiteFooter />);
+    const column = within(screen.getByRole("contentinfo")).getByText("SERBIZ")
+      .parentElement!;
+
+    expect(column.className).toMatch(/\btext-left\b/);
   });
 });

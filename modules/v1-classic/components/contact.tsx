@@ -96,7 +96,7 @@ export function Contact() {
       id="contact"
       className="mx-auto grid max-w-[1200px] scroll-mt-4 grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-12 px-6 py-24"
     >
-      <div className="reveal">
+      <div className="reveal max-md:text-center">
         <p className="text-v1-orange text-sm font-semibold tracking-[0.08em] uppercase">
           Free consultation
         </p>
@@ -104,12 +104,12 @@ export function Contact() {
           Tell us about your business. We will map out what to{" "}
           <span className="text-v1-orange">take off your plate.</span>
         </h2>
-        <p className="mt-4 max-w-[520px] text-base leading-6 text-[#3f4b43]">
+        <p className="mt-4 max-w-[520px] text-base leading-6 text-[#3f4b43] max-md:mx-auto">
           A 30 minute call, no obligation. You leave with a written quote within
           three working days.
         </p>
 
-        <ul className="mt-8 grid list-none gap-4 text-base leading-6">
+        <ul className="mt-8 grid list-none gap-4 text-base leading-6 max-md:text-left">
           <li>
             <a
               href={`tel:${siteConfig.contact.mobileTel}`}
@@ -188,7 +188,7 @@ export function Contact() {
 
         <button
           type="submit"
-          className="bg-v1-orange hover:bg-v1-forest min-h-11 cursor-pointer rounded-lg border-0 px-6 py-3 text-base font-semibold text-white transition-[background-color,transform] duration-200 active:scale-[.98]"
+          className="bg-v1-orange hover:bg-v1-forest min-h-11 cursor-pointer rounded-lg border-0 px-6 py-3 text-base font-semibold text-white transition-[background-color,transform] duration-200 active:scale-[.98] max-md:w-full"
         >
           Request my free consultation
         </button>

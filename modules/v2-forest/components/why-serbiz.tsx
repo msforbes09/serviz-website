@@ -19,8 +19,7 @@ export function WhySerbiz() {
             Big-firm discipline, small-business attention
           </h2>
           <p className="text-v2-on-dark text-base leading-[1.7] text-pretty">
-            Large providers are built for large clients. {siteConfig.legalName} (
-            {siteConfig.shortName}) is built for the sole proprietor, the
+            Large providers are built for large clients. {siteConfig.legalName} is built for the sole proprietor, the
             one-person corporation and the SME — businesses where the owner is
             still signing every cheque. Because payroll and accounting sit with
             one team, nothing falls between the cracks: your books, your people

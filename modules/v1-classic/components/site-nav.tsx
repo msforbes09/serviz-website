@@ -1,19 +1,14 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { siteConfig } from "@/lib/site-config";
 import { navLinks } from "../lib/content";
+import { BrandLockup } from "./brand-lockup";
 import { jumpTo, sectionFor } from "./section-link";
 
 const menuLinks = [
   ...navLinks,
   { href: "#contact", label: "Book a free consultation" },
 ] as const;
-
-// "Resources Income Workers Cooperative", read off the legal name rather than
-// typed a second time, so the bar cannot drift from `site-config.ts`.
-const descriptor = siteConfig.legalName.replace(siteConfig.name, "").trim();
 
 /**
  * v1's navigation. A client component because the mobile panel is a
@@ -30,6 +25,7 @@ export function SiteNav() {
   const toggleRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const pendingJump = useRef<HTMLElement | null>(null);
+  const pendingTop = useRef(false);
 
   useEffect(() => {
     if (!open) return;
@@ -82,6 +78,18 @@ export function SiteNav() {
   function handleLogoClick(event: React.MouseEvent<HTMLAnchorElement>) {
     event.preventDefault();
 
+    // From inside the open overlay the logo closes it first and scrolls once
+    // the body lock has lifted — a scroll begun under the lock is thrown away
+    // a frame later, the same trap the section links avoid below.
+    if (open) {
+      pendingTop.current = true;
+      setOpen(false);
+      return;
+    }
+    scrollToTop();
+  }
+
+  function scrollToTop() {
     // No `behavior` given, so this defers to the CSS `scroll-behavior`: smooth
     // normally, instant for a visitor who asked for reduced motion. Passing
     // "smooth" here would animate for them regardless of that preference.
@@ -98,7 +106,12 @@ export function SiteNav() {
   // smooth scroll begun while the body was still locked is dropped when the
   // lock lifts a frame later, which left the menu's links doing nothing.
   useEffect(() => {
-    if (open || !pendingJump.current) return;
+    if (open) return;
+    if (pendingTop.current) {
+      pendingTop.current = false;
+      scrollToTop();
+    }
+    if (!pendingJump.current) return;
     jumpTo(pendingJump.current);
     pendingJump.current = null;
   }, [open]);
@@ -125,34 +138,14 @@ export function SiteNav() {
               of the bar, which is the bug this fixes. A fragment of "top" with
               no element to match is defined as the top of the document, so the
               href alone is correct and still works without scripting; the
-              click handler makes it certain. The skip link keeps `#main`, since
-              getting past the nav is the whole point of that one. */}
-          {/* The mark plus real text, not the full wordmark PNG: that file
-              carried its own white ground, which sat as a box on the paper
-              bar. The mark alone is transparent, and type takes whatever is
-              behind it. */}
+              click handler makes it certain. */}
           <a
             href="#top"
             onClick={handleLogoClick}
             aria-label="SERBIZ home"
             className="flex min-w-0 items-center gap-2.5"
           >
-            <Image
-              src="/designs/v1/logo-mark.png"
-              alt=""
-              width={40}
-              height={40}
-              priority
-              className="size-10 shrink-0 object-contain"
-            />
-            <span className="flex min-w-0 flex-col leading-[1.05]">
-              <span className="font-outfit text-v1-ink text-[22px] font-extrabold tracking-[0.12em]">
-                {siteConfig.name}
-              </span>
-              <span className="text-v1-muted truncate text-[10px] tracking-[0.02em]">
-                {descriptor}
-              </span>
-            </span>
+            <BrandLockup tone="ink" priority />
           </a>
 
           <div className="hidden items-center gap-6 text-sm font-medium min-[821px]:flex">
