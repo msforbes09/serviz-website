@@ -79,8 +79,11 @@ export const services: Service[] = [
   },
   {
     icon: "laptop",
-    title: "IT consulting",
-    body: "Practical systems advice for small teams: payroll and accounting software setup, web portals, backups and basic security.",
+    // Proposed by the user, a full-stack web developer, as a service delivered
+    // through the cooperative with them as its development partner. Names the
+    // partnership, not the partner, until the cooperative agrees — see TODO.md.
+    title: "Web & software development",
+    body: "Custom websites, online portals and the systems behind your business — inventory, billing, records — built with our development partner and supported after launch.",
     isNew: true,
   },
 ];
@@ -178,7 +181,7 @@ export const faqs = [
     a: "Records live on access controlled systems, we sign a non disclosure agreement at engagement, and only your assigned members see your files.",
   },
   {
-    q: "What does IT consulting cover?",
-    a: "Choosing and setting up payroll and accounting software, simple web portals, backups and basic security for small teams. No jargon, priced per project.",
+    q: "What does web and software development cover?",
+    a: "Custom websites, online portals and business systems such as inventory, billing and records, plus integrations with your payroll and books. Built with our development partner, a full-stack web developer focused on backend systems, quoted per project and supported after launch.",
   },
 ] as const;

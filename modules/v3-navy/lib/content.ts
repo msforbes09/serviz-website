@@ -76,8 +76,8 @@ export const serviceCards: ServiceCard[] = [
   },
   {
     num: "06",
-    title: "IT Consultant",
-    sub: "Systems, cloud, data security.",
+    title: "Web & Software Development",
+    sub: "Websites, systems, integrations.",
     tone: "light",
     isNew: true,
   },
@@ -236,7 +236,13 @@ const details: Record<string, Omit<ServiceSection, keyof ServiceCard>> = {
     id: "registration",
     body: "Paperwork and agency liaison, done right.",
   },
-  "06": { id: "it", body: "Systems, cloud and data security for small teams." },
+  // Proposed by the user, a full-stack web developer, as a service delivered
+  // through the cooperative with them as its development partner. Names the
+  // partnership, not the partner, until the cooperative agrees — see TODO.md.
+  "06": {
+    id: "web",
+    body: "Custom websites, online portals and the systems behind a business — inventory, billing, records — built with our development partner, a full-stack web developer focused on backend systems, and supported after launch.",
+  },
   "07": { id: "packages", body: "Mix and match to fit your business." },
 };
 

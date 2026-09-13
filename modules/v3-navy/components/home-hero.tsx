@@ -57,7 +57,7 @@ export function HomeHero() {
           >
             {/* Two lines on a phone, city on its own; one line with the dash
                 from `md` up. */}
-            <span>Payroll · Accounting · Tax · HR · IT</span>{" "}
+            <span>Payroll · Accounting · Tax · HR · Software</span>{" "}
             <span aria-hidden className="max-md:hidden">
               —
             </span>{" "}
@@ -73,8 +73,8 @@ export function HomeHero() {
             style={{ "--i": 2 } as React.CSSProperties}
             className="text-v3-on-dark enter-rise enter-step mb-[34px] max-w-[540px] max-md:mx-auto text-[clamp(16px,1.6vw,19px)] leading-relaxed text-pretty"
           >
-            Payroll, accounting, tax, HR and IT — handled for small businesses
-            in the Philippines.
+            Payroll, accounting, tax, HR and software — handled for small
+            businesses in the Philippines.
           </p>
           {/* The calls to action are the last beat of the text column: after
               the kicker, headline and lede (0–2) and the steel bars (3–6).

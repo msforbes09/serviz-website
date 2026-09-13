@@ -152,7 +152,7 @@ export function Hero() {
           <strong className="block text-xl leading-7">
             7 services, one team
           </strong>
-          Payroll to IT consulting, priced for small teams.
+          Payroll to web development, priced for small teams.
         </p>
       </div>
     </section>

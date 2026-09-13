@@ -102,6 +102,16 @@ each one approved before any of this is public.
 - **Facebook page** — facebook.com/SerbizWorkersCoop.
 - **CDA registration number** — 9520-10130003 1448, issued 1 February 2021. A
   registration number printed on a public page is worth checking twice.
+- **Web & Software Development (2026-09-13).** Card 06 in v3 and the seventh
+  v1 service were "IT Consultant", invented by the design. They now describe
+  custom websites, portals and business systems "built with our development
+  partner, a full-stack web developer focused on backend systems". That
+  partner is the user, and the cooperative has not yet agreed to offer it.
+  The copy names the partnership, not the partner. On a yes, add the name or
+  brand and a link (`modules/v3-navy/lib/content.ts` detail "06",
+  `modules/v1-classic/lib/content.ts` service and FAQ). On a no, drop card
+  06 and the FAQ entry. The v3 hero kicker and lede say "Software" in place
+  of "IT" for the same reason.
 - **News items and events.** v1 and v3 now show four posts transcribed from
   the cooperative's Facebook page (2026-09-13; `lib/news.ts`, newest first:
   the Galing Kooperatiba onsite validation, the SERBIZ Cares fire relief, the
