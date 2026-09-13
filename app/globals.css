@@ -144,13 +144,14 @@
   /* v1 — classic */
   --color-v1-forest: #0b4a24;
   --color-v1-forest-soft: #3c7a50;
-  /* Twice darkened from the print #f26a1b (2.93:1 on paper). #e36419 cleared
-     the 3:1 that heading accents need but left the 14px eyebrow labels at
-     3.29:1 and the white button label at 3.44:1, where small text needs 4.5:1.
-     This clears 4.5 everywhere the colour carries text: 4.88 on paper, 5.10
-     on white, 4.53 on the FAQ mint (#eaf4ec). It reads deeper than the print
-     orange — the client is to judge it on the preview; see TODO.md. */
-  --color-v1-orange: #b64f14;
+  /* Darkened from #f26a1b, which measured 2.93:1 on paper and 2.72:1 on the
+     FAQ mint. Heading text needs 3:1, and every heading now closes with an
+     accent phrase in this colour. Clears it on all three v1 backgrounds while
+     staying the same orange to the eye. Still short of the 4.5:1 that the
+     eyebrow labels and the white-on-orange button label need: #b64f14 would
+     clear it and was tried on 2026-09-13, and the user preferred this one.
+     See TODO.md. */
+  --color-v1-orange: #e36419;
   --color-v1-ink: #14211a;
   --color-v1-muted: #5c6b60;
   --color-v1-placeholder: #8a958d;

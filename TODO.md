@@ -188,25 +188,26 @@ The interface review of `feat/v1-egov-devices` raised six findings. Five were
 fixed in that branch. What is left is the part of the colour finding that a
 minimal fix deliberately did not take.
 
-- ~~**The v1 orange still fails 4.5:1 for small text and for button labels.**~~
-  Done 2026-09-13, one orange everywhere. `--color-v1-orange` in
-  `app/globals.css` went `#f26a1b` → `#e36419` → `#b64f14`:
+- **The v1 orange still fails 4.5:1 for small text and for button labels,
+  by choice.** `--color-v1-orange` in `app/globals.css` is `#e36419`, darkened
+  from the print `#f26a1b` so the accent phrase closing every heading clears
+  the 3:1 that heading text needs. Small text needs 4.5:1 and two uses fall
+  short:
 
-  | Use                                     | Was    | Now    | Needs |
-  | --------------------------------------- | ------ | ------ | ----- |
-  | Eyebrow labels, 14px semibold, on paper | 3.29:1 | 4.88:1 | 4.5:1 |
-  | Eyebrow label on the FAQ mint `#eaf4ec` | 3.06:1 | 4.53:1 | 4.5:1 |
-  | White label on the orange button fill   | 3.44:1 | 5.10:1 | 4.5:1 |
+  | Use | Measured | Needs |
+  | --- | --- | --- |
+  | Eyebrow labels, 14px semibold, six of them | 3.29:1 on paper, 3.06:1 on the FAQ mint | 4.5:1 |
+  | White label on the orange button fill | 3.44:1 | 4.5:1 |
 
-  **Awaiting the user's eye.** The new value reads deeper than the print
-  orange. Check on the v1 preview: the accent phrase closing each heading, the
-  six eyebrow labels, the hero and contact buttons, the "New" badge on the
-  news cards, and the offset block behind the "Why SERBIZ" photograph. If it
-  reads as brown rather than orange, the alternative is two tokens — this one
-  for small text and button fills, `#e36419` back for heading accents and
-  decorative shapes — at the cost of two oranges on one page.
+  `#b64f14` clears both (4.88 on paper, 5.10 under white, 4.53 on the FAQ
+  mint) and was applied on 2026-09-13; the user looked at it and preferred
+  the brighter orange, so it was reverted the same day. Decided, not
+  forgotten: an accessibility audit will flag the two rows above. If that
+  matters at launch, the option that keeps the brighter orange in view is two
+  tokens — `#b64f14` for eyebrow labels and button fills, `#e36419` for
+  heading accents and decorative shapes.
 
-  v3's `--color-v3-rust` _was_ measured in an earlier pass, contrary to what
+  v3's `--color-v3-rust` *was* measured in an earlier pass, contrary to what
   this entry used to say: `#c14d2a` is 4.56:1 on the v3 paper and 4.81:1 under
   white, both clear. Re-measured 2026-09-13. The one tight pair is the rust
   numeral on a navy circle in the services sidebar at 3.04:1, which is bold
