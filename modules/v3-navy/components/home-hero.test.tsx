@@ -33,3 +33,19 @@ describe("HomeHero entrance", () => {
     expect(book.style.getPropertyValue("--i")).not.toBe(see.style.getPropertyValue("--i"));
   });
 });
+
+describe("v3 on a phone", () => {
+  it("stretches the hero buttons to the full width and centres the text", () => {
+    render(<HomeOpening />);
+    const book = screen.getByRole("link", { name: /book a free consultation/i });
+    const see = screen.getByRole("link", { name: /see our services/i });
+    expect(book.className).toMatch(/max-md:w-full/);
+    expect(see.className).toMatch(/max-md:w-full/);
+    expect(screen.getByRole("heading", { level: 1 }).parentElement?.className).toMatch(/max-md:text-center/);
+  });
+
+  it("sets the header wordmark in Orbitron, like v1", () => {
+    render(<SiteHeader />);
+    expect(screen.getByText("SERBIZ").className).toMatch(/font-orbitron/);
+  });
+});

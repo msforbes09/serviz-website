@@ -20,7 +20,7 @@ export function SiteHeader() {
             className="size-10 shrink-0 object-contain"
           />
           <span className="flex min-w-0 flex-col leading-[1.05]">
-            <span className="font-outfit text-v3-ink text-[22px] font-extrabold tracking-[0.12em]">
+            <span className="font-orbitron text-[21px] font-black tracking-[0.06em] text-v3-ink">
               {siteConfig.name}
             </span>
             <span className="text-v3-slate truncate text-[10px] tracking-[0.02em]">

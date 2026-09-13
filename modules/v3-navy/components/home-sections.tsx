@@ -44,7 +44,7 @@ export function ServicesGrid() {
   return (
     <section className="bg-v3-paper">
       <div className="mx-auto max-w-[1200px] px-5 py-20">
-        <div className="reveal reveal-down mb-11 flex flex-wrap items-end justify-between gap-5">
+        <div className="reveal reveal-down mb-11 flex flex-wrap items-end justify-between gap-5 max-md:justify-center max-md:text-center">
           <div className="max-w-[620px]">
             <p className="text-v3-rust mb-3 text-[13px] font-semibold tracking-[0.18em] uppercase">
               What we do
@@ -105,7 +105,7 @@ export function WhyUs() {
       <div className="relative mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-start gap-12 px-5 py-22">
         <div
           style={{ "--from-x": "-48px" } as React.CSSProperties}
-          className="reveal reveal-x"
+          className="reveal reveal-x max-md:text-center"
         >
           <p className="text-v3-sky mb-3 text-[13px] font-semibold tracking-[0.18em] uppercase">
             Why SERBIZ
@@ -201,24 +201,24 @@ export function HomeCta() {
             aria-hidden
             className="bg-v3-navy absolute top-[-30%] right-[-5%] h-[160%] w-[45%] opacity-95 [clip-path:polygon(35%_0,100%_0,100%_100%,0_100%)]"
           />
-          <div className="relative">
+          <div className="relative max-md:text-center">
             <h2 className="font-outfit mb-3 text-[clamp(28px,3.8vw,44px)] leading-[1.05] font-extrabold tracking-[-0.02em] text-pretty">
               Ready to stop worrying about the small stuff?
             </h2>
-            <p className="max-w-[420px] text-base leading-relaxed text-[#fbe3da]">
+            <p className="max-w-[420px] text-base leading-relaxed text-[#fbe3da] max-md:mx-auto">
               First consultation is free.
             </p>
           </div>
-          <div className="relative flex flex-col items-start gap-3">
+          <div className="relative flex flex-col items-start gap-3 max-md:items-stretch max-md:text-center">
             <a
               href={`mailto:${siteConfig.contact.email}`}
-              className="text-v3-navy rounded-full bg-white px-[26px] py-4 text-base font-bold transition-transform duration-200 hover:-translate-y-0.5"
+              className="text-v3-navy rounded-full bg-white px-[26px] py-4 text-base font-bold transition-transform duration-200 hover:-translate-y-0.5 max-md:w-full"
             >
               {siteConfig.contact.email}
             </a>
             <a
               href={`tel:${siteConfig.contact.mobileTel}`}
-              className="rounded-full border-[1.5px] border-white/50 bg-white/15 px-[26px] py-[15px] text-base font-semibold text-white transition-colors hover:bg-white/30"
+              className="rounded-full border-[1.5px] border-white/50 bg-white/15 px-[26px] py-[15px] text-base font-semibold text-white transition-colors hover:bg-white/30 max-md:w-full"
             >
               {siteConfig.contact.phones.mobile}
             </a>

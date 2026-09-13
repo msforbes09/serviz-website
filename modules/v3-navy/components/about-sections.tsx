@@ -10,7 +10,7 @@ export function AboutIntro() {
         className="absolute inset-x-0 top-0 h-2 bg-[linear-gradient(90deg,var(--color-v3-navy)_0_60%,var(--color-v3-rust)_60%_100%)]"
       />
       <div className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-12 px-5 pt-18 pb-10">
-        <div>
+        <div className="max-md:text-center">
           <p
             style={{ "--i": 0 } as React.CSSProperties}
             className="text-v3-rust enter-rise enter-step mb-3 text-[13px] font-semibold tracking-[0.18em] uppercase">
@@ -99,7 +99,7 @@ export function WhyClientsStay() {
       <div className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-10 px-5 pt-15 pb-22">
         <div
           style={{ "--from-x": "-48px" } as React.CSSProperties}
-          className="reveal reveal-x"
+          className="reveal reveal-x max-md:text-center"
         >
           <p className="text-v3-rust mb-3 text-[13px] font-semibold tracking-[0.18em] uppercase">
             Why clients stay

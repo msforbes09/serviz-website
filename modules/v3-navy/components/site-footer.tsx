@@ -20,13 +20,26 @@ export function SiteFooter() {
       />
       <div className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-9 px-5 pt-14 pb-8">
         <div>
-          <Image
-            src="/designs/v3/logo-wordmark.png"
-            alt={siteConfig.legalName}
-            width={220}
-            height={64}
-            className="mb-4 block w-[220px] max-w-full rounded-2xl bg-white px-4 py-3"
-          />
+          {/* Mark plus text, not the wordmark PNG: that file spelled out an
+              "(SRI)" the cooperative no longer uses, and type can be set in
+              the same face as the header. */}
+          <p className="mb-4 flex items-center gap-2.5">
+            <Image
+              src="/designs/v3/logo-mark.png"
+              alt=""
+              width={40}
+              height={40}
+              className="size-10 shrink-0 object-contain"
+            />
+            <span className="flex flex-col leading-[1.05]">
+              <span className="font-orbitron text-[21px] font-black tracking-[0.06em] text-white">
+                {siteConfig.name}
+              </span>
+              <span className="text-v3-on-dark-muted text-[10px] tracking-[0.02em]">
+                Resources Income Workers Cooperative
+              </span>
+            </span>
+          </p>
           <p className="text-v3-on-dark-muted max-w-[320px] text-sm leading-relaxed">
             Payroll &amp; accounting outsourcing for sole proprietors,
             one-person corporations and SMEs.
@@ -82,7 +95,7 @@ export function SiteFooter() {
 
       <div className="text-v3-on-dark-muted mx-auto flex max-w-[1200px] flex-wrap justify-between gap-2.5 border-t border-white/10 px-5 pt-5 pb-7 text-[13px]">
         <span>
-          © <CopyrightYear /> {siteConfig.legalName} ({siteConfig.shortName})
+          © <CopyrightYear /> {siteConfig.legalName}
         </span>
         <span>{siteConfig.motto}</span>
       </div>

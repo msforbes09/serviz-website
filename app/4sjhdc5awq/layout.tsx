@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { SiteFooter } from "@/modules/v3-navy/components/site-footer";
 import { SiteHeader } from "@/modules/v3-navy/components/site-header";
 import { previewSocialMetadata } from "@/modules/previews/lib/preview-metadata";
-import { outfit, poppins } from "@/modules/v3-navy/lib/fonts";
+import { orbitron, outfit, poppins } from "@/modules/v3-navy/lib/fonts";
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 export default function V3Layout({ children }: LayoutProps<"/4sjhdc5awq">) {
   return (
     <div
-      className={`v3-root ${outfit.variable} ${poppins.variable} font-poppins bg-v3-paper text-v3-ink flex min-h-dvh flex-col`}
+      className={`v3-root ${orbitron.variable} ${outfit.variable} ${poppins.variable} font-poppins bg-v3-paper text-v3-ink flex min-h-dvh flex-col`}
     >
       {/* First stop for a keyboard visitor, invisible until focused. Without it
           every page means tabbing the whole header again. */}

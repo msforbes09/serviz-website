@@ -8,7 +8,7 @@ import V1Layout from "./layout";
 // class each loader hands back.
 vi.mock("next/font/google", () => {
   const loader = () => ({ variable: "font-var", className: "font-class" });
-  return { Michroma: loader, Poppins: loader };
+  return { Orbitron: loader, Poppins: loader };
 });
 
 describe("V1Layout", () => {

@@ -60,7 +60,7 @@ export function ContactForm() {
 
       <button
         type="submit"
-        className="bg-v3-rust hover:bg-v3-rust-bright cursor-pointer rounded-full border-0 px-[22px] py-[15px] text-base font-bold text-white transition-colors"
+        className="bg-v3-rust hover:bg-v3-rust-bright cursor-pointer rounded-full border-0 px-[22px] py-[15px] text-base font-bold text-white transition-colors max-md:w-full"
       >
         Send via email
       </button>

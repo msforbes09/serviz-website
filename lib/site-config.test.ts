@@ -19,3 +19,10 @@ describe("contact numbers", () => {
     expect(dialable).toBe(`63${printed.slice(1)}`);
   });
 });
+
+describe("business name", () => {
+  it("carries no SRI abbreviation anywhere, at the user's request", () => {
+    expect(JSON.stringify(siteConfig)).not.toMatch(/\bSRI\b/);
+    expect("shortName" in siteConfig).toBe(false);
+  });
+});

@@ -25,7 +25,7 @@ const rows = [
 
 export function ContactDetails() {
   return (
-    <div>
+    <div className="max-md:text-center">
       <p className="text-v3-rust mb-3 text-[13px] font-semibold tracking-[0.18em] uppercase">
         Contact
       </p>
@@ -36,7 +36,7 @@ export function ContactDetails() {
         We reply within one working day.
       </p>
 
-      <ul className="grid list-none gap-3">
+      <ul className="grid list-none gap-3 max-md:text-left">
         {rows.map((row) => (
           <li key={row.key}>
             <a

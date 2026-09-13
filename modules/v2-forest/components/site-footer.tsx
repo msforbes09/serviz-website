@@ -29,7 +29,7 @@ export function SiteFooter() {
               {siteConfig.name}
             </span>
             <span>
-              Resources Income Workers Cooperative ({siteConfig.shortName})
+              Resources Income Workers Cooperative
             </span>
           </span>
         </div>

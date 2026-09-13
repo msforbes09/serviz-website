@@ -25,7 +25,14 @@ import { navItems } from "../lib/content";
 export function HeaderNav() {
   const pathname = usePathname();
   const reduceMotion = useReducedMotion();
-  const [menuOpen, setMenuOpen] = useState(false);
+  // The menu remembers which route it was opened on and counts as open only
+  // while that is still the route. Any navigation therefore closes it — the
+  // header logo sits outside this component, so this is what makes a tap on
+  // it dismiss the panel rather than carry it, open, onto the next page — and
+  // no effect has to set state to do it.
+  const [openedOn, setOpenedOn] = useState<string | null>(null);
+  const menuOpen = openedOn === pathname;
+  const setMenuOpen = (open: boolean) => setOpenedOn(open ? pathname : null);
   const toggleRef = useRef<HTMLButtonElement>(null);
 
   /**
@@ -39,7 +46,7 @@ export function HeaderNav() {
 
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key !== "Escape") return;
-      setMenuOpen(false);
+      setOpenedOn(null);
       toggleRef.current?.focus();
     }
 
@@ -96,7 +103,7 @@ export function HeaderNav() {
       <button
         ref={toggleRef}
         type="button"
-        onClick={() => setMenuOpen((open) => !open)}
+        onClick={() => setMenuOpen(!menuOpen)}
         aria-label={menuOpen ? "Close menu" : "Open menu"}
         aria-expanded={menuOpen}
         aria-controls="v3-mobile-menu"

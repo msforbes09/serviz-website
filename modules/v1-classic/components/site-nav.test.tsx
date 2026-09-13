@@ -47,10 +47,10 @@ describe("v1 logo", () => {
     expect(logo()).toHaveAttribute("href", "#top");
   });
 
-  it("sets the wordmark in Michroma, the closest match to the print logo", () => {
+  it("sets the wordmark in Orbitron, the heavy squared face nearest the print logo", () => {
     render(<SiteNav />);
     const word = within(logo()).getByText("SERBIZ");
-    expect(word.className).toMatch(/font-michroma/);
+    expect(word.className).toMatch(/font-orbitron/);
   });
 
   it("sets the cooperative's name in text beside the mark, not as a picture", () => {

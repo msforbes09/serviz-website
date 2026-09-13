@@ -46,8 +46,8 @@ export function HomeHero() {
         </div>
       </div>
 
-      <div className="relative mx-auto grid w-full max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-10 px-5 pt-18 pb-20">
-        <div>
+      <div className="relative mx-auto grid w-full max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] items-center gap-10 px-5 pt-10 pb-14">
+        <div className="max-md:text-center">
           <p
             style={{ "--i": 0 } as React.CSSProperties}
             className="text-v3-sky enter-rise enter-step mb-[18px] text-[13px] font-semibold tracking-[0.18em] uppercase"
@@ -62,23 +62,23 @@ export function HomeHero() {
           </h1>
           <p
             style={{ "--i": 2 } as React.CSSProperties}
-            className="text-v3-on-dark enter-rise enter-step mb-[34px] max-w-[540px] text-[clamp(16px,1.6vw,19px)] leading-relaxed text-pretty"
+            className="text-v3-on-dark enter-rise enter-step mb-[34px] max-w-[540px] max-md:mx-auto text-[clamp(16px,1.6vw,19px)] leading-relaxed text-pretty"
           >
             Payroll, accounting, tax, HR and IT — handled for small businesses
             in the Philippines.
           </p>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-3 max-md:flex-col max-md:items-stretch">
             <a
               href={`mailto:${siteConfig.contact.email}?subject=Consultation%20request`}
               style={{ "--i": 3 } as React.CSSProperties}
-              className="enter-rise enter-step bg-v3-rust hover:bg-v3-rust-bright rounded-full px-[26px] py-4 text-base font-semibold text-white transition-[transform,background-color] duration-200 ease-[cubic-bezier(.23,1,.32,1)] hover:-translate-y-0.5 active:scale-[.97]"
+              className="enter-rise enter-step bg-v3-rust hover:bg-v3-rust-bright rounded-full px-[26px] py-4 text-center text-base font-semibold text-white max-md:w-full transition-[transform,background-color] duration-200 ease-[cubic-bezier(.23,1,.32,1)] hover:-translate-y-0.5 active:scale-[.97]"
             >
               Book a free consultation
             </a>
             <Link
               href={`${basePath}/services`}
               style={{ "--i": 4 } as React.CSSProperties}
-              className="enter-rise enter-step rounded-full border-[1.5px] border-white/50 px-[26px] py-[15px] text-base font-semibold text-white transition-[background-color,border-color,transform] duration-200 ease-[cubic-bezier(.23,1,.32,1)] hover:border-white hover:bg-white/10 active:scale-[.97]"
+              className="enter-rise enter-step rounded-full border-[1.5px] border-white/50 px-[26px] py-[15px] text-center text-base font-semibold text-white max-md:w-full transition-[background-color,border-color,transform] duration-200 ease-[cubic-bezier(.23,1,.32,1)] hover:border-white hover:bg-white/10 active:scale-[.97]"
             >
               See our services
             </Link>

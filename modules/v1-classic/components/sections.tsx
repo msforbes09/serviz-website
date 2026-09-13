@@ -578,24 +578,24 @@ export function SiteFooter() {
     // this footer's forest background, where the default forest ring is
     // invisible. See the focus block in globals.css.
     <footer className="bg-v1-forest text-[#cfe0d4] [--v1-focus-ring:var(--color-v1-paper)]">
-      <div className="mx-auto flex max-w-[1200px] flex-wrap justify-between gap-6 px-6 py-12 text-sm leading-5">
-        <div className="flex items-center gap-3">
+      <div className="mx-auto flex max-w-[1200px] flex-wrap justify-between gap-6 px-6 py-12 text-sm leading-5 max-md:justify-center max-md:text-center">
+        {/* The mark sits on the first line of the name, not floating beside a
+            two-line block; on a phone the lockup stacks and centres. */}
+        <div className="flex items-start gap-3 max-md:flex-col max-md:items-center">
           <Image
             src="/designs/v1/logo-mark.png"
             alt=""
             width={36}
             height={36}
-            className="size-9 object-contain"
+            className="size-9 shrink-0 object-contain"
           />
           <span>
-            <strong className="block text-white">
-              {siteConfig.legalName} ({siteConfig.shortName})
-            </strong>
+            <strong className="block text-white">{siteConfig.legalName}</strong>
             {siteConfig.office.street}, {siteConfig.office.city}{" "}
             {siteConfig.office.postalCode}
           </span>
         </div>
-        <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-4 max-md:justify-center">
           <a
             href={`mailto:${siteConfig.contact.email}?subject=Privacy%20policy%20request`}
             className="text-[#cfe0d4] hover:text-white"

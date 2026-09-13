@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { SectionLink } from "@/modules/v1-classic/components/section-link";
-import { michroma, poppins } from "@/modules/v1-classic/lib/fonts";
+import { orbitron, poppins } from "@/modules/v1-classic/lib/fonts";
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
@@ -14,7 +14,7 @@ export default function V1Layout({ children }: LayoutProps<"/8sfz8dn5ts">) {
        sticky nav drifts with it. Clip, not hidden — hidden would make this a
        scroll container and unstick the nav. */
     <div
-      className={`v1-root ${michroma.variable} ${poppins.variable} font-poppins bg-v1-paper overflow-x-clip text-v1-ink`}
+      className={`v1-root ${orbitron.variable} ${poppins.variable} font-poppins bg-v1-paper overflow-x-clip text-v1-ink`}
     >
       {/* First stop for a keyboard visitor, and invisible until it is focused.
           Without it every anchor jump means tabbing the whole nav again. */}

@@ -12,7 +12,7 @@ export const contentType = "image/png";
 // Nothing here touches a request-time API, which keeps the route static under
 // `cacheComponents`.
 const logo = await readFile(
-  join(process.cwd(), "public/designs/v3/logo-wordmark.png"),
+  join(process.cwd(), "public/designs/v3/logo-mark.png"),
 );
 const logoSrc = `data:image/png;base64,${logo.toString("base64")}`;
 
@@ -41,20 +41,18 @@ export default function Image() {
           borderLeft: `24px solid ${rustBright}`,
         }}
       >
-        {/* On a white chip, the same lockup the v3 footer uses. The wordmark
-            carries an opaque white background in its own pixels, so on navy it
-            reads as a pale box floating behind the type unless the white is
-            made deliberate. */}
-        <div
-          style={{
-            display: "flex",
-            alignSelf: "flex-start",
-            background: "#ffffff",
-            borderRadius: 20,
-            padding: "16px 22px",
-          }}
-        >
-          <img src={logoSrc} alt="" height={64} />
+        {/* Mark plus text, the lockup the v3 header and footer use: the
+            wordmark PNG spelled out an "(SRI)" the cooperative no longer uses. */}
+        <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
+          <img src={logoSrc} alt="" width={84} height={84} />
+          <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.05 }}>
+            <span style={{ fontSize: 44, fontWeight: 900, letterSpacing: "0.08em", color: "#ffffff" }}>
+              SERBIZ
+            </span>
+            <span style={{ fontSize: 20, color: onDark }}>
+              Resources Income Workers Cooperative
+            </span>
+          </div>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>

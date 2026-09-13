@@ -164,7 +164,7 @@ export function SiteNav() {
               className="size-10 shrink-0 object-contain"
             />
             <span className="flex min-w-0 flex-col leading-[1.05]">
-              <span className="font-michroma text-v1-ink text-[19px] tracking-[0.08em]">
+              <span className="font-orbitron text-[21px] font-black tracking-[0.06em] text-v1-ink">
                 {siteConfig.name}
               </span>
               <span className="text-v1-muted truncate text-[10px] tracking-[0.02em]">

@@ -4,7 +4,7 @@ import { events, news } from "../lib/content";
 export function NewsList() {
   return (
     <div className="grid gap-5">
-      <h2 className="reveal reveal-down font-outfit text-v3-navy m-0 text-[28px] font-extrabold">
+      <h2 className="reveal reveal-down font-outfit text-v3-navy m-0 text-[28px] font-extrabold max-md:text-center">
         Latest news
       </h2>
       {news.map((post, index) => (
@@ -44,7 +44,7 @@ export function NewsList() {
 export function UpcomingEvents() {
   return (
     <div className="sticky top-24 grid gap-5">
-      <h2 className="reveal reveal-down font-outfit text-v3-navy m-0 text-[28px] font-extrabold">
+      <h2 className="reveal reveal-down font-outfit text-v3-navy m-0 text-[28px] font-extrabold max-md:text-center">
         Upcoming
       </h2>
       {events.map((event, index) => (

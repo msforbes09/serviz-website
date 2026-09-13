@@ -12,7 +12,7 @@ export const contentType = "image/png";
 // Nothing here touches a request-time API, which is what keeps the route
 // statically generated under `cacheComponents`.
 const logo = await readFile(
-  join(process.cwd(), "public/designs/v1/logo-full.png"),
+  join(process.cwd(), "public/designs/v1/logo-mark.png"),
 );
 const logoSrc = `data:image/png;base64,${logo.toString("base64")}`;
 
@@ -47,7 +47,19 @@ export default function Image() {
           borderLeft: `24px solid ${orange}`,
         }}
       >
-        <img src={logoSrc} alt="" height={84} />
+        {/* Mark plus text: the full-logo PNG spelled out an "(SRI)" the
+            cooperative no longer uses. */}
+        <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
+          <img src={logoSrc} alt="" width={84} height={84} />
+          <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.05 }}>
+            <span style={{ fontSize: 44, fontWeight: 900, letterSpacing: "0.08em", color: "#14211a" }}>
+              SERBIZ
+            </span>
+            <span style={{ fontSize: 20, color: muted }}>
+              Resources Income Workers Cooperative
+            </span>
+          </div>
+        </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div

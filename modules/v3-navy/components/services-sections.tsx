@@ -22,7 +22,7 @@ export function ServiceSections() {
                 pinned under the header and the list scrolled up beneath it. */}
             <div
               style={{ "--from-x": "-48px" } as React.CSSProperties}
-              className="reveal reveal-x md:sticky md:top-24"
+              className="reveal reveal-x max-md:text-center md:sticky md:top-24"
             >
               <p className="bg-v3-mint mb-[18px] inline-flex items-center gap-3 rounded-full py-2 pr-4 pl-2">
                 <span className="bg-v3-navy text-v3-rust font-outfit flex h-8 min-w-8 items-center justify-center rounded-full px-2 text-base font-extrabold">
@@ -90,13 +90,13 @@ export function ServicesCta() {
   return (
     <section className="bg-v3-paper">
       <div className="mx-auto max-w-[1200px] px-5 py-16">
-        <div className="reveal reveal-scale bg-v3-navy flex flex-wrap items-center justify-between gap-3 rounded-[20px] px-7 py-6 text-white">
+        <div className="reveal reveal-scale bg-v3-navy flex flex-wrap items-center justify-between gap-3 rounded-[20px] px-7 py-6 text-white max-md:justify-center max-md:text-center">
           <p className="font-outfit text-xl font-bold">
             Not sure which package fits? We’ll help you decide.
           </p>
           <a
             href={`mailto:${siteConfig.contact.email}?subject=Service%20inquiry`}
-            className="bg-v3-rust hover:bg-v3-rust-bright rounded-full px-6 py-3.5 font-semibold text-white transition-colors"
+            className="bg-v3-rust hover:bg-v3-rust-bright rounded-full px-6 py-3.5 text-center font-semibold text-white transition-colors max-md:w-full"
           >
             Ask us
           </a>

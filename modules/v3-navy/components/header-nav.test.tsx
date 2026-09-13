@@ -3,7 +3,8 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { HeaderNav } from "./header-nav";
 
-vi.mock("next/navigation", () => ({ usePathname: () => "/4sjhdc5awq" }));
+let pathname = "/4sjhdc5awq";
+vi.mock("next/navigation", () => ({ usePathname: () => pathname }));
 
 const toggle = () => screen.getByRole("button", { name: /menu/i });
 
@@ -13,6 +14,20 @@ const toggle = () => screen.getByRole("button", { name: /menu/i });
  * `aria-modal`. Those belong to modal dialogs; v1's overlay is one, this is not.
  */
 describe("v3 mobile menu", () => {
+  it("closes when the route changes, so tapping the logo does not leave it open on the new page", async () => {
+    const user = userEvent.setup();
+    pathname = "/4sjhdc5awq";
+    const view = render(<HeaderNav />);
+
+    await user.click(toggle());
+    expect(toggle()).toHaveAttribute("aria-expanded", "true");
+
+    pathname = "/4sjhdc5awq/about";
+    view.rerender(<HeaderNav />);
+
+    expect(toggle()).toHaveAttribute("aria-expanded", "false");
+  });
+
   it("closes on Escape", async () => {
     const user = userEvent.setup();
     render(<HeaderNav />);

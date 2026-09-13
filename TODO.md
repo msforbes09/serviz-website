@@ -523,6 +523,33 @@ services section alone, so there was nothing to trim.
   text column enters from its own side while the list beside it keeps the
   upward stagger. Both sides sliding reads as busy.
 
+- **Bolder wordmark, "SRI" removed, v1 round ported to v3 (2026-09-13).**
+
+  - **Orbitron 900** replaces Michroma for the SERBIZ word on the v1 and v3
+    headers and the v3 footer. Michroma matched the print logo's shape but
+    ships one light weight and read thin beside the mark; Orbitron's black
+    weight is the nearest Google face with the print logo's mass. Zen Dots,
+    Bruno Ace SC and synthesised bolds were on the sheet and rejected. 21px,
+    tracking 0.06em. v3 keeps Outfit for headings.
+  - **"SRI" is gone** at the user's request. `siteConfig.shortName` is
+    removed, with its five call sites (v1 footer, v2 footer and Why SERBIZ,
+    v3 footer copyright, the placeholder home). The two logo PNGs that spell
+    it out — `public/designs/v1/logo-full.png` and
+    `public/designs/v3/logo-wordmark.png` — are no longer referenced: the v3
+    footer and both Open Graph cards now set mark plus text. The files stay
+    in the tree for the record; delete them if the client confirms the
+    abbreviation is retired for good. README and CLAUDE.md updated.
+  - **v1 footer alignment.** The mark sat vertically centred beside a
+    two-line name; it now sits on the first line, and on phones the lockup
+    stacks and centres with the links row.
+  - **v3 port of the v1 round.** Hero padding 40px over 56px; hero, page
+    banners, section intros, CTA banner, about, services, news headings and
+    contact details centred below `md` with lists and cards left; hero
+    buttons, CTA banner buttons, the services "Ask us" and the contact submit
+    full width on phones. The mobile menu now derives its open state from the
+    route it was opened on, so any navigation — the header logo included —
+    closes it without an effect setting state.
+
 - **v1 enhancements (2026-09-13).** Five asks after the v3 round, same
   branch.
 
