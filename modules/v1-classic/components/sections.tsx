@@ -57,8 +57,15 @@ export function Hero() {
           style={{ "--i": 0 } as React.CSSProperties}
           className="text-v1-forest enter-rise enter-step inline-flex items-center gap-2 rounded-full bg-[#eaf4ec] px-3 py-1 text-sm font-semibold"
         >
-          <BadgeCheck aria-hidden className="size-4" />A workers cooperative in
-          Pasig City, since 2021
+          <BadgeCheck aria-hidden className="shrink-0 size-4" />
+          {/* The full sentence wrapped "2021" onto its own line on a phone.
+              The city goes below `md`, where the pill then holds one line at
+              375px; `text-balance` covers a narrower phone, splitting the
+              sentence evenly rather than orphaning the year. */}
+          <span className="text-balance">
+            A workers cooperative
+            <span className="max-md:hidden"> in Pasig City,</span> since 2021
+          </span>
         </p>
         {/* No hard line breaks: the designed three-line shape only holds at
             desktop width, and forcing it left "handled by" stranded on its own
